@@ -5,7 +5,11 @@ import {
   Heading, 
   Text, 
   Input as ChakraInput, 
-  RadioGroup,
+  RadioGroupRoot,
+  RadioGroupItem,
+  RadioGroupItemControl,
+  RadioGroupItemText,
+  RadioGroupItemHiddenInput,
   Stack, 
 } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button';
@@ -20,7 +24,6 @@ export default function RegisterCylinder() {
   const [aadhaar, setAadhaar] = useState('');
   const [agency, setAgency] = useState('');
   const [availability, setAvailability] = useState('yes');
-  const [quantity, setQuantity] = useState('1');
   const [file, setFile] = useState<File | null>(null);
   
   const navigate = useNavigate();
@@ -29,7 +32,6 @@ export default function RegisterCylinder() {
   
   const handleSubmit = () => {
     // Note: useToast is deprecated in v3, we'd normally use a toaster snippet.
-    // Simplifying for now to focus on the RadioGroup error.
     console.log("Registration Submitted");
     setStep(3); // Completed step
   };
@@ -56,7 +58,6 @@ export default function RegisterCylinder() {
                 
                 <Box w="full">
                   <Text color="whiteAlpha.700" fontSize="xs" mb={2}>Aadhaar Number (12-digit)</Text>
-                   {/* Centering labe for soft look? No, standard layout is better for stress use */}
                   <ChakraInput 
                     placeholder="0000 0000 0000" 
                     bg="whiteAlpha.50" 
@@ -87,24 +88,24 @@ export default function RegisterCylinder() {
 
                 <Box w="full">
                   <Text color="whiteAlpha.700" fontSize="xs" mb={2}>Currently Available to Share?</Text>
-                  <RadioGroup.Root onValueChange={(e) => setAvailability(e.value)} value={availability}>
+                  <RadioGroupRoot onValueChange={(e) => setAvailability(e.value)} value={availability}>
                     <Stack direction="row" gap={8} mt={2}>
-                      <RadioGroup.Item value="yes">
-                        <RadioGroup.ItemControl />
-                        <RadioGroup.ItemText>
+                      <RadioGroupItem value="yes">
+                        <RadioGroupItemControl />
+                        <RadioGroupItemText>
                            <span style={{ color: 'white' }}>Yes</span>
-                        </RadioGroup.ItemText>
-                        <RadioGroup.ItemHiddenInput />
-                      </RadioGroup.Item>
-                      <RadioGroup.Item value="no">
-                        <RadioGroup.ItemControl />
-                        <RadioGroup.ItemText>
+                        </RadioGroupItemText>
+                        <RadioGroupItemHiddenInput />
+                      </RadioGroupItem>
+                      <RadioGroupItem value="no">
+                        <RadioGroupItemControl />
+                        <RadioGroupItemText>
                            <span style={{ color: 'white' }}>No</span>
-                        </RadioGroup.ItemText>
-                        <RadioGroup.ItemHiddenInput />
-                      </RadioGroup.Item>
+                        </RadioGroupItemText>
+                        <RadioGroupItemHiddenInput />
+                      </RadioGroupItem>
                     </Stack>
-                  </RadioGroup.Root>
+                  </RadioGroupRoot>
                 </Box>
 
                 <Button className="w-full h-12 mt-4" onClick={handleNext} disabled={!aadhaar || !agency}>

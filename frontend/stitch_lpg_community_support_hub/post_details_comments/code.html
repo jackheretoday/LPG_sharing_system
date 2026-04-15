@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LPG Hub | Community Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e2e2e2",
+                        "surface": "#131313",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "on-secondary-fixed-variant": "#484742",
+                        "outline": "#8f918c",
+                        "on-primary-container": "#636561",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c5c7c1",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary": "#c9c6c0",
+                        "inverse-primary": "#5d5f5b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-tertiary": "#313030",
+                        "background": "#131313",
+                        "primary-fixed": "#e2e3de",
+                        "inverse-on-surface": "#303030",
+                        "primary": "#ffffff",
+                        "primary-container": "#e2e3de",
+                        "outline-variant": "#454843",
+                        "on-tertiary-container": "#656464",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed-variant": "#454744",
+                        "on-primary-fixed": "#1a1c19",
+                        "secondary-fixed": "#e5e2db",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "surface-tint": "#c6c7c2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-variant": "#353535",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-container": "#1f1f1f",
+                        "on-secondary": "#31312c",
+                        "tertiary": "#ffffff",
+                        "secondary-container": "#4a4944",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-background": "#e2e2e2",
+                        "surface-container-low": "#1b1b1b",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "tertiary-container": "#e5e2e1",
+                        "on-secondary-container": "#bbb8b2",
+                        "on-primary": "#2f312e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(16px);
+        }
+        .liquid-border {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-8 h-16 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white font-headline">LPG Hub</span>
+<div class="hidden md:flex gap-6">
+<a class="text-white border-b-2 border-white pb-1 font-manrope tracking-tight text-sm" href="#">Community</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-manrope tracking-tight text-sm" href="#">Map</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-manrope tracking-tight text-sm" href="#">Resources</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-md pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-outline-variant/40" placeholder="Search insights..." type="text"/>
+</div>
+<button class="p-2 hover:bg-white/10 transition-all rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined text-white">notifications</span>
+</button>
+<button class="p-2 hover:bg-white/10 transition-all rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined text-white">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with clean-cut appearance on a minimalist dark gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANOqqvGAGuHubrB6YTrj37myyX1YfdWsMdSNS7qdSWME6ETTO7j7msJLpKmzwk4VOdgZbJKrb1WJHiIg9y0DbLP-BtshZyMKOpg2FokYDIKpFCBPXrAFdVaVN-WnCf_BRK8DToPEC0oom63uR0gjbq-CaFicSx8mTn5WkuFrMtmDuKMb8g-hpna_ydL_vXaDn9WSh_w9y9cZi92ruKACeImrlYp5hs8JVMOCVLBL6puyokynvSNwX2K8o9u8jVlT9hs4K3SxkVIw"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Hidden on small screens) -->
+<aside class="h-screen w-64 fixed left-0 top-16 bg-[#0E0E0E] hidden lg:flex flex-col gap-2 pt-6">
+<div class="px-6 mb-6">
+<h2 class="text-lg font-black text-white font-headline">Community Insights</h2>
+<p class="text-xs text-on-surface-variant">Local LPG availability</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="bg-white text-[#131313] rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span> Home Feed
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">emergency_home</span> Emergency Alerts
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">gas_meter</span> Active Offers
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">history</span> My Requests
+            </a>
+</nav>
+<div class="mt-auto p-4 flex flex-col gap-4">
+<button class="bg-primary text-on-primary py-3 rounded-md font-bold text-sm tracking-tight active:scale-95 transition-all">
+                Create Post
+            </button>
+<div class="flex flex-col gap-1 border-t border-white/5 pt-4">
+<a class="text-[#C5C7C1] px-4 py-2 flex items-center gap-3 hover:text-white text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">help</span> Support
+                </a>
+<a class="text-[#C5C7C1] px-4 py-2 flex items-center gap-3 hover:text-white text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">description</span> Terms
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 pb-12 px-4 md:px-8 max-w-5xl mx-auto">
+<!-- Thread Header/Back Navigation -->
+<div class="mb-8 flex items-center gap-4">
+<button class="group flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors text-sm">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back to Feed
+            </button>
+<div class="h-4 w-px bg-outline-variant/20"></div>
+<span class="text-xs font-medium uppercase tracking-widest text-on-surface-variant">Thread ID: #LPG-4902</span>
+</div>
+<!-- Primary Post Card -->
+<article class="bg-surface-container rounded-xl overflow-hidden shadow-2xl mb-10 liquid-border">
+<div class="p-8">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-white/5">
+<img alt="Sarah J." class="w-full h-full object-cover" data-alt="portrait of a confident woman with professional style, soft cinematic lighting, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg0rRaqs41L9sKZBTQVtDXOoGSOmYrEgO49rDVSfB-pt5q-bpoJNs51JToWdUkT5wW573ajkRY9q2eN_EFmsLxfV4p7XB8ihNWx5lDGCqe9JNleT9088L-y5p_tYDs8URFdn8QdzVAoQcgE70rUVHIrH3HDGbyjz2uRbC3zvqWzb0wI6xYCFPhPcqTVvQVu1j107PY8HBFcCRsBXMHLQjJYmdBwfc2ChgkOhqIL5R-YN94cOH-N-NAP44OEU7ab_pTX5TV6CL0ew"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-lg text-white leading-tight inline-block">Sarah Jenkins</h3><span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-[#38bdf8] text-[10px] font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined !text-[14px]" style="font-variation-settings: 'FILL' 1, 'wght' 700;">verified</span>
+    Verified Supplier
+</span>
+<p class="text-xs text-on-surface-variant">Central District • 2 hours ago</p>
+</div>
+<div class="ml-auto">
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">LPG Availability</span>
+</div>
+</div>
+<h1 class="text-3xl md:text-4xl font-headline font-extrabold text-white mb-6 leading-[1.1] tracking-tight">
+                    Current LPG shortage at Metro Station terminal?
+                </h1>
+<p class="text-on-surface text-lg leading-relaxed mb-8 max-w-3xl">
+                    Has anyone tried to refill at the North Metro terminal in the last hour? I'm hearing reports of long queues and potential stockouts. I need to secure a 12kg cylinder before the evening. Any verified alternatives nearby?
+                </p>
+<!-- Post Image Attachment -->
+<div class="rounded-lg overflow-hidden mb-8 border border-white/5">
+<img alt="Terminal" class="w-full h-auto object-cover max-h-[400px]" data-alt="industrial scene of large gas cylinders at a refill terminal with dramatic overhead lighting and metallic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5_8KLwf2umrcQEnIKou59g6ukxyzygDuvyFL2dJ0j6onGiyptEi9IySFYBQs1zf_J8DROziQZPPRAT6_VxCnDd8mZU7ReFTig1SkLtMaEFRM6zk7IsMHx0VAeI_3UsnpKWQcpy1OKY-HWrTO7yBXrrZ5JAJsQVQhURz0NfTcQQMSExTOaAJNF5dadbp32Nrd3KJUkHyN1LYqYvorI3cfUahIDuOACrCOcuNO7CoULmhxfCADrD3gEYgsQJ5dbxXHph0EQZkMnsg"/>
+</div>
+<div class="flex items-center gap-6 pt-6 border-t border-white/5">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">thumb_up</span>
+<span class="text-sm font-semibold">124</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-sm font-semibold">18 Comments</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+<span class="text-sm font-semibold">Share</span>
+</button>
+<button class="ml-auto text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Comment Section Header -->
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-headline font-bold text-xl text-white">Responses</h4>
+<div class="flex gap-2">
+<button class="text-xs font-bold px-3 py-1 bg-surface-container-high rounded-full text-on-surface">Newest</button>
+<button class="text-xs font-bold px-3 py-1 text-on-surface-variant hover:text-white transition-colors">Most Liked</button>
+</div>
+</div>
+<!-- New Comment Input -->
+<div class="bg-surface-container-low rounded-xl p-4 mb-10 liquid-border">
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+<img alt="User" class="w-full h-full object-cover" data-alt="minimalist close-up of a user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChMu_6yTaedy4IwIN_yMdlJdEaGMI-kKP9IMuzz-Owin7JkuO8Y-yVuChUazumK1FT_pMu_EHnYCILu-2k7XyGa_ytfSK-OSksEiDWBFRxDghuIXJFvagmtCGUdHjwDbqvK3zTfVBiQOORGB6Aj0DzKgDwJbLFxapBI-CtlJBvuSaQFeHjI03C7ct4kWoGLpitZwPey-yM8WJaII_O5ck6ZbqaXY9jAP5y5-d6rJaTwlCVvUfkzv2W0ywpXHdLpPS1iovzr3hWnA"/>
+</div>
+<div class="flex-grow">
+<textarea class="w-full bg-transparent border-none text-on-surface placeholder:text-on-surface-variant/40 focus:ring-0 resize-none min-h-[80px] p-0" placeholder="Write a thoughtful reply..."></textarea>
+<div class="flex items-center justify-between pt-4 border-t border-white/5 mt-2">
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-white/5 rounded text-on-surface-variant"><span class="material-symbols-outlined text-lg">image</span></button>
+<button class="p-1.5 hover:bg-white/5 rounded text-on-surface-variant"><span class="material-symbols-outlined text-lg">link</span></button>
+</div>
+<button class="bg-primary text-on-primary px-6 py-1.5 rounded font-bold text-sm hover:opacity-90 transition-opacity">Post Reply</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Nested Comments Container -->
+<div class="space-y-6">
+<!-- Comment 1 -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/5">
+<img alt="Marcus" class="w-full h-full object-cover" data-alt="portrait of a man with spectacles and a calm expression, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN72ueIfn9Ac-gaI7TOg5AsfIye1BF4BOCxuGpYh3gzy7kkfcCMb95z_RCWYgJraf_RnVJXgvotUPwFnlu-4wE158aeiD2gZMft3lgI0vl8UhPA4s2E-w56Mp-6rDzS3olEWV2QOARtRSMV4zpJeCBVh64Ug-mU8Wv_J51DmokvJH4QZrtiEBDr_reOhT3R4020IeNsdFocJylcFsomI_pJAHVuWvpD6fj3a0xvZXhY0MQk0wZIKbexXaxiloky6AbT8w63It-aQ"/>
+</div>
+<div class="flex-grow">
+<div class="bg-surface-container-low rounded-lg p-5">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-bold text-sm text-white">Marcus Thorne</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant/40"></span>
+<span class="text-xs text-on-surface-variant">1 hour ago</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            Confirmed. Just drove past Metro North. The queue is wrapping around the block. They've posted a sign saying "Stock Expected 4 PM". I suggest trying the GreenWay Depot—they still had 50+ units 20 minutes ago.
+                        </p>
+<div class="flex items-center gap-4 mt-4">
+<button class="flex items-center gap-1 text-xs font-bold text-on-surface-variant hover:text-white">
+<span class="material-symbols-outlined text-sm">thumb_up</span> 14
+                            </button>
+<button class="text-xs font-bold text-on-surface-variant hover:text-white">Reply</button>
+</div>
+</div>
+<!-- Nested Reply (Comment 1.1) -->
+<div class="mt-4 flex gap-4 pl-4 border-l border-outline-variant/20">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-white/5">
+<img alt="Lisa" class="w-full h-full object-cover" data-alt="woman portrait with warm soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu_K9uY8QYPaV7hdR5ZTYpY22YJx1NoAhrsRRwse7TcaGIayRPw4Jhk5Xrm_mKojBLZ3XO2e9muvv9NXBNL2uoq993nz2QAlMAmbUaIY6Bt6cnO78NbExM6nTm8j3N-Bdrm7RQ9DsUvuaEQ4zg2a9W-SroLVZ_e1qgV26V-n1sbFCOX2jqbA6hm5dkCo3NQ0AYsUhLrSmdJKdKLSnI_4vD-pCtOOIiuB0uU_7U5utU7oKZfrjdcSbzHTWWI0ObuUSZpJjsG1DqLQ"/>
+</div>
+<div class="flex-grow">
+<div class="bg-surface-container-high/40 rounded-lg p-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-bold text-xs text-white">Lisa K.</span>
+<span class="text-xs text-on-surface-variant">45 mins ago</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                                    Thanks Marcus! Just got mine from GreenWay. Life saver.
+                                </p>
+<div class="flex items-center gap-4 mt-3">
+<button class="flex items-center gap-1 text-[10px] font-bold text-on-surface-variant hover:text-white">
+<span class="material-symbols-outlined text-[14px]">thumb_up</span> 3
+                                    </button>
+<button class="text-[10px] font-bold text-on-surface-variant hover:text-white">Reply</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Comment 2 -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/5">
+<img alt="David" class="w-full h-full object-cover" data-alt="portrait of a man with a professional look" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5i5VU0HYs8UM5ZJIEejUPAt-qxss2TIw0Rc15VWEU-mh9c5m65n67gYctznSj4oRHIAIvhumc9Vvc5Scxuup_PH9iGMp0crPJsmLi5kYlHe4Qr5cHLpKXa8N9O8F32dK_g23HnvPnb8C4iKmk5tWP3OEByQw__9ZJDKr29WPhOenSy9X8CJnMjYCRb70fl9m3XRcF7wwg219bfa4Cmy9IhgsezHmmtlkH3U8ycR2HAKm8sHGbuFeqDEvJUANfQz0rNe8dobjo-Q"/>
+</div>
+<div class="flex-grow">
+<div class="bg-surface-container-low rounded-lg p-5">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-bold text-sm text-white">David Chen</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant/40"></span>
+<span class="text-xs text-on-surface-variant">30 mins ago</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            Does anyone know if the price at GreenWay is the standard government rate or is there a premium today?
+                        </p>
+<div class="flex items-center gap-4 mt-4">
+<button class="flex items-center gap-1 text-xs font-bold text-on-surface-variant hover:text-white">
+<span class="material-symbols-outlined text-sm">thumb_up</span> 2
+                            </button>
+<button class="text-xs font-bold text-on-surface-variant hover:text-white">Reply</button>
+</div>
+</div>
+</div>
+</div>
+<!-- More Comments Trigger -->
+<div class="flex justify-center pt-8">
+<button class="text-sm font-bold text-on-surface-variant hover:text-white py-2 px-6 border border-outline-variant/20 rounded-full transition-all hover:bg-white/5">
+                    Load 12 more responses
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Nav for Mobile -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#131313]/90 backdrop-blur-xl border-t border-white/5 md:hidden flex justify-around items-center h-16 px-4">
+<a class="flex flex-col items-center gap-1 text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[10px] font-medium">Explore</span>
+</a>
+<button class="bg-primary text-on-primary p-3 rounded-full -mt-10 shadow-lg border-4 border-surface">
+<span class="material-symbols-outlined">add</span>
+</button>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">emergency_home</span>
+<span class="text-[10px] font-medium">Alerts</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</body></html>

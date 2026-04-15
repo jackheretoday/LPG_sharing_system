@@ -37,6 +37,19 @@
     mask-composite: exclude;
     pointer-events: none;
   }
+
+  .hub-glass {
+    background: rgba(31, 31, 31, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .glass-edge {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
 }
 
 @keyframes pulseRed {

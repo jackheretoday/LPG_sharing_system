@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#F7F7F2",
+          "background-light": "#f7f7f6",
+          "background-dark": "#1b1b17",
+          "surface": {
+            DEFAULT: "#131313",
+            light: "#f7f7f6",
+            dark: "#131313"
+          },
+          "on-surface": {
+            DEFAULT: "#e2e2e2",
+            light: "#1b1b17",
+            dark: "#e2e2e2"
+          }
+        },
+        fontFamily: {
+          "display": ["Manrope"],
+          "headline": ["Manrope"],
+          "body": ["Inter"],
+          "label": ["Inter"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .map-bg {
+            background-color: #0e0e0e;
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-8 h-16 w-full font-manrope tracking-tight dark:bg-[#131313]/80 bg-white/80">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white dark:text-white text-black">LPG Hub</span>
+<div class="hidden md:flex gap-6">
+<a class="text-[#C5C7C1] hover:text-white transition-colors" href="#">Community</a>
+<a class="text-white border-b-2 border-white pb-1 dark:text-white text-black" href="#">Map</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors" href="#">Resources</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<input class="bg-surface-container-low border-none rounded-md px-4 py-1.5 text-sm focus:ring-1 focus:ring-outline-variant/40 transition-all w-64 dark:bg-surface-container-low bg-gray-200 dark:text-white text-black" placeholder="Search areas..." type="text"/>
+</div>
+<button class="p-2 hover:bg-white/10 dark:hover:bg-white/10 hover:bg-black/5 transition-all active:scale-95 duration-200" id="theme-toggle">
+<span class="material-symbols-outlined text-white dark:text-white text-black hidden dark:block dark:text-white text-black" data-icon="light_mode">light_mode</span>
+<span class="material-symbols-outlined text-black dark:text-white block dark:hidden" data-icon="dark_mode">dark_mode</span>
+</button><button class="p-2 hover:bg-white/10 transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-white dark:text-white text-black" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-white/10 transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-white dark:text-white text-black" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container overflow-hidden">
+<img alt="User profile" data-alt="Close-up portrait of a professional male user in soft studio lighting with a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkbXcUvZPuhqi_lYlwjYFD_Oudq9R83VR_lXJSS7yZdYixOcN8lAqp_Xaz74r-vJwv25GjJVDS9NgXPICIjqVCT0LZvPcVIoGwiKhzb3idSsJwILVea0ISrWwHz9yInXlEJYXjmHTG4WAH_Bwz6rrO3NdySFckSa6H3vR4pyrSkJw197BcsGwpuJh20GvtMvqt4Pi7pSGc59P5abaKHVeIQWJtlsdWBptyih4SsYKIg2nUr1d0gN2vFQPGc0Kx_qF4sjwVqq_7AQ"/>
+</div>
+</div>
+</nav>
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex h-screen w-64 fixed left-0 top-16 bg-[#0E0E0E] flex-col gap-2 pt-6 font-manrope text-sm font-medium z-40 border-r border-white/5">
+<div class="px-6 mb-6">
+<h2 class="text-lg font-black text-white">Community Insights</h2>
+<p class="text-xs text-on-surface-variant">Local LPG availability</p>
+</div>
+<nav class="flex flex-col gap-1 dark:bg-[#131313]/80 bg-white/80">
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Home Feed</span>
+</a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined" data-icon="emergency_home">emergency_home</span>
+<span>Emergency Alerts</span>
+</a>
+<a class="bg-white text-[#131313] rounded-md mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="gas_meter">gas_meter</span>
+<span>Active Offers</span>
+</a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] transition-all duration-300 ease-in-out group" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span>My Requests</span>
+</a>
+</nav>
+<div class="mt-auto p-4 flex flex-col gap-4 border-t border-white/5">
+<button class="bg-white text-on-primary font-bold py-3 rounded-md hover:bg-secondary transition-colors text-center">
+                Create Post
+            </button>
+<div class="flex flex-col gap-2">
+<a class="text-[#C5C7C1] px-4 py-2 flex items-center gap-3 text-xs hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<a class="text-[#C5C7C1] px-4 py-2 flex items-center gap-3 text-xs hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+<span>Terms</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content: Map Interface -->
+<main class="md:pl-64 pt-16 h-screen w-full relative overflow-hidden bg-surface-container-lowest">
+<!-- Mock Map Background -->
+<div class="absolute inset-0 z-0 map-bg">
+<img alt="Dark stylized satellite map" class="w-full h-full object-cover opacity-20 grayscale" data-location="Chicago" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpCi-XaGerhIXIx230pzUl3wsBzCpfj-NX5mRjPBRFNDU6lz7pioH8Ydol2kDdZ_BHBkCVnSXYzKjbP7_YnUfaNRybT-0Tt_K8M6xxuwlBTdb_qLZ1vvEoKEgDDegW3Uo7zqCGMfnnzjzmNwwtQ_tM2tf1qb7o58tV53udzO5ERqWFVBQ9rpZ9x_x-ZJ6EDLldF3zU0dS-Rq56sW9oEPxsdL6uj2_UIq1oRxdf5gfXHz4vJq3qCaq4Gb2c1Uyj-Car5GMROQ0mRw"/>
+<!-- Map Markers -->
+<!-- Request Marker -->
+<div class="absolute top-[35%] left-[45%] group cursor-pointer">
+<div class="relative">
+<div class="absolute -inset-4 bg-error/20 rounded-full blur-xl group-hover:bg-error/40 transition-all"></div>
+<div class="relative bg-error text-white h-8 w-8 rounded-full flex items-center justify-center shadow-lg border-2 border-surface active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-sm" data-icon="priority_high">priority_high</span>
+</div>
+</div>
+</div>
+<!-- Availability Marker 1 -->
+<div class="absolute top-[55%] left-[32%] group cursor-pointer">
+<div class="relative">
+<div class="absolute -inset-4 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/40 transition-all"></div>
+<div class="relative bg-surface-bright text-white h-10 w-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20 active:scale-90 transition-transform overflow-hidden">
+<img alt="Industrial LPG cylinders" class="w-full h-full object-cover" data-alt="Row of industrial blue LPG cylinders in a clean warehouse environment with morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwyqWqo7k-o3a7le2NPd1aXrSehP1cR9DX7LMWev0qOxnhYl47UXLPSJSkLBQUgo_C5keAENuuQNYBH0CTWh3Ho9bV54sAeDCpvGDO8feTcuci-Fqi7uWjzKcJl6NykgbAwPIdK7I-O9EBToyfFMHaaEhMTXRy8Uzkq89JLXlciApUrfS8zdZMh5CS57gkxSMpeDZ9uKfgtDAG_zGfzDg07lLzcG7LXbcmnscmmvKVSYFbnxpPNwNcDUbCf019NsX5yDsxXee5hg"/>
+</div>
+</div>
+</div>
+<!-- Availability Marker 2 (Active Preview) -->
+<div class="absolute top-[42%] left-[68%] group cursor-pointer">
+<div class="relative">
+<div class="absolute -inset-4 bg-primary/20 rounded-full blur-xl"></div>
+<div class="relative bg-primary text-on-primary h-10 w-10 rounded-full flex items-center justify-center shadow-lg border-2 border-surface active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="local_gas_station">local_gas_station</span>
+</div>
+<!-- Glassmorphic Preview Card -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 w-72 bg-surface-bright/70 backdrop-blur-2xl rounded-xl p-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-white/10 z-10">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="font-headline font-bold text-white leading-tight">North Station Depot <span class="inline-flex items-center ml-2 bg-blue-500/20 text-blue-400 text-[9px] px-1.5 py-0.5 rounded-sm border border-blue-500/30 font-bold uppercase tracking-wider"><span class="material-symbols-outlined text-[10px] mr-0.5" style='font-variation-settings: "FILL" 1, "wght" 700'>verified</span>Verified</span></h3>
+<p class="text-xs text-on-surface-variant">Available: 42 Units</p>
+</div>
+<span class="bg-white/10 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-widest font-bold">In Stock</span>
+</div>
+<div class="aspect-video w-full rounded-lg overflow-hidden mb-3 bg-surface-container">
+<img alt="Gas distribution center" class="w-full h-full object-cover" data-alt="A clean modern gas distribution facility at twilight with glowing safety lights and metallic structures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMRxzITWvNs3-beaoFwGQq2kCw34uwn_CbqRydnxVN4y3kqRHV4NvFgJapCNd9XcgJZ36aPrT0V6JqhZoKO9jWOb3YD1KXoHiI4Eiwu4HWWHqVLnXPm7fxc6hU3-wm73v6_-Y0O9eymp1a4JKWiCYj8mznRCNjB7olx9kEVyA1a3vU6eD_wEGX-Kc_sAYilAaKtEp-b4oP5qT_4vHg0FHPfQoRIMrwmCyPxOVzR3rQK4_rRZHhn0fHY3ZD-E4CtGJ-nG2HZdVF-g"/>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold text-white">$24.50 <span class="text-[10px] font-normal text-on-surface-variant">/ refil</span></span>
+<a class="text-xs font-bold text-primary hover:underline flex items-center gap-1" href="#">
+                                View Details <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- UI Overlays -->
+<!-- Controls -->
+<div class="absolute top-6 right-6 flex flex-col gap-2 z-10">
+<div class="bg-surface-container/80 backdrop-blur-md rounded-lg p-1 border border-white/5 flex flex-col">
+<button class="p-2 hover:bg-white/10 text-white transition-colors rounded-md">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<div class="h-px bg-white/5 mx-2"></div>
+<button class="p-2 hover:bg-white/10 text-white transition-colors rounded-md">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+</div>
+<button class="bg-surface-container/80 backdrop-blur-md p-2 rounded-lg border border-white/5 text-white hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="my_location">my_location</span>
+</button>
+</div>
+<!-- Toggle View Button -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+<div class="bg-surface-container-highest/80 backdrop-blur-xl p-1.5 rounded-full border border-white/10 shadow-2xl flex items-center gap-2">
+<button class="px-6 py-2 rounded-full bg-white text-on-primary text-sm font-bold flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="map">map</span>
+                    Map View
+                </button>
+<button class="px-6 py-2 rounded-full text-on-surface-variant text-sm font-medium flex items-center gap-2 hover:text-white transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="view_agenda">view_agenda</span>
+                    Feed View
+                </button>
+</div>
+</div>
+<!-- Filter Chips Overlay -->
+<div class="absolute top-6 left-6 flex gap-3 z-10 overflow-x-auto max-w-[calc(100%-200px)] no-scrollbar">
+<button class="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/10 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                Emergency Requests
+            </button>
+<button class="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/10 whitespace-nowrap">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                Bulk Availability
+            </button>
+<button class="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/10 whitespace-nowrap">
+<span class="material-symbols-outlined text-xs" data-icon="filter_list">filter_list</span>
+                More Filters
+            </button>
+</div>
+<!-- Legend -->
+<div class="absolute bottom-8 right-8 z-10 hidden lg:block">
+<div class="bg-surface-container/60 backdrop-blur-lg border border-white/5 rounded-xl p-4 shadow-xl">
+<h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant mb-3">Map Legend</h4>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<span class="text-xs text-white">Critical Need</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-xs text-white">Verified Stock</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-on-surface-variant"></div>
+<span class="text-xs text-white">Refill Station</span>
+</div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-blue-400 text-sm" style="font-variation-settings: 'FILL' 1">verified</span><span class="text-xs text-white">Verified Supplier</span></div></div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container/90 backdrop-blur-xl z-50 flex justify-around items-center h-16 border-t border-white/5 dark:bg-[#131313]/80 bg-white/80">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px]">Feed</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-white">
+<span class="material-symbols-outlined" data-icon="map" data-weight="fill">map</span>
+<span class="text-[10px]">Map</span>
+</button>
+<div class="-mt-8">
+<button class="bg-white text-on-primary p-4 rounded-full shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="gas_meter">gas_meter</span>
+<span class="text-[10px]">Offers</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px]">Profile</span>
+</button>
+</nav>
+<script>
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const htmlElement = document.documentElement;
+
+  // Check for saved theme or default to dark
+  if (localStorage.getItem('theme') === 'light') {
+    htmlElement.classList.remove('dark');
+  } else {
+    htmlElement.classList.add('dark');
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    if (htmlElement.classList.contains('dark')) {
+      htmlElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      htmlElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+</script></body></html>

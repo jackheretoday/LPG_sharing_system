@@ -1,9 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { mockMarkers, MarkerData } from '../lib/mockData';
-import { Button } from './ui/button';
 
 // Helper to update map center dynamically
 function ChangeView({ center }: { center: [number, number] }) {
@@ -14,18 +13,40 @@ function ChangeView({ center }: { center: [number, number] }) {
   return null;
 }
 
-// Custom icons
-const createIcon = (className: string) => new L.Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  className: className,
-});
+// Custom DivIcons for modern look
+const createHtmlIcon = (type: string, img?: string) => {
+  let content = '';
+  if (type === 'user') {
+    content = `<div class="w-8 h-8 rounded-full bg-white border-4 border-black/20 shadow-2xl flex items-center justify-center animate-pulse">
+                <div class="w-2 h-2 bg-black rounded-full"></div>
+               </div>`;
+  } else if (type === 'emergency') {
+    content = `<div class="relative group">
+                <div class="absolute -inset-4 bg-red-500/30 rounded-full blur-xl animate-pulse"></div>
+                <div class="relative bg-red-600 text-white w-8 h-8 rounded-full border-2 border-surface flex items-center justify-center shadow-lg active:scale-90 transition-all">
+                  <span class="material-symbols-outlined !text-sm">priority_high</span>
+                </div>
+               </div>`;
+  } else if (type === 'cylinder') {
+    content = `<div class="relative group">
+                <div class="absolute -inset-4 bg-emerald-500/10 rounded-full blur-xl"></div>
+                <div class="relative bg-[#131313] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20 active:scale-90 transition-transform overflow-hidden">
+                  <img src="${img || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAwyqWqo7k-o3a7le2NPd1aXrSehP1cR9DX7LMWev0qOxnhYl47UXLPSJSkLBQUgo_C5keAENuuQNYBH0CTWh3Ho9bV54sAeDCpvGDO8feTcuci-Fqi7uWjzKcJl6NykgbAwPIdK7I-O9EBToyfFMHaaEhMTXRy8Uzkq89JLXlciApUrfS8zdZMh5CS57gkxSMpeDZ9uKfgtDAG_zGfzDg07lLzcG7LXbcmnscmmvKVSYFbnxpPNwNcDUbCf019NsX5yDsxXee5hg'}" class="w-full h-full object-cover">
+                </div>
+               </div>`;
+  } else {
+     content = `<div class="bg-primary text-on-primary w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-surface active:scale-90 transition-transform">
+                  <span class="material-symbols-outlined">local_gas_station</span>
+                </div>`;
+  }
 
-const userIcon = createIcon('hue-rotate-180 grayscale contrast-150');
-const cylinderIcon = createIcon('hue-rotate-[120deg] brightness-125'); // Greenish
-const mechanicIcon = createIcon('hue-rotate-[240deg] brightness-125'); // Bluish
-const emergencyIcon = createIcon('hue-rotate-0 brightness-150 contrast-200'); // Red
+  return L.divIcon({
+    html: content,
+    className: 'custom-leaflet-marker',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+  });
+};
 
 export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergency' }) {
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
@@ -41,7 +62,7 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
           lng: m.position.lng + (Math.random() - 0.5) * 0.0001,
         }
       })));
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -51,24 +72,27 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
         (position) => {
           setUserLocation([position.coords.latitude, position.coords.longitude]);
         },
-        () => setUserLocation([19.107, 72.825])
+        () => setUserLocation([19.1075, 72.8258]) // Default Mumbai
       );
     } else {
-      setUserLocation([19.107, 72.825]);
+      setUserLocation([19.1075, 72.8258]);
     }
   }, []);
 
   if (!userLocation) {
     return (
-      <div className="h-full w-full rounded-2xl overflow-hidden border border-white/20 bg-black/50 flex items-center justify-center liquid-glass min-h-[400px]">
-         <span className="text-gray-400 animate-pulse font-light text-lg">Calibrating sensors...</span>
+      <div className="h-full w-full bg-[#0e0e0e] flex items-center justify-center">
+         <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-2 border-white/10 border-t-white rounded-full animate-spin"></div>
+            <span className="text-white/40 font-headline text-xs uppercase tracking-widest font-black">Syncing Geo-Node...</span>
+         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-full w-full relative z-0 min-h-[400px]">
-      <MapContainer center={userLocation} zoom={14} className="h-full w-full" zoomControl={false}>
+    <div className="h-full w-full relative z-0">
+      <MapContainer center={userLocation} zoom={15} className="h-full w-full bg-[#0e0e0e]" zoomControl={false}>
         <ChangeView center={userLocation} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -76,9 +100,9 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
         />
         
         {/* User Marker */}
-        <Marker position={userLocation} icon={userIcon}>
-          <Popup>
-            <div className="text-black font-medium">You are here</div>
+        <Marker position={userLocation} icon={createHtmlIcon('user')}>
+          <Popup className="lumina-popup">
+            <div className="text-black font-bold p-1">Your Location</div>
           </Popup>
         </Marker>
 
@@ -89,33 +113,67 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
           <Marker 
             key={m.id} 
             position={[m.position.lat, m.position.lng]} 
-            icon={m.type === 'cylinder' ? cylinderIcon : m.type === 'mechanic' ? mechanicIcon : emergencyIcon}
+            icon={createHtmlIcon(m.type)}
           >
-            <Popup className="custom-popup">
-              <div className="p-1 min-w-[150px]">
-                <h3 className="font-bold text-black border-b border-gray-100 pb-1 mb-2">
-                  {m.type === 'emergency' ? 'Emergency' : m.ownerName}
-                </h3>
-                <div className="space-y-1 mb-3">
-                  <p className="text-[10px] text-gray-500 uppercase tracking-tighter">Status</p>
-                  <p className="text-xs text-gray-700">{m.status || m.availability || 'Verified'}</p>
+            <Popup className="lumina-popup">
+              <div className="w-[280px] p-0 m-0 overflow-hidden bg-transparent border-none">
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <h3 className="font-headline font-bold text-white leading-tight">
+                      {m.type === 'emergency' ? 'Critical Need' : m.ownerName || 'Station Depot'}
+                      {m.type !== 'emergency' && (
+                        <span className="inline-flex items-center ml-2 bg-blue-500/20 text-blue-400 text-[9px] px-1.5 py-0.5 rounded-sm border border-blue-500/30 font-bold uppercase tracking-wider">
+                          <span className="material-symbols-outlined text-[10px] mr-0.5" style={{ fontVariationSettings: "'FILL' 1, 'wght' 700" }}>verified</span>Verified
+                        </span>
+                      )}
+                    </h3>
+                    <p className="text-[10px] text-white/50">{m.type === 'emergency' ? 'Action Required' : `Available: ${Math.floor(Math.random() * 50) + 1} Units`}</p>
+                  </div>
+                  <span className={`text-[9px] px-2 py-0.5 rounded-full uppercase tracking-widest font-black ${m.type === 'emergency' ? 'bg-red-500 text-white' : 'bg-white/10 text-white'}`}>
+                    {m.type === 'emergency' ? 'URGENT' : 'IN STOCK'}
+                  </span>
                 </div>
-                {m.type === 'cylinder' && (
-                  <Button size="sm" className="w-full bg-black text-white hover:bg-gray-800 h-7 text-[10px]">
-                    Request Cylinder
-                  </Button>
-                )}
-                {m.type === 'mechanic' && (
-                   <Button size="sm" className="w-full bg-blue-600 text-white hover:bg-blue-700 h-7 text-[10px]">
-                    Call Dispatch
-                 </Button>
-                )}
+                
+                <div className="aspect-video w-full rounded-lg overflow-hidden mb-3 bg-white/5">
+                  <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMRxzITWvNs3-beaoFwGQq2kCw34uwn_CbqRydnxVN4y3kqRHV4NvFgJapCNd9XcgJZ36aPrT0V6JqhZoKO9jWOb3YD1KXoHiI4Eiwu4HWWHqVLnXPm7fxc6hU3-wm73v6_-Y0O9eymp1a4JKWiCYj8mznRCNjB7olx9kEVyA1a3vU6eD_wEGX-Kc_sAYilAaKtEp-b4oP5qT_4vHg0FHPfQoRIMrwmCyPxOVzR3rQK4_rRZHhn0fHY3ZD-E4CtGJ-nG2HZdVF-g" className="w-full h-full object-cover" />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-white">$24.50 <span className="text-[9px] font-normal text-white/40">/ refill</span></span>
+                  <button className="text-[10px] font-black text-white px-3 py-1 bg-white/10 rounded hover:bg-white/20 transition-all flex items-center gap-1 uppercase tracking-tight">
+                    View Details
+                    <span className="material-symbols-outlined !text-[12px]">arrow_forward</span>
+                  </button>
+                </div>
               </div>
             </Popup>
           </Marker>
         ))}
       </MapContainer>
+
+      <style>{`
+        .lumina-popup .leaflet-popup-content-wrapper {
+          background: rgba(19, 19, 19, 0.7);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          color: white;
+          padding: 8px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .lumina-popup .leaflet-popup-tip {
+          background: rgba(19, 19, 19, 0.7);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .lumina-popup .leaflet-popup-content {
+          margin: 8px;
+        }
+        .custom-leaflet-marker {
+          background: transparent;
+          border: none;
+        }
+      `}</style>
     </div>
   );
 }
-

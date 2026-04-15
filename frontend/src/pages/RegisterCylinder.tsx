@@ -5,11 +5,11 @@ import {
   Heading, 
   Text, 
   Input as ChakraInput, 
-  RadioGroup, 
+  RadioGroup,
   Stack, 
-  Badge,
 } from '@chakra-ui/react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { UploadBox } from '@/components/UploadBox';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';

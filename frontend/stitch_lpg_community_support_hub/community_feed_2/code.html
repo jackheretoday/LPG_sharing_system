@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LPG Hub | Community Feed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#ffffff",
+          "on-primary": "#2f312e",
+          "background-light": "#f7f7f6",
+          "background-dark": "#131313",
+          "on-surface": "#1b1b17",
+          "surface": "#ffffff",
+        },
+        fontFamily: {
+          "display": ["Manrope"],
+          "headline": ["Manrope"],
+          "body": ["Inter"]
+        },
+        borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      },
+    },
+  }</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .liquid-glass {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-edge {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    
+        html:not(.dark) .liquid-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        html:not(.dark) .glass-edge {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            border-left: 1px solid rgba(0, 0, 0, 0.02);
+        }
+        html:not(.dark) body {
+            background-color: #f7f7f6;
+            color: #1b1b17;
+        }
+        html:not(.dark) aside {
+            background-color: #ffffff;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        html:not(.dark) header {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #1b1b17;
+        }
+        html:not(.dark) .text-white { color: #1b1b17; }
+        html:not(.dark) .text-on-surface-variant { color: #5d5f5b; }
+        html:not(.dark) article h3 { color: #1b1b17; }
+        html:not(.dark) nav a.text-white { border-color: #1b1b17; }
+        html:not(.dark) .bg-surface-container-low { background-color: #ededed; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary selection:text-surface transition-colors duration-300">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-white font-headline">LPG Hub</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-white border-b-2 border-white pb-1 font-headline tracking-tight text-sm" href="#">Community</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-headline tracking-tight text-sm" href="#">Map</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-headline tracking-tight text-sm" href="#">Resources</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-outline-variant w-64 transition-all" placeholder="Search insights..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white transition-all p-2 rounded-full hover:bg-white/10" id="theme-toggle">
+<span class="dark:hidden">dark_mode</span>
+<span class="hidden dark:block">light_mode</span>
+</button><button class="material-symbols-outlined text-on-surface-variant hover:text-white transition-all p-2 rounded-full hover:bg-white/10">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-white transition-all p-2 rounded-full hover:bg-white/10">settings</button>
+<img alt="User profile" class="w-8 h-8 rounded-full border border-white/10" data-alt="Close-up portrait of a man with a friendly expression in a modern urban setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU7X65WWbHi5hPUFfgGybpsSuwbm5NaRJ02IWixtcKvudaiQ9shrc3SMCVeoy8h0KwrkZ2yNCNn8HaWSMt030WcEUhkUKEDyNAjH7BU4Wa2UD_jN9ssFi3bWCRV16ArV1p14t1bT4_bosx41kHkXUtA8uPoxHLcYO_avlNzZ4cnpWH_VTsA4rqfBf4bGFnwoHSW9FgmA4PbC0RanXC1CGE3P6mkkd7xESObghWO4i2Tq-Z3yqlaGPjZKYnxjRodjWmsg9wh9zw9A"/>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col gap-2 pt-6 h-screen w-64 fixed left-0 top-16 bg-[#0E0E0E] z-40">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-black text-white font-headline">Community Insights</h2>
+<p class="text-xs text-on-surface-variant">Local LPG availability</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="bg-white text-[#131313] rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Home Feed
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">emergency_home</span>
+                Emergency Alerts
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">gas_meter</span>
+                Active Offers
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+                My Requests
+            </a>
+</nav>
+<div class="mt-8 px-4">
+<button class="w-full py-3 bg-primary text-on-primary rounded-md font-bold text-sm tracking-tight hover:opacity-90 active:scale-95 transition-all">
+                Create Post
+            </button>
+</div>
+<div class="mt-auto pb-20 flex flex-col gap-1">
+<a class="text-[#C5C7C1] mx-2 px-4 py-2 flex items-center gap-3 hover:bg-[#1F1F1F] text-xs" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+<a class="text-[#C5C7C1] mx-2 px-4 py-2 flex items-center gap-3 hover:bg-[#1F1F1F] text-xs" href="#">
+<span class="material-symbols-outlined">description</span>
+                Terms
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 mr-0 lg:mr-80 pt-24 px-4 md:px-8 pb-12 transition-all">
+<!-- Filter Bar -->
+<div class="mb-10 flex items-center gap-3 overflow-x-auto no-scrollbar pb-2">
+<button class="px-5 py-2 rounded-full bg-white text-surface text-xs font-semibold whitespace-nowrap">All Posts</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:text-white text-xs font-semibold whitespace-nowrap transition-colors">Emergency</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:text-white text-xs font-semibold whitespace-nowrap transition-colors">Available</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant hover:text-white text-xs font-semibold whitespace-nowrap transition-colors">Nearby</button>
+<div class="h-6 w-px bg-outline-variant/30 mx-2"></div>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white text-xs font-medium transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                Sort: Newest
+            </button>
+</div>
+<!-- Feed Grid -->
+<div class="flex flex-col gap-6 max-w-3xl mx-auto">
+<!-- Post Card: Emergency -->
+<article class="liquid-glass glass-edge rounded-xl p-6 shadow-2xl relative overflow-hidden border border-error/20 group hover:-translate-y-1 transition-all duration-300">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-white">Anonymous User</span>
+<span class="text-[10px] bg-error/20 text-error px-2 py-0.5 rounded uppercase font-bold tracking-widest">Emergency</span>
+</div>
+<div class="flex items-center gap-1 text-xs text-on-surface-variant">
+<span>Upper Hill, Nairobi</span>
+<span>•</span>
+<span>2 mins ago</span>
+</div>
+</div>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant">more_horiz</button>
+</div>
+<h3 class="text-xl font-headline font-bold text-white mb-3">Critical Shortage at Main Depot - Urgent help needed!</h3>
+<p class="text-on-surface-variant leading-relaxed mb-6">
+                    We've been waiting for 4 hours and they just announced they've run out of 13kg cylinders. If anyone knows an alternative supplier nearby that is currently open, please share! Many families here are stranded.
+                </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="px-3 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-on-surface uppercase tracking-tight">#GasShortage</span>
+<span class="px-3 py-1 bg-surface-container-highest rounded text-[10px] font-bold text-on-surface uppercase tracking-tight">#Urgent</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors group/btn">
+<span class="material-symbols-outlined group-hover/btn:scale-110 transition-transform">thumb_up</span>
+<span class="text-xs font-medium">42 Helpful</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors group/btn">
+<span class="material-symbols-outlined group-hover/btn:scale-110 transition-transform">chat_bubble</span>
+<span class="text-xs font-medium">12 Comments</span>
+</button>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-error text-white rounded text-xs font-bold hover:opacity-90 transition-opacity">Request Help</button>
+<button class="px-4 py-2 bg-white/5 text-white rounded text-xs font-bold hover:bg-white/10 transition-colors">Start Chat</button>
+</div>
+</div>
+</article>
+<!-- Post Card: Available -->
+<article class="liquid-glass glass-edge rounded-xl p-6 shadow-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<img alt="Sarah K." class="w-10 h-10 rounded-full object-cover" data-alt="Professional portrait of a young woman with a warm smile, natural lighting, outdoors in a park" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSvE05yjBDcJFI5EtLlIGvNd_caVGoiEPMdZ5IzLrVhBfNpsSwmV2QeVgUVQJeHTTBE8AlL6C_UrBEbZFC-LkJhUmWIxDVvJe_IQA8rmtkcP3zIN0jWtAhyTnEOqjnZNnQMM-c4IqI4kw1Da7_fbZzw9HePO73IwBs4Fzz4PROm3s2j7ZZCuHaFPGJ3EtiMxIJrXu5v9LGrb_h8wGxEodWo-PAKkqahp4_SShoqS8nygpjL2k7076WsLxLq2N0Wq-lftg9xLQfEQ"/>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-white">Sarah Kamau</span><div class="flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Verified</span>
+</div>
+<div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+<span class="text-[10px] text-emerald-400 font-bold tracking-widest">AVAILABLE</span>
+</div>
+<div class="flex items-center gap-1 text-xs text-on-surface-variant">
+<span>Westlands Square</span>
+<span>•</span>
+<span>15 mins ago</span>
+</div>
+</div>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant">more_horiz</button>
+</div>
+<h3 class="text-xl font-headline font-bold text-white mb-3">Fresh stock just arrived at Rubis Westlands</h3>
+<p class="text-on-surface-variant leading-relaxed mb-4">
+                    Just refilled my 6kg tank. They have plenty of 6kg and 13kg in stock. Queue is moving fast (about 10 mins). Price is standard at 1,250 KES for the 6kg refill.
+                </p>
+<div class="rounded-xl overflow-hidden mb-6 aspect-video bg-surface-container-high relative">
+<img alt="Gas cylinders" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Rows of brightly colored gas cylinders at a modern fueling station, professional photography, clean composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_8D28xmWub9SIfcO9jSumktSNJ3mHWapL43Mf2jVq6w32FqJoWSUAbnPDYRbs8B6-Ca4LXAtZ1emHjJQ0AIAkj8Dizqyv1hOwGxJfRRCJ0Zrg-19T85Ior05udYU6OK5UI499ny-mSYGEeVUBx7HBk1GMwTfUlBB6RfC6rcipu50G_1uSqH5N8Z1_6uhaqmOINrkJD2yZ4ReneShkpWI0_htCFKM0KnwHzhsL8TPpY2DiON7Od93QiY_mQHUbCuU7TFgL7cPxxA"/>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">thumb_up</span>
+<span class="text-xs font-medium">128 Helpful</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-xs font-medium">4 Comments</span>
+</button>
+</div>
+<button class="px-4 py-2 bg-white text-surface rounded text-xs font-bold hover:bg-secondary-fixed-dim transition-colors">Start Chat</button>
+</div>
+</article>
+<!-- Post Card: Info/Nearby -->
+<article class="liquid-glass glass-edge rounded-xl p-6 shadow-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">info</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-semibold text-white">Local Admin</span>
+<span class="text-[10px] bg-surface-container-highest text-on-surface px-2 py-0.5 rounded uppercase font-bold tracking-widest">Information</span>
+</div>
+<div class="flex items-center gap-1 text-xs text-on-surface-variant">
+<span>Global Update</span>
+<span>•</span>
+<span>1 hour ago</span>
+</div>
+</div>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant">more_horiz</button>
+</div>
+<h3 class="text-lg font-headline font-bold text-white mb-2">New Safety Regulations for Home Delivery</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                    Please ensure all delivery personnel show their valid hub ID before allowing them access to your premises. We've updated the safety protocols... <button class="text-white hover:underline">Read More</button>
+</p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">thumb_up</span>
+<span class="text-xs font-medium">256</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined">share</span>
+<span class="text-xs font-medium">Share</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Right Sidebar: Quick Insights -->
+<aside class="hidden lg:flex flex-col gap-6 w-80 fixed right-0 top-16 h-[calc(100vh-4rem)] p-8 overflow-y-auto no-scrollbar bg-surface border-l border-white/5">
+<!-- Live Status Widget -->
+<section class="liquid-glass glass-edge p-5 rounded-xl border border-white/5">
+<h4 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant mb-4">Market Status</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface">Average Price</span>
+<span class="text-sm font-bold text-white">1,280 KES</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface">Demand Level</span>
+<div class="flex items-center gap-2">
+<div class="w-12 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-[75%] h-full bg-error"></div>
+</div>
+<span class="text-[10px] font-bold text-error">HIGH</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm text-on-surface">Wait Times</span>
+<span class="text-sm text-on-surface-variant">15 - 45 mins</span>
+</div>
+</div>
+</section>
+<!-- Map Snippet -->
+<section class="space-y-4">
+<div class="flex items-center justify-between px-1">
+<h4 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant">Hotspots Near You</h4>
+<button class="text-[10px] text-white underline font-bold">View Full Map</button>
+</div>
+<div class="aspect-square rounded-xl bg-surface-container overflow-hidden relative group cursor-pointer">
+<img alt="Map" class="w-full h-full object-cover grayscale contrast-125 opacity-60 group-hover:scale-110 transition-transform duration-700" data-alt="Abstract dark themed map of a city with glowing supply points and transit lines, high tech UI look" data-location="Nairobi" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB08smE87D1shJu_a9-Tu_7tAnUUSl2oF1_4QdluSVmvBhmXR6-ZjX8oFt0ErbB_kTwhq-Nar91LDfDoOQa8ro41LMaka--Pt5FkE6UUo1qMgHw3sdJSTL3W6hyVwnUbtVeXcJ93DOQTbeQouyJe41ex7YCpjOFDk1Qbjd_An7DR4YIY1gGW8EEVG1qcRB8N-M2_ODvTj7ElEVOOW9ZDggI3snml3SrfGrHMVNN0LoaEwqaknNoL1aSUL2J-YfmZOzQleWHTQlu3Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute bottom-4 left-4">
+<div class="flex items-center gap-2 bg-black/60 backdrop-blur px-3 py-1.5 rounded-full border border-white/10">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span class="text-[10px] font-bold text-white tracking-tight">3 Active Alerts</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Contributors -->
+<section class="space-y-4">
+<h4 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant px-1">Top Contributors</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<img alt="Alex M." class="w-8 h-8 rounded-full object-cover ring-2 ring-transparent group-hover:ring-primary transition-all" data-alt="Portrait of a mature man with a beard and professional glasses in a modern office, cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfXq705PO8eaVuor3ZrHCOm758ZfmvJqfLmxbQHQrm8iewFLJHDbOUrBPWT47o7eGWYjCAGbigSGVElRR_FDjbLm0eDM9KriT_QcA-g2ZkeXBKTEUgCDcWh6pGclj1CGSfrTuaMG0LMXZnQmJKiEfnNGNx0Gz7ztFMpsKUZk8V_vr0iNnyoQqCGMAEEFN5_njI5PQfaYO0zhJWocjkWwxizXQhUWi_QvS7O6CNMMQUZ9S6_rjMvY4sK0tCVNxkZ5krBTtjTyp8Jg"/>
+<div>
+<p class="text-xs font-bold text-white">Alex Mwangi</p>
+<p class="text-[10px] text-on-surface-variant">1,240 Helpful Points</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<img alt="Grace T." class="w-8 h-8 rounded-full object-cover ring-2 ring-transparent group-hover:ring-primary transition-all" data-alt="Portrait of a young professional woman smiling in a minimalist studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGtfJTNbpfT2n49dy9bcrYHAyHlrkNFvY-_lxDg91IJBVV7cqGLTEXTtSAbMxz8tDa-SqUeuQlSbtSTzFUP4qAxeOJtpUVh1KN5tEes1jbBIqg23qkqs-ssPtHYhOL8NsTZjmkYXkntAbkKQvW5YgsFPicClj5-6rZTXfXXBIJ7-3rF913Zq9hC-8uevcCyFvl6xjzD1AG8So5Ajj_RkBRNIX6dDs3_c-uKytdB67UIgpLk39DOoO7i79QgCeYeSFZrP3U4fAaaA"/>
+<div>
+<p class="text-xs font-bold text-white">Grace Tanui</p>
+<p class="text-[10px] text-on-surface-variant">980 Helpful Points</p>
+</div>
+</div>
+</div>
+</section><section class="space-y-4 mt-6">
+<h4 class="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant px-1">Verified Suppliers</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">store</span>
+</div>
+<div>
+<p class="text-xs font-bold text-white">Rubis Westlands</p>
+<p class="text-[10px] text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">verified</span> Official Partner
+        </p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_gas_station</span>
+</div>
+<div>
+<p class="text-xs font-bold text-white">TotalEnergies Upper Hill</p>
+<p class="text-[10px] text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">verified</span> Trusted Station
+        </p>
+</div>
+</div>
+</div>
+</section>
+</aside>
+<!-- FAB for mobile -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 32px;">add</span>
+</button>
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+
+  themeToggle.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    const isDark = html.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // Check for saved theme preference
+  if (localStorage.getItem('theme') === 'light') {
+    html.classList.remove('dark');
+  }
+</script></body></html>

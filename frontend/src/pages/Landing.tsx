@@ -42,9 +42,11 @@ export default function Landing() {
                 Raise Emergency
               </button>
             </Link>
-            <button className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-black transition-all">
-              Explore Platform
-            </button>
+            <Link to="/auth">
+              <button className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-black transition-all">
+                Explore Platform
+              </button>
+            </Link>
           </FadeIn>
         </div>
 

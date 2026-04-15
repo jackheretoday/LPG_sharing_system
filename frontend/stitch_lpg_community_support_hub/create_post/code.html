@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Create Post | LPG Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#e2e2e2",
+                        "surface": "#131313",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "on-secondary-fixed-variant": "#484742",
+                        "outline": "#8f918c",
+                        "on-primary-container": "#636561",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c5c7c1",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-error": "#690005",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary": "#c9c6c0",
+                        "inverse-primary": "#5d5f5b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-tertiary": "#313030",
+                        "background": "#131313",
+                        "primary-fixed": "#e2e3de",
+                        "inverse-on-surface": "#303030",
+                        "primary": "#ffffff",
+                        "primary-container": "#e2e3de",
+                        "outline-variant": "#454843",
+                        "on-tertiary-container": "#656464",
+                        "surface-bright": "#393939",
+                        "on-primary-fixed-variant": "#454744",
+                        "on-primary-fixed": "#1a1c19",
+                        "secondary-fixed": "#e5e2db",
+                        "error": "#ffb4ab",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "surface-tint": "#c6c7c2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-variant": "#353535",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-container": "#1f1f1f",
+                        "on-secondary": "#31312c",
+                        "tertiary": "#ffffff",
+                        "secondary-container": "#4a4944",
+                        "inverse-surface": "#e2e2e2",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-background": "#e2e2e2",
+                        "surface-container-low": "#1b1b1b",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "tertiary-container": "#e5e2e1",
+                        "on-secondary-container": "#bbb8b2",
+                        "on-primary": "#2f312e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-glow:focus-within {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-surface-container-lowest text-background-dark dark:text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background-light/80 dark:bg-[#131313]/80 backdrop-blur-xl border-b border-black/5 dark:border-white/5 flex justify-between items-center px-8 h-16 w-full shadow-sm dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="text-xl font-bold tracking-tighter text-background-dark dark:text-white font-headline">LPG Hub</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-manrope tracking-tight" href="#">Community</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-manrope tracking-tight" href="#">Map</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors font-manrope tracking-tight" href="#">Resources</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-[#C5C7C1] hover:bg-white/10 transition-all rounded-md active:scale-95 duration-200">notifications</button>
+<button class="material-symbols-outlined p-2 text-[#C5C7C1] hover:bg-white/10 transition-all rounded-md active:scale-95 duration-200">settings</button>
+<button class="p-2 text-[#C5C7C1] hover:bg-white/10 dark:hover:bg-white/10 hover:bg-black/5 transition-all rounded-md active:scale-95 duration-200 flex items-center justify-center" id="theme-toggle">
+<span class="material-symbols-outlined dark:hidden text-on-surface-variant">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:block text-[#C5C7C1]">light_mode</span>
+</button><div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container ml-2">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="close up professional portrait of a user with neutral background and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSGsChV4S3BIowSnG5JQu4jMnDOWpsG-G4-LOz9SFIwTJjQwYrNERiNZ2-iLzVvUmPDngccssBsOOYmDKu4rNVSJPRl13hikJhNfeqeVi5CwXl9nWfs_KBnL4C0MiQgvctHmmZkjyKxtRwbYwDtzbPKs0NJgVoQwhEb_XVX6d1TPUuhnp_lkN5MPNmmBA4N_sLrIpVOty88QFAfgY0H-osxo32HsLARWiF6mfnNjFEHwjVIc0MiPzQWebtyEWk8NpNrO6i7fPUAg"/>
+</div>
+</div>
+</nav>
+<main class="min-h-screen pt-32 pb-20 px-6 flex flex-col items-center">
+<!-- Header Section (Asymmetric Editorial Layout) -->
+<div class="w-full max-w-4xl mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
+<div class="max-w-xl">
+<h1 class="text-5xl md:text-6xl font-headline font-extrabold tracking-tighter text-background-dark dark:text-white mb-4">
+                    New <span class="text-on-surface-variant italic">Entry</span>
+</h1>
+<p class="text-on-surface-variant text-lg font-light leading-relaxed">
+                    Share updates with the LPG community. Whether it's an urgent need or a local stock alert, clarity helps everyone.
+                </p>
+</div>
+<div class="hidden md:block pb-2">
+<span class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant/40 font-bold">LPG Hub / Workspace / 2024</span>
+</div>
+</div>
+<!-- Glassmorphic Form Container -->
+<div class="w-full max-w-4xl glass-panel p-8 md:p-12 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-white/70 dark:bg-[#1f1f1f]/70 border-black/5 dark:border-white/10">
+<form class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- Post Type Selection -->
+<div class="col-span-1 md:col-span-2 space-y-3">
+<label class="text-xs uppercase tracking-widest text-on-surface-variant font-bold text-on-surface-variant/80 dark:text-on-surface-variant">Post Type</label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<button class="flex items-center gap-3 p-4 rounded-lg bg-surface-bright text-white border border-white/20 transition-all" type="button">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">emergency_home</span>
+<span class="font-medium">Emergency Request</span>
+</button>
+<button class="flex items-center gap-3 p-4 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined">gas_meter</span>
+<span class="font-medium">Availability</span>
+</button>
+<button class="flex items-center gap-3 p-4 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high transition-all" type="button">
+<span class="material-symbols-outlined">update</span>
+<span class="font-medium">General Update</span>
+</button>
+</div>
+</div>
+<!-- Title -->
+<div class="col-span-1 md:col-span-2 space-y-3">
+<label class="text-xs uppercase tracking-widest text-on-surface-variant font-bold text-on-surface-variant/80 dark:text-on-surface-variant" for="title">Title</label>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" id="title" placeholder="A brief, descriptive subject..." type="text"/>
+</div>
+<!-- Description -->
+<div class="col-span-1 md:col-span-2 space-y-3">
+<label class="text-xs uppercase tracking-widest text-on-surface-variant font-bold text-on-surface-variant/80 dark:text-on-surface-variant" for="description">Description</label>
+<textarea class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" id="description" placeholder="Details about the current situation or availability..." rows="5"></textarea>
+</div>
+<!-- Location -->
+<div class="space-y-3">
+<label class="text-xs uppercase tracking-widest text-on-surface-variant font-bold text-on-surface-variant/80 dark:text-on-surface-variant" for="location">Location</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">location_on</span>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" id="location" placeholder="Search area or neighborhood" type="text"/>
+</div>
+</div>
+<!-- Urgency Level -->
+<div class="space-y-3">
+<label class="text-xs uppercase tracking-widest text-on-surface-variant font-bold text-on-surface-variant/80 dark:text-on-surface-variant">Urgency Level</label>
+<select class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all">
+<option value="low">Standard Utility</option>
+<option value="medium">Urgent Need</option>
+<option value="high">Critical / Emergency</option>
+</select>
+</div>
+<!-- Optional: Cylinder Availability (Conditional visual style) -->
+<div class="col-span-1 md:col-span-2 p-6 rounded-lg bg-black/5 dark:bg-surface-container-high/40 border border-black/5 dark:border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">inventory_2</span>
+<span class="font-headline font-bold text-white tracking-tight">Cylinder Inventory</span>
+</div>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Optional</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="space-y-2">
+<span class="text-[10px] text-on-surface-variant/60 block">5kg Units</span>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" placeholder="0" type="number"/>
+</div>
+<div class="space-y-2">
+<span class="text-[10px] text-on-surface-variant/60 block">12kg Units</span>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" placeholder="0" type="number"/>
+</div>
+<div class="space-y-2">
+<span class="text-[10px] text-on-surface-variant/60 block">14kg Units</span>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" placeholder="0" type="number"/>
+</div>
+<div class="space-y-2">
+<span class="text-[10px] text-on-surface-variant/60 block">Commercial</span>
+<input class="w-full bg-white dark:bg-surface-container-low border border-black/10 dark:border-none rounded-lg p-4 text-background-dark dark:text-white placeholder:text-on-surface-variant/50 dark:placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-black/20 dark:focus:ring-white/20 input-glow transition-all" placeholder="0" type="number"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="col-span-1 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6 pt-6 border-t border-white/5">
+<p class="text-on-surface-variant text-xs max-w-sm">
+                        By submitting this post, you agree to provide accurate information to help your community maintain reliable LPG access.
+                    </p>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button class="w-full md:w-auto px-8 py-3 text-on-surface-variant hover:text-white transition-colors font-medium" type="button">Discard</button>
+<button class="w-full md:w-auto px-10 py-4 bg-background-dark dark:bg-white text-white dark:text-on-primary font-headline font-bold rounded-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-lg" type="submit">
+                            Publish Post
+                        </button>
+</div>
+</div>
+</form>
+</div>
+<!-- Secondary Info (Asymmetric Bento Block) -->
+<div class="w-full max-w-4xl mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-1 md:col-span-2 bg-white dark:bg-surface-container p-8 rounded-xl flex flex-col justify-between border border-black/5 dark:border-none shadow-sm dark:shadow-none">
+<div>
+<h3 class="text-white font-headline font-bold text-xl mb-4 text-background-dark dark:text-white">Real-time Map Integration</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Posts tagged with a specific location automatically populate the regional heat map for 24 hours.</p>
+</div>
+<div class="h-32 w-full rounded-lg overflow-hidden grayscale opacity-50 contrast-125">
+<img alt="Neighborhood map interface" class="w-full h-full object-cover" data-alt="abstract stylized black and white street map with minimalist UI markers and clean lines" data-location="Chicago" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlryfb6_hg-rA89v94xlqedFPIAXxx_qtGYRDJl4n2C5hzjiV0xnhZOjDohiKE2gngPHusipF7NDkMFBhbj7C2I6bhEkAZDYW3KYgnuqkP0UIH8lK0xBdLdxAMOScaFleRgcTXLItfQ-qUt53mVegI5XR4_gbWB-g729DB2I5cJL8_XQsq80dDXfUccCeu2qAhTJCI-M4hzxluzhVDeSx1t7xUGfHvDFQGmssQJzS_ulX5Rgn7kXMTCPmQgkrkQbtd7XrxnBRWiw"/>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-bright p-8 rounded-xl border border-black/5 dark:border-white/5 flex flex-col justify-center gap-4 shadow-sm dark:shadow-none">
+<div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">verified_user</span>
+</div>
+<h3 class="text-white font-headline font-bold text-lg text-background-dark dark:text-white">Trusted Submissions</h3>
+<p class="text-on-surface-variant text-sm">Verified providers receive a badge on their availability updates to ensure authenticity.</p>
+</div>
+</div>
+</main>
+<!-- Footer Space -->
+<footer class="py-12 border-t border-black/5 dark:border-white/5 bg-white dark:bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="font-headline font-black text-lg tracking-tighter uppercase text-background-dark dark:text-white">LPG Hub</div>
+<div class="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/40">
+<a class="hover:text-white transition-colors" href="#">Safety Protocols</a>
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Data Transparency</a>
+<a class="hover:text-white transition-colors" href="#">System Status</a>
+</div>
+<div class="text-on-surface-variant/30 text-xs font-mono">2024 CORE SYSTEM v4.1</div>
+</div>
+</footer>
+<script>
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+    });
+</script></body></html>

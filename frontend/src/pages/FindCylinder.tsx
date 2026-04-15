@@ -1,96 +1,141 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MapView } from '@/components/MapView';
 import { CylinderCard } from '@/components/CylinderCard';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Search, Filter, ArrowLeft, LayoutGrid, Map as MapIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { mockMarkers } from '@/lib/mockData';
-import { motion } from 'framer-motion';
 
 export default function FindCylinder() {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   // Filter only cylinder markers
   const cylinderMarkers = mockMarkers.filter(m => m.type === 'cylinder');
 
   return (
-    <div className="h-screen w-full bg-black text-white flex flex-col font-sans overflow-hidden">
-      {/* Search Bar Header */}
-      <div className="p-4 md:p-6 border-b border-white/10 liquid-glass flex items-center justify-between gap-4 z-10">
-        <div className="flex items-center gap-4 flex-1">
-          <button onClick={() => navigate('/dashboard')} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-            <ArrowLeft className="w-5 h-5 text-gray-400" />
+    <div className="h-screen w-full bg-surface text-on-surface flex flex-col font-body overflow-hidden selection:bg-white selection:text-black">
+      
+      {/* Modern Header / Navigator */}
+      <nav className="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-white/5 flex justify-between items-center px-8 h-16 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={() => navigate('/dashboard')}
+            className="p-2 hover:bg-white/10 rounded-md transition-all text-on-surface-variant flex items-center justify-center"
+          >
+            <span className="material-symbols-outlined !text-xl">arrow_back</span>
           </button>
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <Input 
-              placeholder="Search by area or agency..." 
-              className="pl-10 h-10 bg-white/5 border-white/10 rounded-xl focus:border-white/30"
-            />
-          </div>
+          <div className="text-xl font-bold tracking-tighter text-white font-headline">Find LPG</div>
+        </div>
+
+        <div className="flex-1 max-w-xl px-12 relative group hidden md:block">
+          <span className="material-symbols-outlined absolute left-15 top-1/2 -translate-y-1/2 text-on-surface-variant/30 !text-sm">search</span>
+          <input 
+            className="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-white/10 transition-all text-white placeholder:text-on-surface-variant/20" 
+            placeholder="Search neighborhood or agency..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className={`rounded-lg h-8 px-3 gap-2 text-xs ${viewMode === 'list' ? 'bg-white text-black hover:bg-white' : 'text-gray-400'}`}
+          <div className="bg-surface-container-low p-1 rounded-lg border border-white/5 flex">
+            <button 
+              className={`px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all ${viewMode === 'list' ? 'bg-white text-black shadow-lg' : 'text-on-surface-variant hover:text-white'}`}
               onClick={() => setViewMode('list')}
             >
-              <LayoutGrid className="w-3.5 h-3.5" /> List
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className={`rounded-lg h-8 px-3 gap-2 text-xs ${viewMode === 'map' ? 'bg-white text-black hover:bg-white' : 'text-gray-400'}`}
+              <span className="material-symbols-outlined !text-sm">view_agenda</span> List
+            </button>
+            <button 
+              className={`px-4 py-1.5 rounded-md text-xs font-bold flex items-center gap-2 transition-all ${viewMode === 'map' ? 'bg-white text-black shadow-lg' : 'text-on-surface-variant hover:text-white'}`}
               onClick={() => setViewMode('map')}
             >
-              <MapIcon className="w-3.5 h-3.5" /> Map
-            </Button>
+              <span className="material-symbols-outlined !text-sm">map</span> Map
+            </button>
           </div>
-          <Button variant="outline" size="icon" className="h-10 w-10 border-white/10 rounded-xl">
-            <Filter className="w-4 h-4 text-gray-400" />
-          </Button>
+          <button className="p-2 hover:bg-white/10 rounded-md transition-all text-on-surface-variant flex items-center justify-center border border-white/5 ml-2">
+            <span className="material-symbols-outlined !text-xl">filter_list</span>
+          </button>
         </div>
-      </div>
+      </nav>
 
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-hidden pt-16">
         {/* VIEW: MAP */}
-        <div className={`absolute inset-0 transition-opacity duration-500 ${viewMode === 'map' ? 'opacity-100 z-0' : 'opacity-0 -z-10 pointer-events-none'}`}>
-          <MapView mode="discovery" />
+        <div className={`absolute inset-0 transition-opacity duration-700 ${viewMode === 'map' ? 'opacity-100 z-0' : 'opacity-0 -z-10 pointer-events-none'}`}>
+          <div className="w-full h-full grayscale-[0.3] contrast-[1.1]">
+            <MapView mode="discovery" />
+          </div>
         </div>
 
         {/* VIEW: LIST (Glass Overlay) */}
-        <div className={`absolute inset-0 z-10 overflow-hidden bg-black/40 backdrop-blur-sm transition-transform duration-500 ${viewMode === 'list' ? 'translate-y-0' : 'translate-y-full'}`}>
-           <div className="h-full overflow-y-auto p-6 md:p-10 max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 {cylinderMarkers.map((c, i) => (
-                   <motion.div 
-                    key={c.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                   >
-                     <CylinderCard 
-                      ownerName={c.ownerName || 'Unknown'} 
-                      distance={c.distance || 'Unknown'} 
-                      availability={c.availability || 'Out of stock'} 
-                     />
-                   </motion.div>
-                 ))}
-              </div>
-              
-              {cylinderMarkers.length === 0 && (
-                <div className="h-64 flex flex-col items-center justify-center text-center opacity-40">
-                  <Search className="w-12 h-12 mb-4" />
-                  <p>No cylinders found in your immediate area.</p>
-                </div>
-              )}
-           </div>
-        </div>
+        <AnimatePresence>
+          {viewMode === 'list' && (
+            <motion.div 
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="absolute inset-0 z-10 overflow-hidden bg-surface/40 backdrop-blur-md border-t border-white/5"
+            >
+               <div className="h-full overflow-y-auto p-8 md:p-12 max-w-6xl mx-auto custom-scrollbar">
+                  <div className="flex items-center justify-between mb-10">
+                    <h2 className="text-2xl font-headline font-black text-white tracking-tight">Cylinders Available Near You</h2>
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant/60">{cylinderMarkers.length} Results found</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     {cylinderMarkers.map((c, i) => (
+                       <motion.div 
+                        key={c.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                       >
+                         <div className="hub-glass glass-edge p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-500 border border-white/5 shadow-2xl">
+                           <div className="flex justify-between items-start mb-6">
+                             <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-500">
+                               <span className="material-symbols-outlined !text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>gas_meter</span>
+                             </div>
+                             <span className="bg-emerald-500/10 text-emerald-400 text-[10px] font-black tracking-widest px-3 py-1 rounded-full uppercase border border-emerald-500/20">Verified</span>
+                           </div>
+                           
+                           <h3 className="text-xl font-headline font-extrabold text-white mb-2 leading-tight">{c.ownerName || 'Independent Station'}</h3>
+                           <div className="flex items-center gap-4 mb-6">
+                             <p className="text-xs text-on-surface-variant flex items-center gap-1.5">
+                               <span className="material-symbols-outlined !text-sm">location_on</span>
+                               {c.distance || '0.8 km away'}
+                             </p>
+                             <p className="text-xs text-on-surface-variant flex items-center gap-1.5">
+                               <span className="material-symbols-outlined !text-sm">schedule</span>
+                               Open now
+                             </p>
+                           </div>
+
+                           <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                             <div>
+                               <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black mb-1">Stock</p>
+                               <p className="text-sm font-bold text-white">{c.availability || 'In Stock (12)'}</p>
+                             </div>
+                             <button className="bg-white text-black px-5 py-2 rounded font-black text-xs hover:bg-[#C9C6C0] active:scale-95 transition-all">Request</button>
+                           </div>
+                         </div>
+                       </motion.div>
+                     ))}
+                  </div>
+                  
+                  {cylinderMarkers.length === 0 && (
+                    <div className="h-96 flex flex-col items-center justify-center text-center">
+                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-on-surface-variant mb-6">
+                        <span className="material-symbols-outlined !text-4xl">search_off</span>
+                      </div>
+                      <h3 className="text-xl font-headline font-bold text-white mb-2">No Cylinders Found</h3>
+                      <p className="text-on-surface-variant max-w-sm">We couldn't find any resources matching your search in this area. Try adjusting your filters.</p>
+                    </div>
+                  )}
+               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

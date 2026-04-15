@@ -12,6 +12,9 @@ import RegisterCylinder from '@/pages/RegisterCylinder';
 import FindCylinder from '@/pages/FindCylinder';
 import Chat from '@/pages/Chat';
 import Profile from '@/pages/Profile';
+import Community from '@/pages/Community';
+import CreatePost from '@/pages/CreatePost';
+import PostDetails from '@/pages/PostDetails';
 
 function App() {
   return (
@@ -30,6 +33,9 @@ function App() {
         <Route path="/find" element={<FindCylinder />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/community/create" element={<CreatePost />} />
+        <Route path="/community/post/:id" element={<PostDetails />} />
       </Routes>
     </Router>
   );

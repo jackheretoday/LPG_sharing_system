@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0e0e0e;
+        }
+        .liquid-glass {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .obsidian-void {
+            background: radial-gradient(circle at 50% 50%, #131313 0%, #0e0e0e 100%);
+        }
+        .brushed-metal {
+            background: linear-gradient(145deg, #ffffff 0%, #c9c6c0 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#313030",
+                        "secondary": "#c9c6c0",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "primary": "#ffffff",
+                        "outline": "#8f918c",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-container": "#e5e2e1",
+                        "on-secondary-container": "#bbb8b2",
+                        "on-primary-container": "#636561",
+                        "error-container": "#93000a",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c5c7c1",
+                        "surface-container": "#1f1f1f",
+                        "on-surface": "#e2e2e2",
+                        "outline-variant": "#454843",
+                        "inverse-on-surface": "#303030",
+                        "secondary-container": "#4a4944",
+                        "on-secondary-fixed": "#1c1c18",
+                        "primary-container": "#e2e3de",
+                        "on-secondary-fixed-variant": "#484742",
+                        "primary-fixed": "#e2e3de",
+                        "surface": "#131313",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#c6c7c2",
+                        "surface-container-low": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131313",
+                        "on-secondary": "#31312c",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-tertiary-container": "#656464",
+                        "inverse-surface": "#e2e2e2",
+                        "tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#e5e2db",
+                        "on-error": "#690005",
+                        "on-background": "#e2e2e2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#2f312e",
+                        "on-primary-fixed": "#1a1c19",
+                        "on-primary-fixed-variant": "#454744",
+                        "surface-container-highest": "#353535",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#5d5f5b"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="dark bg-surface text-on-surface min-h-screen flex flex-col obsidian-void overflow-hidden">
+<!-- TopNavBar (The "Navigation Shell" suppressed logic applied - only rendering essential brand and theme toggle as it's a login screen) -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl text-neutral-50 font-['Manrope'] tracking-tight text-sm font-semibold border-b border-neutral-50/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-6 h-16 w-full">
+<div class="text-xl font-bold tracking-tighter text-neutral-50">
+            Lumina Noir
+        </div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Directory</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Trust</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="User avatar placeholder showing a professional silhouette in a clean studio setting with neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMU29HKk8PMc2Kd8E-5IquSjQqxiHzMyY-s1e38xYSlW7zIPeQm7Q-oq2Y5HbDN3aDvS345TtEtCTxswFZz60jNA-lB79nPI9LyyKFni54rzfVeAzCWMkviJgCtA4Q5gp5o8JFmJL5Lt2uqYeuMZo6Wb5f15ai7qQJT9bPe7q4uCVHUgMsPdMJ6Qck7izM68gOzDFniK9xo2sXz9CMcLsTXETviT_v_j8B06lDIVePK6uEFiSLMCpWKPy0gL9wS0IXhQq8ZMZigA"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center p-4 relative">
+<!-- Background Decorative Element (Asymmetric Depth) -->
+<div class="absolute top-1/4 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 -left-20 w-80 h-80 bg-secondary-container/10 rounded-full blur-[100px]"></div>
+<!-- Login Container (Liquid Glass Card) -->
+<div class="w-full max-w-md liquid-glass p-8 md:p-12 rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-outline-variant/10 relative z-10">
+<header class="mb-10">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-on-primary" data-icon="emergency_heat">emergency_heat</span>
+</div>
+<h2 class="font-headline text-2xl font-extrabold tracking-tighter text-on-surface">Lumina Utility</h2>
+</div>
+<h1 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-2">Welcome Back</h1>
+<p class="text-on-surface-variant font-body text-sm leading-relaxed">Enter your registered phone number to receive a secure access code for emergency services.</p>
+</header>
+<form class="space-y-6">
+<!-- Phone Input (Utility-Focused) -->
+<div class="space-y-2">
+<label class="font-label text-xs font-semibold uppercase tracking-widest text-on-surface-variant" for="phone">Phone Number</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant">
+<span class="text-sm font-medium">+1</span>
+</div>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-4 pl-12 pr-4 text-on-surface placeholder:text-neutral-600 focus:ring-0 focus:bg-surface-container-high transition-all duration-300 outline-none" id="phone" name="phone" placeholder="(555) 000-0000" type="tel"/>
+<div class="absolute bottom-0 left-0 h-[1px] w-0 bg-primary group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+<!-- Action Section -->
+<div class="pt-4">
+<button class="w-full brushed-metal py-4 rounded-lg font-headline font-extrabold text-on-primary tracking-wide shadow-xl hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+                        Send OTP
+                        <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<footer class="mt-12 pt-8 border-t border-outline-variant/10">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2 text-xs text-on-surface-variant font-label">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified_user">verified_user</span>
+<span>Secure Verification Service</span>
+</div>
+<p class="text-xs text-neutral-500 font-body leading-relaxed">
+                        By continuing, you agree to Lumina Noir's <a class="text-secondary hover:text-primary transition-colors underline decoration-secondary/30" href="#">Terms of Trust</a> and <a class="text-secondary hover:text-primary transition-colors underline decoration-secondary/30" href="#">Privacy Protocol</a>.
+                    </p>
+</div>
+</footer>
+</div>
+<!-- Utility Decorative Text (Asymmetric/Editorial) -->
+<div class="hidden lg:block absolute left-12 bottom-12 opacity-20 pointer-events-none">
+<h3 class="font-headline text-6xl font-black tracking-tighter text-on-surface leading-none">NOIR<br/>SYSTEM</h3>
+</div>
+</main>
+<!-- Navigation Shell (BottomNavBar suppressed for Login focused task) -->
+</body></html>

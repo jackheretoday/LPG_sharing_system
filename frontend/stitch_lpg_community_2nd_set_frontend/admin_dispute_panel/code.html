@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dispute Panel - LPG Resolve</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#8f918c",
+                    "on-primary-fixed-variant": "#454744",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "surface-container": "#1f1f1f",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-tertiary-container": "#656464",
+                    "on-secondary-container": "#bbb8b2",
+                    "secondary-container": "#4a4944",
+                    "primary-fixed-dim": "#c6c7c2",
+                    "on-secondary-fixed-variant": "#484742",
+                    "inverse-surface": "#e2e2e2",
+                    "outline-variant": "#454843",
+                    "surface": "#131313",
+                    "on-background": "#e2e2e2",
+                    "primary-fixed": "#e2e3de",
+                    "on-surface-variant": "#c5c7c1",
+                    "on-tertiary": "#313030",
+                    "surface-variant": "#353535",
+                    "on-secondary-fixed": "#1c1c18",
+                    "surface-container-low": "#1b1b1b",
+                    "tertiary-container": "#e5e2e1",
+                    "primary-container": "#e2e3de",
+                    "tertiary": "#ffffff",
+                    "on-secondary": "#31312c",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#474646",
+                    "secondary": "#c9c6c0",
+                    "on-error": "#690005",
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary-fixed": "#1a1c19",
+                    "tertiary-fixed-dim": "#c9c6c5",
+                    "tertiary-fixed": "#e5e2e1",
+                    "primary": "#ffffff",
+                    "surface-tint": "#c6c7c2",
+                    "surface-container-highest": "#353535",
+                    "on-primary-container": "#636561",
+                    "error": "#ffb4ab",
+                    "surface-dim": "#131313",
+                    "secondary-fixed": "#e5e2db",
+                    "background": "#131313",
+                    "surface-bright": "#393939",
+                    "on-surface": "#e2e2e2",
+                    "secondary-fixed-dim": "#c9c6c0",
+                    "on-primary": "#2f312e",
+                    "inverse-primary": "#5d5f5b",
+                    "inverse-on-surface": "#303030"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .liquid-glass {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0e0e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #454843;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="hidden md:flex flex-col h-full p-4 space-y-2 bg-[#0E0E0E] h-screen w-64 border-r border-[#454843]/15 font-['Inter'] text-sm">
+<div class="mb-8 px-2 pt-4">
+<h1 class="text-lg font-bold text-[#E2E2E2] font-headline tracking-tight">Admin Console</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant/60">Dispute Management</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#C5C7C1] hover:bg-[#1F1F1F] hover:text-[#FFFFFF] transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#FFFFFF] font-semibold bg-[#1F1F1F] rounded-md transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="gavel">gavel</span>
+<span>All Claims</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#C5C7C1] hover:bg-[#1F1F1F] hover:text-[#FFFFFF] transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_late">assignment_late</span>
+<span>Inspector Queue</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#C5C7C1] hover:bg-[#1F1F1F] hover:text-[#FFFFFF] transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+<span>Audit Log</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<button class="w-full py-3 bg-primary text-on-primary font-semibold rounded-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+                Generate Report
+            </button>
+<div class="flex items-center gap-3 mt-6 px-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a professional male administrator with a calm expression in studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1hUO-Xk2FoUqgCKcKJhjv88a-st1vi2h8ejdA-5q8DLqy-q-CSnVyajTASU0Wwby51N5MseeSRpvjKoQMPooJhPKlHHOMxkp4cl60-fEUlL_wGj-ejqJTF3AUG66hAdT3q41HlHnaez522D0tpm1HyCNdbJQtQMoEDTtEfTVAxQS6_IIFMPZb2R23huMTlKcw5PCoJ3DjeO7HFtr3GM8vHesSyfhtyHT1cdLLQ4Frm7TLkvvn121zg933PIkqWkVL_a_GdHhmVA"/>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-on-surface">Alex Rivera</span>
+<span class="text-[10px] text-on-surface-variant">Senior Inspector</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 bg-surface">
+<!-- TopNavBar Component -->
+<header class="fixed top-0 w-full z-50 md:relative bg-[#131313]/80 backdrop-blur-xl border-b border-[#454843]/15 flex justify-between items-center px-8 h-16 w-full shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-colors duration-300 ease-in-out">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold text-[#E2E2E2] font-headline tracking-tight">LPG Resolve</div>
+<nav class="hidden md:flex items-center gap-6 text-sm font-['Inter']">
+<a class="text-[#C5C7C1] hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="text-white border-b-2 border-white pb-1" href="#">My Disputes</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors" href="#">Resources</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-9 pr-4 py-1.5 text-sm focus:ring-1 focus:ring-outline-variant/40 w-64 text-on-surface" placeholder="Search disputes..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto pt-20 pb-24 md:pt-8 px-4 md:px-12 space-y-12">
+<!-- Page Header & Stats -->
+<section class="flex flex-col md:flex-row justify-between items-end gap-6">
+<div>
+<h2 class="text-4xl font-headline font-extrabold tracking-tight text-white mb-2">Dispute Management</h2>
+<p class="text-on-surface-variant max-w-xl">Review and resolve claims across the community. Prioritize high-impact cases and maintain structural integrity.</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container p-4 rounded-xl min-w-[120px] flex flex-col gap-1 border-t border-white/5">
+<span class="text-[10px] text-on-surface-variant font-bold tracking-widest uppercase">Pending</span>
+<span class="text-2xl font-headline font-bold">24</span>
+</div>
+<div class="bg-surface-container p-4 rounded-xl min-w-[120px] flex flex-col gap-1 border-t border-white/5">
+<span class="text-[10px] text-error font-bold tracking-widest uppercase">High Priority</span>
+<span class="text-2xl font-headline font-bold text-error">08</span>
+</div>
+<div class="bg-surface-container p-4 rounded-xl min-w-[120px] flex flex-col gap-1 border-t border-white/5">
+<span class="text-[10px] text-on-surface-variant font-bold tracking-widest uppercase">Resolved</span>
+<span class="text-2xl font-headline font-bold text-on-surface-variant/50">142</span>
+</div>
+</div>
+</section>
+<!-- Active Resolution Panel (Bento Focus) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Main Table Area -->
+<div class="lg:col-span-8 space-y-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex gap-2">
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-on-primary">All Claims</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant hover:text-white">Pending</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-surface-container text-on-surface-variant hover:text-white">Resolved</button>
+</div>
+<button class="flex items-center gap-2 text-xs text-on-surface-variant hover:text-white">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                            Sort: Newest First
+                        </button>
+</div>
+<!-- Dispute List -->
+<div class="space-y-3">
+<!-- High Priority Row -->
+<div class="group bg-surface-container-low hover:bg-surface-container transition-colors p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border-l-2 border-error">
+<div class="flex-1 space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold bg-error-container/20 text-error px-2 py-0.5 rounded">HIGH PRIORITY</span>
+<span class="text-xs text-on-surface-variant">#DIS-9241</span>
+</div>
+<h3 class="text-lg font-bold text-white font-headline">Boundary Wall Structural Integrity</h3>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="person">person</span> John Doe</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span> Oct 12, 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-surface-container-high text-white text-xs font-semibold rounded-md border border-white/5 hover:bg-surface-bright transition-colors">Details</button>
+<button class="px-4 py-2 bg-white text-on-primary text-xs font-semibold rounded-md hover:opacity-90 transition-opacity">Take Action</button>
+</div>
+</div>
+<!-- Standard Row -->
+<div class="group bg-surface-container-low hover:bg-surface-container transition-colors p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1 space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold bg-secondary-container/30 text-secondary px-2 py-0.5 rounded">PENDING</span>
+<span class="text-xs text-on-surface-variant">#DIS-8802</span>
+</div>
+<h3 class="text-lg font-bold text-white font-headline">Lawn Maintenance Compliance</h3>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="person">person</span> Sarah Smith</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span> Oct 11, 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-surface-container-high text-white text-xs font-semibold rounded-md border border-white/5 hover:bg-surface-bright transition-colors">Details</button>
+<button class="px-4 py-2 bg-white text-on-primary text-xs font-semibold rounded-md hover:opacity-90 transition-opacity">Take Action</button>
+</div>
+</div>
+<!-- Standard Row -->
+<div class="group bg-surface-container-low hover:bg-surface-container transition-colors p-5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="flex-1 space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold bg-secondary-container/30 text-secondary px-2 py-0.5 rounded">PENDING</span>
+<span class="text-xs text-on-surface-variant">#DIS-8755</span>
+</div>
+<h3 class="text-lg font-bold text-white font-headline">Unauthorized Exterior Paint Change</h3>
+<div class="flex items-center gap-4 text-xs text-on-surface-variant">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="person">person</span> Mike Johnson</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span> Oct 10, 2023</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 bg-surface-container-high text-white text-xs font-semibold rounded-md border border-white/5 hover:bg-surface-bright transition-colors">Details</button>
+<button class="px-4 py-2 bg-white text-on-primary text-xs font-semibold rounded-md hover:opacity-90 transition-opacity">Take Action</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Action & Resolution Side Panel -->
+<div class="lg:col-span-4 space-y-6">
+<div class="liquid-glass p-6 rounded-2xl border border-white/5 shadow-2xl space-y-6 sticky top-24">
+<div class="flex items-center justify-between border-b border-white/10 pb-4">
+<h3 class="text-lg font-bold font-headline">Resolution Hub</h3>
+<span class="text-[10px] text-on-surface-variant">SELECTED: #DIS-9241</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-2 block font-bold">Inspector Notes</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl text-sm text-on-surface focus:ring-1 focus:ring-outline-variant/40 resize-none p-3" placeholder="Add detailed inspection observations..." rows="4"></textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-2 block font-bold">Quick Actions</label>
+<button class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors text-sm font-medium">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" data-icon="task_alt">task_alt</span>
+                                        Approve Claim
+                                    </div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high hover:bg-surface-bright transition-colors text-sm font-medium">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="mail">mail</span>
+                                        Request Info
+                                    </div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="flex items-center justify-between p-3 rounded-lg bg-error-container/10 hover:bg-error-container/20 transition-colors text-sm font-medium text-error">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="cancel">cancel</span>
+                                        Reject Claim
+                                    </div>
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="pt-4 border-t border-white/10">
+<button class="w-full py-3 bg-white text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity shadow-[0_10px_20px_rgba(255,255,255,0.1)]">
+                                Finalize Resolution
+                            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- BottomNavBar Component (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-3 md:hidden bg-[#1F1F1F]/70 backdrop-blur-lg border-t border-[#454843]/20 shadow-2xl rounded-t-xl z-50">
+<a class="flex flex-col items-center text-[#FFFFFF] font-bold opacity-100 transition-transform scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-['Inter']">Disputes</span>
+</a>
+<a class="flex flex-col items-center text-[#C5C7C1] hover:opacity-80 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-[10px] font-['Inter']">New Claim</span>
+</a>
+<a class="flex flex-col items-center text-[#C5C7C1] hover:opacity-80 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-['Inter']">Profile</span>
+</a>
+</nav>
+</main>
+</body></html>

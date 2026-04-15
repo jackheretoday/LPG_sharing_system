@@ -15,6 +15,16 @@ import Profile from '@/pages/Profile';
 import Community from '@/pages/Community';
 import CreatePost from '@/pages/CreatePost';
 import PostDetails from '@/pages/PostDetails';
+import TrustLogin from '@/pages/trust/TrustLogin';
+import OTPVerify from '@/pages/trust/OTPVerify';
+import ProfileSetup from '@/pages/trust/ProfileSetup';
+import TrustProfile from '@/pages/trust/TrustProfile';
+import NearbyProviders from '@/pages/trust/NearbyProviders';
+import ProviderDetails from '@/pages/trust/ProviderDetails';
+import RaiseDispute from '@/pages/trust/RaiseDispute';
+import Disputes from '@/pages/trust/Disputes';
+import DisputeDetails from '@/pages/trust/DisputeDetails';
+import AdminDisputes from '@/pages/trust/AdminDisputes';
 
 function App() {
   return (
@@ -36,6 +46,18 @@ function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/community/create" element={<CreatePost />} />
         <Route path="/community/post/:id" element={<PostDetails />} />
+        
+        {/* Trust Layer Routes */}
+        <Route path="/auth/login" element={<TrustLogin />} />
+        <Route path="/auth/otp-verify" element={<OTPVerify />} />
+        <Route path="/onboarding/setup" element={<ProfileSetup />} />
+        <Route path="/trust/me" element={<TrustProfile />} />
+        <Route path="/providers/nearby" element={<NearbyProviders />} />
+        <Route path="/provider/:id" element={<ProviderDetails />} />
+        <Route path="/disputes/new/:exchangeId" element={<RaiseDispute />} />
+        <Route path="/disputes" element={<Disputes />} />
+        <Route path="/disputes/:id" element={<DisputeDetails />} />
+        <Route path="/admin/disputes" element={<AdminDisputes />} />
       </Routes>
     </Router>
   );

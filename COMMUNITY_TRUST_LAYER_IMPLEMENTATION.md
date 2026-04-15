@@ -324,6 +324,10 @@ This gives you a deployable, low-cost, real-world trust layer that can scale gra
 
 Run this in Supabase SQL Editor after project setup.
 
+If your project already has `public.users` but is missing trust tables, run the migration file first:
+- `backend/migrations/001_add_trust_tables.sql`
+- This is the safest path for existing projects and matches the backend mirror write expectations.
+
 ```sql
 -- Recommended extension for UUID generation
 create extension if not exists pgcrypto;
@@ -491,6 +495,7 @@ alter table public.user_badges enable row level security;
 alter table public.disputes enable row level security;
 
 -- Users can view own profile; public trust fields can be exposed via API view if needed.
+-- If you already created a recursive policy, drop it first and recreate it with a direct auth.uid() comparison only.
 create policy if not exists users_select_own on public.users
 for select using (auth.uid() = id);
 
@@ -510,6 +515,9 @@ for select using (auth.uid() = user_id);
 
 create policy if not exists user_badges_select_own on public.user_badges
 for select using (auth.uid() = user_id);
+
+-- Health checks should probe trust_metrics or another non-recursive table.
+-- Do not use public.users for generic connectivity checks unless its RLS is known to be safe.
 ```
 
 ### 15.2 Trust Score Recompute Query (Reference)
@@ -545,4 +553,166 @@ set trust_score = c.new_score,
     updated_at = now()
 from calc c
 where t.user_id = c.user_id;
+```
+
+## 16. Backend Implementation Tracker
+
+Use this checklist to track what is already done and what is still pending.
+
+- [x] Supabase client config added in backend/config/supabaseClient.js
+- [x] Auth module created with signup/login/me
+- [x] Role-aware JWT payloads added
+- [x] Trust score service created
+- [x] Trust routes added
+- [x] Verification routes added
+- [x] Dispute routes added
+- [x] Internal exchange hook routes added
+- [x] Backend database status endpoint added
+- [x] Local MCP server for Supabase added
+- [ ] Supabase SQL schema applied in production project
+- [ ] Supabase RLS policies corrected and tested
+- [ ] Frontend trust pages connected to backend APIs
+- [ ] Inspector/admin dashboards connected
+- [ ] Final production SMS OTP provider integrated
+
+Note:
+- Current backend trust routes run in a dev-safe fallback mode when the Supabase schema or service-role setup is incomplete.
+- Once the final Supabase schema and service-role key are in place, the same routes can persist trust data directly to the database.
+
+## 17. Postman Testing Guide
+
+### 17.1 Base URL
+- Local backend: `http://localhost:5000`
+
+### 17.2 Recommended Postman Flow
+
+1. Check backend health
+- Method: `GET`
+- URL: `http://localhost:5000/`
+
+2. Check database connection
+- Method: `GET`
+- URL: `http://localhost:5000/api/db/status`
+
+3. Signup a user
+- Method: `POST`
+- URL: `http://localhost:5000/api/auth/signup`
+- Body:
+```json
+{
+  "name": "John Bright",
+  "email": "john@example.com",
+  "password": "pass1234",
+  "role": "household"
+}
+```
+
+4. Login
+- Method: `POST`
+- URL: `http://localhost:5000/api/auth/login`
+- Body:
+```json
+{
+  "email": "john@example.com",
+  "password": "pass1234"
+}
+```
+
+5. Save JWT token
+- In Postman Tests tab:
+```javascript
+const response = pm.response.json();
+pm.environment.set("token", response.token);
+```
+
+6. Get my trust profile
+- Method: `GET`
+- URL: `http://localhost:5000/api/trust/me`
+- Headers:
+  - `Authorization: Bearer {{token}}`
+
+7. Verify PIN
+- Method: `POST`
+- URL: `http://localhost:5000/api/verification/pin-verify`
+- Headers:
+  - `Authorization: Bearer {{token}}`
+- Body:
+```json
+{
+  "pinCode": "500001",
+  "addressText": "Sample address in Hyderabad"
+}
+```
+
+8. Upload ID document link
+- Method: `POST`
+- URL: `http://localhost:5000/api/verification/id-upload`
+- Headers:
+  - `Authorization: Bearer {{token}}`
+- Body:
+```json
+{
+  "idDocUrl": "https://example.com/id-card.png"
+}
+```
+
+9. Review ID (inspector/admin only)
+- Method: `POST`
+- URL: `http://localhost:5000/api/verification/id-review`
+- Body:
+```json
+{
+  "userId": 1,
+  "decision": "approved"
+}
+```
+
+10. Recompute trust score (admin/inspector only)
+- Method: `POST`
+- URL: `http://localhost:5000/api/trust/recompute/1`
+- Headers:
+  - `Authorization: Bearer {{token}}`
+
+11. Create dispute
+- Method: `POST`
+- URL: `http://localhost:5000/api/disputes`
+- Headers:
+  - `Authorization: Bearer {{token}}`
+- Body:
+```json
+{
+  "exchangeId": 1,
+  "againstUserId": 2,
+  "reason": "Unsafe cylinder condition"
+}
+```
+
+12. Trigger exchange hook (admin/inspector only)
+- Method: `POST`
+- URL: `http://localhost:5000/api/internal/exchange-completed`
+- Body:
+```json
+{
+  "userId": 1,
+  "successful": true,
+  "safetyCompleted": true,
+  "disputed": false,
+  "responseSeconds": 180
+}
+```
+
+### 17.3 What to Expect
+- `/api/db/status` should confirm Supabase reachability.
+- `/api/trust/me` should return score, badges, and verification state.
+- After PIN verification and completed exchanges, trust score should increase.
+- After enough safe exchanges, badges like `verified_household`, `safety_compliant`, and `fast_responder` should appear.
+
+### 17.4 Database View Checks
+In Supabase SQL editor, verify rows with:
+```sql
+select * from public.users;
+select * from public.user_verifications;
+select * from public.trust_metrics;
+select * from public.user_badges;
+select * from public.disputes;
 ```

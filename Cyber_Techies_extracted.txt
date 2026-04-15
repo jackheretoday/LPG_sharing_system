@@ -1,0 +1,38 @@
+
+
+===== PAGE 1 =====
+• Team Name: Cyber Techies
+• Team Leader: John Bright
+• Problem Statement: Community-Based LPG Sharing & Emergency 
+Access Platform
+• Team Members: John Bright, Dinesh Suthar, Rajpratap Baniya
+Team Details
+
+===== PAGE 2 =====
+Overview of your solution
+• The Idea: A safe online platform that lets verified community members list and trade extra LPG cylinders 
+when there are problems with supply.
+• The goal is to connect people who have extra cylinders with people who are running low on them in a 
+dangerous way, so that no one has to use unsafe fuel alternatives.
+• Value Proposition: Offers a safe, structured, and verified alternative to the informal and risky "cylinder 
+borrowing" that happens in neighborhoods right now.
+
+===== PAGE 3 =====
+Methodology: Wire frame diagram 
+
+
+===== PAGE 4 =====
+Tech Stack Used 
+• Frontend: React.js and Tailwind CSS make a mobile-first UI that works on all devices.
+• Backend: Render.com hosts the Node.js Express server.
+• Database and authentication: Firebase Firestore (NoSQL) and Firebase Phone Authentication.
+• Maps and location: Leaflet.js with OpenStreetMap (an API that doesn't cost anything).
+• Claude API (Anthropic) is the AI Engine for the "Safety Advisor" chatbot.
+
+===== PAGE 5 =====
+Real World Use Case 
+• Scenario: A family runs out of gas while waiting for a delivery in a Mumbai suburb because of the monsoon.
+• Use: They log into ShareGas, find a neighbor 500 meters away who has an extra cylinder, and make a 
+verified exchange in less than 30 minutes.
+• Safety Assurance: Before the transaction is marked as complete, the app makes both users do a "Leakage & 
+Connection" safety check.

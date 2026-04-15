@@ -5,13 +5,15 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "mcp:supabase": "node mcp/supabase-mcp-server.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@supabase/supabase-js": "^2.103.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",

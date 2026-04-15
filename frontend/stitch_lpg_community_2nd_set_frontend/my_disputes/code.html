@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LPG Resolve - My Disputes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#8f918c",
+                        "on-primary-fixed-variant": "#454744",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-container": "#1f1f1f",
+                        "error-container": "#93000a",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary-container": "#656464",
+                        "on-secondary-container": "#bbb8b2",
+                        "secondary-container": "#4a4944",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-secondary-fixed-variant": "#484742",
+                        "inverse-surface": "#e2e2e2",
+                        "outline-variant": "#454843",
+                        "surface": "#131313",
+                        "on-background": "#e2e2e2",
+                        "primary-fixed": "#e2e3de",
+                        "on-surface-variant": "#c5c7c1",
+                        "on-tertiary": "#313030",
+                        "surface-variant": "#353535",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-container-low": "#1b1b1b",
+                        "tertiary-container": "#e5e2e1",
+                        "primary-container": "#e2e3de",
+                        "tertiary": "#ffffff",
+                        "on-secondary": "#31312c",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "secondary": "#c9c6c0",
+                        "on-error": "#690005",
+                        "surface-container-high": "#2a2a2a",
+                        "on-primary-fixed": "#1a1c19",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "tertiary-fixed": "#e5e2e1",
+                        "primary": "#ffffff",
+                        "surface-tint": "#c6c7c2",
+                        "surface-container-highest": "#353535",
+                        "on-primary-container": "#636561",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#131313",
+                        "secondary-fixed": "#e5e2db",
+                        "background": "#131313",
+                        "surface-bright": "#393939",
+                        "on-surface": "#e2e2e2",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "on-primary": "#2f312e",
+                        "inverse-primary": "#5d5f5b",
+                        "inverse-on-surface": "#303030"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .liquid-gradient {
+            background: linear-gradient(145deg, #FFFFFF 0%, #C9C6C0 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface min-h-screen">
+<!-- TopNavBar Implementation -->
+<nav class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl border-b border-[#454843]/15 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-8 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-[#E2E2E2] font-headline tracking-tight">LPG Resolve</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-[#C5C7C1] hover:text-white transition-colors duration-300 ease-in-out font-headline" href="#">Dashboard</a>
+<a class="text-white border-b-2 border-white pb-1 font-headline" href="#">My Disputes</a>
+<a class="text-[#C5C7C1] hover:text-white transition-colors duration-300 ease-in-out font-headline" href="#">Resources</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#C5C7C1] hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#C5C7C1] hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="User profile avatar" data-alt="User profile avatar of a professional manager in a dark studio setting with soft rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQZ7QoUHbarXVyDEEtP8SPrJ40oHKRJr05hXschfyWP3XWV16SFQxoOWRxnd742PP0sOCn1Fq_FmqA2-fYqeC6Bif8Zr4Y8gRqRmPVYqnYGkBBrNrmcHdesFHe4T8_6kTwLYozsAwGuWzbzW3MbWne8KDFZxM5toX6a7d8jArkBJzx3OMq7MBySKNJghyr2MR3BaYMpy63Csmne2URNgBsaQ2j9CLIhZ0WzDSGecp2wxThzlNg89zI7OIlo61hi9Xf3JSr6o6yHw"/>
+</div>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">My Disputes</h1>
+<p class="text-on-surface-variant font-body">Track and manage your submitted resolution requests.</p>
+</header>
+<!-- Stats Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+<span class="text-on-surface-variant text-sm font-label uppercase tracking-widest">Active Claims</span>
+<span class="text-5xl font-bold font-headline mt-4">08</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between">
+<span class="text-on-surface-variant text-sm font-label uppercase tracking-widest">Awaiting Review</span>
+<span class="text-5xl font-bold font-headline mt-4">03</span>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl border border-outline-variant/10 flex flex-col justify-between group cursor-pointer hover:bg-surface-bright transition-colors">
+<div>
+<span class="text-on-surface-variant text-sm font-label uppercase tracking-widest">Need Help?</span>
+<p class="text-on-surface mt-2 text-sm">Contact our 24/7 support team for immediate assistance.</p>
+</div>
+<div class="mt-4 flex items-center text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform">
+                    Reach Out <span class="material-symbols-outlined ml-1 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex flex-wrap gap-3 mb-8">
+<button class="px-5 py-2 rounded-full bg-on-surface text-on-primary font-medium text-sm">All Disputes</button>
+<button class="px-5 py-2 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant text-sm">Open</button>
+<button class="px-5 py-2 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant text-sm">In Review</button>
+<button class="px-5 py-2 rounded-full bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface-variant text-sm">Resolved</button>
+</div>
+<!-- Disputes Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Dispute Card 1 -->
+<div class="glass-card p-6 rounded-xl hover:bg-[#1F1F1F]/90 transition-all duration-300 group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter bg-[#F9E182]/10 text-[#F9E182] mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F9E182] mr-2"></span>
+                            Open
+                        </div>
+<h3 class="text-xl font-bold font-headline text-on-surface">Cylinder Not Delivered</h3>
+</div>
+<span class="text-on-surface-variant text-xs font-label">Oct 24, 2023</span>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Order ID</span>
+<span class="text-sm font-mono text-on-surface">#LPG-99201-X</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Dispute Card 2 -->
+<div class="glass-card p-6 rounded-xl hover:bg-[#1F1F1F]/90 transition-all duration-300 group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter bg-blue-400/10 text-blue-400 mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-2"></span>
+                            In Review
+                        </div>
+<h3 class="text-xl font-bold font-headline text-on-surface">Damaged Valve Assembly</h3>
+</div>
+<span class="text-on-surface-variant text-xs font-label">Oct 21, 2023</span>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Order ID</span>
+<span class="text-sm font-mono text-on-surface">#LPG-88412-A</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Dispute Card 3 -->
+<div class="glass-card p-6 rounded-xl hover:bg-[#1F1F1F]/90 transition-all duration-300 group cursor-pointer">
+<div class="flex justify-between items-start mb-6">
+<div>
+<div class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter bg-[#82F9A1]/10 text-[#82F9A1] mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-[#82F9A1] mr-2"></span>
+                            Resolved
+                        </div>
+<h3 class="text-xl font-bold font-headline text-on-surface">Incorrect Billing Amount</h3>
+</div>
+<span class="text-on-surface-variant text-xs font-label">Oct 15, 2023</span>
+</div>
+<div class="flex items-center justify-between pt-6 border-t border-outline-variant/10">
+<div class="flex flex-col">
+<span class="text-[10px] text-on-surface-variant uppercase tracking-widest">Order ID</span>
+<span class="text-sm font-mono text-on-surface">#LPG-77103-B</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- New Claim Trigger -->
+<div class="p-6 rounded-xl border-2 border-dashed border-outline-variant/20 flex flex-col items-center justify-center min-h-[160px] group cursor-pointer hover:border-primary/40 transition-colors">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary mb-2 transition-colors" data-icon="add_circle">add_circle</span>
+<span class="text-on-surface-variant font-medium">Report New Issue</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Implementation (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-3 md:hidden bg-[#1F1F1F]/70 backdrop-blur-lg border-t border-[#454843]/20 shadow-2xl z-50 rounded-t-xl">
+<a class="flex flex-col items-center text-[#FFFFFF] font-bold transition-transform scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="list_alt">list_alt</span>
+<span class="text-[10px] font-body mt-1">Disputes</span>
+</a>
+<a class="flex flex-col items-center text-[#C5C7C1] transition-transform hover:opacity-80 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-[10px] font-body mt-1">New Claim</span>
+</a>
+<a class="flex flex-col items-center text-[#C5C7C1] transition-transform hover:opacity-80 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-body mt-1">Profile</span>
+</a>
+</nav>
+<!-- Floating Action Button - Supressed on Detail screens but shown here for primary action -->
+<button class="fixed bottom-24 right-8 w-14 h-14 rounded-full liquid-gradient text-on-primary shadow-2xl flex items-center justify-center hover:scale-105 transition-transform md:flex hidden z-40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</body></html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Noir | Provider Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#313030",
+                        "secondary": "#c9c6c0",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "primary": "#ffffff",
+                        "outline": "#8f918c",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-container": "#e5e2e1",
+                        "on-secondary-container": "#bbb8b2",
+                        "on-primary-container": "#636561",
+                        "error-container": "#93000a",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c5c7c1",
+                        "surface-container": "#1f1f1f",
+                        "on-surface": "#e2e2e2",
+                        "outline-variant": "#454843",
+                        "inverse-on-surface": "#303030",
+                        "secondary-container": "#4a4944",
+                        "on-secondary-fixed": "#1c1c18",
+                        "primary-container": "#e2e3de",
+                        "on-secondary-fixed-variant": "#484742",
+                        "primary-fixed": "#e2e3de",
+                        "surface": "#131313",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#c6c7c2",
+                        "surface-container-low": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131313",
+                        "on-secondary": "#31312c",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-tertiary-container": "#656464",
+                        "inverse-surface": "#e2e2e2",
+                        "tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#e5e2db",
+                        "on-error": "#690005",
+                        "on-background": "#e2e2e2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#2f312e",
+                        "on-primary-fixed": "#1a1c19",
+                        "on-primary-fixed-variant": "#454744",
+                        "surface-container-highest": "#353535",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#5d5f5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0e0e0e;
+            color: #e2e2e2;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .liquid-gradient {
+            background: linear-gradient(145deg, #ffffff 0%, #c9c6c0 100%);
+        }
+        .ghost-border {
+            outline: 1px solid rgba(69, 72, 67, 0.15);
+        }
+        .monolith-shadow {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest">
+<!-- TopNavBar -->
+<nav class="bg-neutral-950/70 backdrop-blur-xl text-neutral-50 font-['Manrope'] tracking-tight text-sm font-semibold fixed top-0 w-full z-50 border-b border-neutral-50/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-6 h-16 w-full">
+<div class="text-xl font-bold tracking-tighter text-neutral-50">Lumina Noir</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-neutral-50 border-b-2 border-neutral-50 pb-1" href="#">Directory</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Trust</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="material-symbols-outlined text-neutral-50 hover:bg-neutral-800/50 rounded-lg p-2 transition-all active:scale-95 duration-200 cursor-pointer" data-icon="notifications">notifications</div>
+<img alt="User avatar" class="w-8 h-8 rounded-full ghost-border" data-alt="high-quality profile portrait of a professional user in dark studio lighting with soft highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqwj0rQWY5YDwdg18kbh-CeQ7-CTi1R7whz-PZpuns8mVasp4mkIJkhRovY5gnGjfzh-VvbHr4NzWs1FUveUcSQ4c-rBY98XCAQaaFujdMZZ1H81VZ3i9FhLO-nhO-Z4qZjZfrAp-o5IB7bljWlq6Nj68PPEJiTuDCjkwfdseV-8yjLVY9NMtQyiROmBvyRFM8bVtzGNo_FrKUFxWQ8oLa28xzhOzlHn6OUhF1zTywG8scuJfF6ntLXf7uJvgrVUj6gWQWS5jXEA"/>
+</div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-4rem)] w-64 bg-neutral-900/80 backdrop-blur-2xl text-neutral-50 font-['Inter'] text-sm font-medium border-r border-neutral-50/10 p-4 gap-4 sticky top-16">
+<div class="flex items-center gap-3 mb-6 px-2">
+<div class="w-10 h-10 rounded-xl bg-surface-bright flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<div class="text-lg font-black text-neutral-50 leading-tight">Lumina Utility</div>
+<div class="text-[10px] uppercase tracking-widest text-on-surface-variant">Verified Provider</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="emergency_heat">emergency_heat</span> Emergency
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-neutral-50 text-neutral-950 rounded-md font-bold shadow-lg active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="local_gas_station">local_gas_station</span> Providers
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span> Community
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span> Verification
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+                </a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container rounded-xl ghost-border">
+<p class="text-[10px] text-on-surface-variant mb-2">URGENT ACTION</p>
+<button class="w-full py-2 bg-primary text-on-primary text-xs font-bold rounded-md hover:opacity-90 transition-all">
+                    Request Emergency Refill
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 p-6 md:p-12 max-w-7xl mx-auto w-full">
+<!-- Header Section: Asymmetric Layout -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 items-end">
+<div class="lg:col-span-8">
+<div class="flex items-center gap-4 mb-4">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-widest uppercase rounded-full">Elite Tier Provider</span>
+<span class="text-on-surface-variant text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span> Oslo, Norway
+                        </span>
+</div>
+<h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter text-on-surface mb-6">Aether Gas Systems</h1>
+<p class="font-body text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+                        Precision LPG distribution and industrial mechanic services. Specializing in high-pressure systems and residential sustainable energy logistics since 2012.
+                    </p>
+</div>
+<div class="lg:col-span-4 flex flex-col items-start lg:items-end gap-6">
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/10 blur-3xl rounded-full"></div>
+<div class="relative w-48 h-48 bg-surface-container-high rounded-full flex items-center justify-center border border-white/5 monolith-shadow">
+<div class="text-center">
+<div class="text-6xl font-headline font-black text-primary">98</div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Trust Score</div>
+</div>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="96" cy="96" fill="none" r="90" stroke="rgba(255,255,255,0.05)" stroke-width="4"></circle>
+<circle cx="96" cy="96" fill="none" r="90" stroke="white" stroke-dasharray="565" stroke-dashoffset="11" stroke-linecap="round" stroke-width="4"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+<!-- Action Card -->
+<div class="md:col-span-1 bg-surface-container rounded-2xl p-8 flex flex-col justify-between ghost-border monolith-shadow relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 liquid-gradient"></div>
+<div>
+<h3 class="font-headline text-2xl font-bold mb-4">Direct Service</h3>
+<p class="text-on-surface-variant text-sm mb-8">Average response time: <span class="text-primary font-semibold">14 minutes</span></p>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="check_circle">check_circle</span>
+<span class="text-sm">Certified Safety Inspection</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="check_circle">check_circle</span>
+<span class="text-sm">Digital Compliance Logs</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="check_circle">check_circle</span>
+<span class="text-sm">Secure Token Payments</span>
+</div>
+</div>
+</div>
+<button class="mt-12 w-full py-4 liquid-gradient text-on-primary font-black uppercase tracking-widest text-xs rounded-lg active:scale-[0.98] transition-transform">
+                        Request Service
+                    </button>
+</div>
+<!-- Activity Log -->
+<div class="md:col-span-2 bg-surface-container-low rounded-2xl p-8 ghost-border">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline text-xl font-bold">Activity Log</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Live Feed</span>
+</div>
+<div class="space-y-6">
+<div class="flex gap-4 items-start">
+<div class="w-2 h-2 rounded-full bg-primary mt-2"></div>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-semibold">Bulk Delivery Completed</span>
+<span class="text-xs text-on-surface-variant">2h ago</span>
+</div>
+<p class="text-xs text-on-surface-variant">Residential Complex Nord-B, Oslo. 450L Refill.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start opacity-60">
+<div class="w-2 h-2 rounded-full bg-outline mt-2"></div>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-semibold">Safety Certification Renewed</span>
+<span class="text-xs text-on-surface-variant">Yesterday</span>
+</div>
+<p class="text-xs text-on-surface-variant">ISO 9001:2023 Audit passed with 0 discrepancies.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start opacity-40">
+<div class="w-2 h-2 rounded-full bg-outline mt-2"></div>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-semibold">Maintenance Dispatch</span>
+<span class="text-xs text-on-surface-variant">Oct 24</span>
+</div>
+<p class="text-xs text-on-surface-variant">Valve replacement at Central Utility Hub.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Reviews Summary -->
+<div class="md:col-span-3 bg-surface-container-low rounded-2xl p-8 ghost-border overflow-hidden relative">
+<div class="flex flex-col md:flex-row gap-12">
+<div class="md:w-1/3">
+<h3 class="font-headline text-xl font-bold mb-2">Customer Sentiment</h3>
+<div class="text-5xl font-black mb-4">4.9<span class="text-xl text-on-surface-variant font-normal">/5.0</span></div>
+<div class="flex gap-1 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Based on 1,240 verified interactions. Rated highly for technical expertise and punctual arrival.</p>
+</div>
+<div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="bg-surface-container rounded-xl p-6 ghost-border">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Reviewer" class="w-8 h-8 rounded-full" data-alt="close-up portrait of a satisfied customer in a modern home office with soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAMCOLFQVNgotBkUAWyQlbmeGShPcpA05bOICaije-yKfjwRdSIWI7ZtUfvwmrKRihSZLoCYYrwfi-JJFMMb_BFMwXDnR6fyINsJrYyuqFHHWK46kMXi8SZfuMBsIWxqLRvW3qudOkFSToddqed-NagKmWw8CnBFKNjVSu-aL4faqmuDTGbd7g9F6XpVA_m0c2xBBRa1-GXP5pUqNnfMXPdwdwjxjkDHwi6JI4TTu_oZHPKE-5XpikyH_i2izsWKo5v5ShluMLJg"/>
+<div>
+<div class="text-xs font-bold">Erik V.</div>
+<div class="text-[10px] text-on-surface-variant">Verified Client</div>
+</div>
+</div>
+<p class="text-xs italic text-on-surface-variant">"Unmatched precision. Their mechanics caught a slow leak our previous provider missed for years."</p>
+</div>
+<div class="bg-surface-container rounded-xl p-6 ghost-border">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Reviewer" class="w-8 h-8 rounded-full" data-alt="professional portrait of a facility manager in a clean industrial environment with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_EYj9iG1X0rOXJBn-GKriRMd8_dxaYB9qx-zOj2vWuDhNjDa55yVnh-CLqt7jkWAlWEjsmEkDvMt9apubCD4nHYMGMzCbu8EK7gz54jrmLWjU9OqAadgGi7DDOaz7YviwOdmDsRVnCpOGgT_IoB4N60gFx-8nEGmSIu4rZqIjFU3KWK8f2n_80qxYWixMA_cF7p3Iz96I-JZm764LsBHSodcu23CETw3TmC_gfM4tgg78tRNeK5C4NCha9P2R-xrqI944acjfeg"/>
+<div>
+<div class="text-xs font-bold">Marta S.</div>
+<div class="text-[10px] text-on-surface-variant">Operations Director</div>
+</div>
+</div>
+<p class="text-xs italic text-on-surface-variant">"Lumina utility integration is seamless. Real-time tracking and automated billing are game changers."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visual Showcase Section -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-8">
+<div>
+<p class="text-[10px] uppercase tracking-[0.3em] text-on-surface-variant mb-2">Technical Capability</p>
+<h2 class="font-headline text-3xl font-bold">Facility &amp; Equipment</h2>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 h-96">
+<div class="col-span-2 row-span-2 rounded-2xl overflow-hidden ghost-border">
+<img alt="Industrial Facility" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="dramatic wide shot of a high-tech industrial gas processing facility at night with glowing blue lights and steam" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVP1BzaY0rTzyDC-SdNUVTsWbj0ItiW19yN_8MagNVQBMb7plh6MlQLSmGTUkqEmiUjbBpcIbBcWLWklIcXQE-oycEdIfVC22DPY9-N9x1dISG4A8_snNv9q3P-h12FAc1HQiZ21FcskfNQKPaKBTFd3G-9JxvsgrwcjCeyGoy1kv1C1w2q-8JXrBqkLdZBNoxjSQwa6YvZGiEf5O8hf80s-5Rrism-dBJSr51V8OhPICe3yy-uIsZ-sTupCRxKhllYWCK0ZZSow"/>
+</div>
+<div class="rounded-2xl overflow-hidden ghost-border">
+<img alt="Equipment" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="close-up of complex industrial piping and pressure gauges with polished steel surfaces and orange warning labels" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuaBhcvMXKrt_CBVvf447owm6Yiccpjh-eIGkWuyzKruvXh7wba_599xuPmFwwRoGOWz6l13-GVWhbMmR7KgS6QItBpwFh3r5q4WIbtnYjBCLY1IWWQBWYdbFcMSTgM-N4e6oP7hhPGDBoWbBpKTwO3NtQ-b44z2gRCHDCq1iA2wTnVoGV_aukK4owlOMDmWXRUoSItijhR20AkmV5Gray7g-VPJ0AfmoKd651nDI-Y40gIrXDZSzqPpnUmmxrg6jlqHvXRGocew"/>
+</div>
+<div class="rounded-2xl overflow-hidden ghost-border">
+<img alt="Service Vehicle" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="sleek matte black delivery truck with minimal white branding parked on a clean concrete surface in fog" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOdpl3ClCPzm5r4tN9nUxbz-2gQsNSc8rGdfvYm9nP84Wa5-ANWG6ZnoNSIlVoDeUWFAQMppdRHQgftZ3gX9Z6NHCD2yVrJKVLBvFrLjyUaor9Lgl6nTRWcwFIexbo4ryvJAaX64XOLj9V7J4I7py2P8VklZifNmtm0Tggt4xATcFlknGd6vxJOZqPqAR1YyPoJyPDhDSIcu-5cpey-B4G8vbI5ZQeCqmesFcg095nBhvmjbcRKDIIF4aFeyUCqYzAP1RsCPfJ-A"/>
+</div>
+<div class="col-span-2 rounded-2xl overflow-hidden ghost-border h-44">
+<img alt="Control Center" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="ultra-modern control room with multiple monitors displaying data visualizations and maps in a darkened room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAP9U5XdQyOhCHUBU7b41QyeybO-Tj5hwu7CbXU1I4bFzd8QaMSL0HDXb2W4rKxsXvlMOknzXkHISE17TTSaFk0J2ewDpWV5ZvzZya2-KSbuw8LOObyG0BGiHGNq2LZx4rIQhEd30gGvvKYD-fOqE2ygVM1yIMGKR2bBBXYq45fs6jG6DuAQGGD2BGqdMdaT607ayIIzSK9XPiakUjylS_mTG5ZWiQiE8GmXWlphNu8vSy4lblJg3ukUTy4LIIDaNgofKkqCBljg"/>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-neutral-950/90 backdrop-blur-xl border-t border-neutral-50/10 px-6 py-3 z-50 flex justify-between items-center">
+<button class="flex flex-col items-center gap-1 text-neutral-400">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-[10px]">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-50">
+<span class="material-symbols-outlined" data-icon="local_gas_station" style="font-variation-settings: 'FILL' 1;">local_gas_station</span>
+<span class="text-[10px]">Providers</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-400">
+<span class="material-symbols-outlined" data-icon="emergency_heat">emergency_heat</span>
+<span class="text-[10px]">Urgent</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-400">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px]">Profile</span>
+</button>
+</div>
+</body></html>

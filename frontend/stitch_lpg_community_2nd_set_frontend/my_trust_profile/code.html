@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#313030",
+                    "secondary": "#c9c6c0",
+                    "tertiary-fixed-dim": "#c9c6c5",
+                    "primary": "#ffffff",
+                    "outline": "#8f918c",
+                    "surface-container-high": "#2a2a2a",
+                    "tertiary-container": "#e5e2e1",
+                    "on-secondary-container": "#bbb8b2",
+                    "on-primary-container": "#636561",
+                    "error-container": "#93000a",
+                    "surface-dim": "#131313",
+                    "on-surface-variant": "#c5c7c1",
+                    "surface-container": "#1f1f1f",
+                    "on-surface": "#e2e2e2",
+                    "outline-variant": "#454843",
+                    "inverse-on-surface": "#303030",
+                    "secondary-container": "#4a4944",
+                    "on-secondary-fixed": "#1c1c18",
+                    "primary-container": "#e2e3de",
+                    "on-secondary-fixed-variant": "#484742",
+                    "primary-fixed": "#e2e3de",
+                    "surface": "#131313",
+                    "surface-variant": "#353535",
+                    "surface-tint": "#c6c7c2",
+                    "surface-container-low": "#1b1b1b",
+                    "on-error-container": "#ffdad6",
+                    "background": "#131313",
+                    "on-secondary": "#31312c",
+                    "primary-fixed-dim": "#c6c7c2",
+                    "on-tertiary-fixed-variant": "#474646",
+                    "on-tertiary-container": "#656464",
+                    "inverse-surface": "#e2e2e2",
+                    "tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#c9c6c0",
+                    "surface-bright": "#393939",
+                    "secondary-fixed": "#e5e2db",
+                    "on-error": "#690005",
+                    "on-background": "#e2e2e2",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "tertiary-fixed": "#e5e2e1",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-primary": "#2f312e",
+                    "on-primary-fixed": "#1a1c19",
+                    "on-primary-fixed-variant": "#454744",
+                    "surface-container-highest": "#353535",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#5d5f5b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-gradient {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .liquid-border {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        body {
+            background-color: #0e0e0e;
+            color: #e2e2e2;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Shell -->
+<nav class="bg-neutral-950/70 backdrop-blur-xl text-neutral-50 font-['Manrope'] tracking-tight text-sm font-semibold fixed top-0 w-full z-50 border-b border-neutral-50/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-neutral-50">Lumina Noir</span>
+<div class="hidden md:flex gap-6">
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Directory</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Trust</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-50">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-50">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/20">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with a neutral expression in a high-end studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQTo6_y_j3x4F16Mj49DHAngWyADXK2x3MqS67j5EmDoVEr5zU5J4U_isfHGuBaLAKUCuFVe0R7Mu5cEJh139CwoL1k5oUeOO7HsagwQt1yVgSJVAqpTB_MKKeoRHKBxOlV4EI6ybrFYdMwrckx6sTi2fvYw_DwfG9nsYT9c3hb1n13gZIubnlrHpqcBmqDFQlqnpcnW9i5XerEH9iLu0yp2Jdnj5lAUG0qm11oHxHpcHSokztnGxvBtVfZuX24f-MAIv7QdGwKg"/>
+</div>
+</div>
+</nav>
+<div class="flex pt-16 min-h-screen">
+<!-- Side Navigation Shell -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-4rem)] w-64 border-r border-neutral-50/10 bg-neutral-900/80 backdrop-blur-2xl p-4 gap-4 sticky top-16">
+<div class="mb-4 px-2">
+<p class="text-lg font-black text-neutral-50 font-headline">Lumina Utility</p>
+<p class="text-xs text-on-surface-variant font-medium">Verified Provider</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">emergency_heat</span> Emergency
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">local_gas_station</span> Providers
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">groups</span> Community
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-neutral-50 text-neutral-950 rounded-md font-bold shadow-lg font-['Inter'] text-sm active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">verified_user</span> Verification
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium active:opacity-80 transition-opacity" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+                </a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container rounded-xl border border-outline-variant/10">
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-md font-bold text-xs uppercase tracking-widest hover:brightness-90 transition-all">
+                    Request Emergency Refill
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 p-6 md:p-12 overflow-y-auto">
+<header class="mb-12 max-w-5xl mx-auto">
+<h1 class="text-4xl md:text-6xl font-headline font-extrabold tracking-tighter text-on-surface mb-2">Account Trust Center</h1>
+<p class="text-on-surface-variant max-w-xl">Manage your verified status, documentation, and infrastructure health in one unified obsidian interface.</p>
+</header>
+<div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Profile Identity Card (Bento Big) -->
+<section class="md:col-span-8 bg-surface-container rounded-2xl overflow-hidden shadow-2xl glass-gradient liquid-border">
+<div class="p-8 flex flex-col md:flex-row gap-8 items-start">
+<div class="relative">
+<div class="w-32 h-32 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+<img class="w-full h-full object-cover" data-alt="professional male portrait with soft studio lighting and dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0TMyCNaXHUpELRSshnPhysoJIKqCLqYLdS6W0RtL_NIRuOxJLPjlw0QZNosLglTkeONuUoJD70Foss2gL7xR9IMROHxZMDcuk2LVdfS2mvmfyV_at9zMI4Pc1be52QMRqwm_sCHZAwG90wBTibpbsVVG2SyTM4KkjjbT2WIxbCL_xWcV2VXx6fJMHxZO2DU-MyN70gJofOl9ef2HLlEqaa-pTD8WT2bpMVm_ARgy2MNmp14MO84oK9k_7CeJAcS1JZXqypOsJ7w"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-on-primary p-1.5 rounded-lg shadow-xl">
+<span class="material-symbols-outlined text-sm font-bold" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-3 mb-1">
+<h2 class="text-3xl font-headline font-bold text-primary">Marcus Sterling</h2>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">Verified Provider</span>
+</div>
+<p class="text-on-surface-variant font-medium mb-6">Senior Logistics Lead • District 7</p>
+<div class="grid grid-cols-2 gap-6 py-6 border-y border-outline-variant/10">
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Trust Score</p>
+<p class="text-2xl font-headline font-bold text-primary">98.4<span class="text-sm font-normal text-on-surface-variant">/100</span></p>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Account Age</p>
+<p class="text-2xl font-headline font-bold text-primary">4.2 <span class="text-sm font-normal text-on-surface-variant">Years</span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="px-8 py-4 bg-surface-container-high/50 flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Last activity: 14 minutes ago from London, UK</span>
+<button class="text-xs font-bold text-primary hover:underline">View History</button>
+</div>
+</section>
+<!-- Status Summary (Bento Side) -->
+<section class="md:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5 shadow-inner">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-4 font-bold">Refill Status</p>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 bg-surface-bright/50 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">emergency_heat</span>
+</div>
+<div>
+<p class="text-lg font-headline font-bold">Standby</p>
+<p class="text-xs text-on-surface-variant">Next window: 04:00 AM</p>
+</div>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4 rounded-full"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant/5 shadow-inner">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-4 font-bold">Document Queue</p>
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="text-sm">License_A7.pdf</span>
+<span class="text-xs font-bold text-primary">✅</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm">Safety_Audit.doc</span>
+<span class="text-xs font-bold text-secondary">⏳</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Cylinder Availability (Full Width Glass) -->
+<section class="md:col-span-12 bg-surface-container-low rounded-2xl p-8 border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32 rounded-full transition-all group-hover:bg-primary/10"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h3 class="text-2xl font-headline font-bold text-primary mb-1">Cylinder Inventory</h3>
+<p class="text-on-surface-variant text-sm">Real-time availability of utility units across localized sectors.</p>
+</div>
+<button class="bg-surface-bright text-on-surface px-4 py-2 rounded-lg text-xs font-bold border border-outline-variant/20 hover:bg-surface-container-highest transition-colors">
+                                View Full Map
+                            </button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Cylinder Item -->
+<div class="bg-surface-container p-5 rounded-xl border-t border-white/5 shadow-lg">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-secondary">database</span>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">UNIT 09</span>
+</div>
+<p class="text-sm font-bold mb-1">Alpha-7 Sector</p>
+<p class="text-xs text-on-surface-variant mb-4">84% Capacity</p>
+<div class="flex gap-1">
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<!-- Cylinder Item -->
+<div class="bg-surface-container p-5 rounded-xl border-t border-white/5 shadow-lg">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-secondary">database</span>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">UNIT 12</span>
+</div>
+<p class="text-sm font-bold mb-1">Beta-Prime</p>
+<p class="text-xs text-on-surface-variant mb-4">12% Capacity</p>
+<div class="flex gap-1">
+<div class="h-1 flex-1 bg-error rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<!-- Cylinder Item -->
+<div class="bg-surface-container p-5 rounded-xl border-t border-white/5 shadow-lg">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-secondary">database</span>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">UNIT 04</span>
+</div>
+<p class="text-sm font-bold mb-1">Gamma Ridge</p>
+<p class="text-xs text-on-surface-variant mb-4">98% Capacity</p>
+<div class="flex gap-1">
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+<div class="h-1 flex-1 bg-primary rounded-full"></div>
+</div>
+</div>
+<!-- Cylinder Item -->
+<div class="bg-surface-container p-5 rounded-xl border-t border-white/5 shadow-lg">
+<div class="flex justify-between mb-4">
+<span class="material-symbols-outlined text-secondary">database</span>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">UNIT 21</span>
+</div>
+<p class="text-sm font-bold mb-1">Delta Port</p>
+<p class="text-xs text-on-surface-variant mb-4">Ready</p>
+<div class="flex gap-1">
+<div class="h-1 flex-1 bg-secondary rounded-full"></div>
+<div class="h-1 flex-1 bg-secondary rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Bottom Nav for Mobile Only -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-neutral-950/90 backdrop-blur-xl border-t border-neutral-50/10 flex justify-around items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold">Panel</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-500">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="text-[10px] font-bold">Trust</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-500">
+<span class="material-symbols-outlined">database</span>
+<span class="text-[10px] font-bold">Storage</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-500">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</button>
+</div>
+</body></html>

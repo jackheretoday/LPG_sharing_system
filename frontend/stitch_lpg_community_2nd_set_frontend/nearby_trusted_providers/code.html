@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#313030",
+                        "secondary": "#c9c6c0",
+                        "tertiary-fixed-dim": "#c9c6c5",
+                        "primary": "#ffffff",
+                        "outline": "#8f918c",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary-container": "#e5e2e1",
+                        "on-secondary-container": "#bbb8b2",
+                        "on-primary-container": "#636561",
+                        "error-container": "#93000a",
+                        "surface-dim": "#131313",
+                        "on-surface-variant": "#c5c7c1",
+                        "surface-container": "#1f1f1f",
+                        "on-surface": "#e2e2e2",
+                        "outline-variant": "#454843",
+                        "inverse-on-surface": "#303030",
+                        "secondary-container": "#4a4944",
+                        "on-secondary-fixed": "#1c1c18",
+                        "primary-container": "#e2e3de",
+                        "on-secondary-fixed-variant": "#484742",
+                        "primary-fixed": "#e2e3de",
+                        "surface": "#131313",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#c6c7c2",
+                        "surface-container-low": "#1b1b1b",
+                        "on-error-container": "#ffdad6",
+                        "background": "#131313",
+                        "on-secondary": "#31312c",
+                        "primary-fixed-dim": "#c6c7c2",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "on-tertiary-container": "#656464",
+                        "inverse-surface": "#e2e2e2",
+                        "tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#e5e2db",
+                        "on-error": "#690005",
+                        "on-background": "#e2e2e2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#2f312e",
+                        "on-primary-fixed": "#1a1c19",
+                        "on-primary-fixed-variant": "#454744",
+                        "surface-container-highest": "#353535",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#5d5f5b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(31, 31, 31, 0.7);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-bg-neutral-950 {
+            background-color: #0e0e0e;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-950/70 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full border-b border-neutral-50/10 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-neutral-50 font-headline">Lumina Noir</span>
+<div class="hidden md:flex items-center gap-6 font-['Manrope'] tracking-tight text-sm font-semibold">
+<a class="text-neutral-50 border-b-2 border-neutral-50 pb-1" href="#">Directory</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Trust</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-low border-none rounded-md px-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-outline-variant/40 placeholder:text-on-surface-variant" placeholder="Search directory..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-neutral-50 hover:bg-neutral-800/50 p-2 rounded-lg transition-all active:scale-95 duration-200">notifications</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="professional portrait of a man in a dark minimalist studio with soft rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQmuvek2CB1RXfAOAixxF-SJy1twiT7qHPbThBj7uRIICldhwQNcbxEqr40BUnEeqsRXcaJg426zM259KRroqYJ7FHZDRnD2n8BQaLQ0ojI08b5-uaQqjwxk6MF7qiCKBkKCZzjwjwXjraJ-xZBFazAS72xWwxOjIh64Y9WPbh4Dpff0dYFVEXHzoyHjK5eMhEDLSDrrRk8hPcsPkC3m-KKx5nm9JFTAeClGDWxV5HM3B-M7yss_3tW8QYtvzhTDIcvciq1Wbdtw"/>
+</div>
+</div>
+</nav>
+<div class="flex pt-16 h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-full w-64 border-r border-neutral-50/10 bg-neutral-900/80 backdrop-blur-2xl p-4 gap-4 tonal-shift-bg-neutral-950">
+<div class="flex items-center gap-3 px-2 py-4">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h2 class="text-lg font-black text-neutral-50 font-headline leading-none">Lumina Utility</h2>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mt-1">Verified Provider</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">emergency_heat</span> Emergency
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 bg-neutral-50 text-neutral-950 rounded-md font-bold shadow-lg font-['Inter'] text-sm" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_gas_station</span> Providers
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">groups</span> Community
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">verified_user</span> Verification
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 text-neutral-400 hover:bg-neutral-800/50 hover:translate-x-1 duration-200 rounded-md font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+                </a>
+</nav>
+<div class="mt-auto p-4 bg-surface-container rounded-xl">
+<p class="text-xs text-on-surface-variant mb-3 font-medium">Need immediate service?</p>
+<button class="w-full bg-primary text-on-primary py-2.5 rounded-md text-xs font-bold active:opacity-80 transition-opacity">
+                    Request Emergency Refill
+                </button>
+</div>
+</aside>
+<!-- Main Content: Split Screen -->
+<main class="flex-1 flex flex-col md:flex-row overflow-hidden bg-surface-container-lowest">
+<!-- Left Panel: Provider List -->
+<section class="w-full md:w-[450px] lg:w-[500px] flex flex-col border-r border-outline-variant/10 bg-surface h-full">
+<div class="p-6 pb-4">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h1 class="text-3xl font-bold font-headline tracking-tighter text-on-surface">Providers</h1>
+<p class="text-on-surface-variant text-sm mt-1">Found 24 verified stations near you</p>
+</div>
+</div>
+<div class="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-4 py-1.5 bg-primary text-on-primary rounded-full text-xs font-semibold whitespace-nowrap">Nearby</button>
+<button class="px-4 py-1.5 bg-surface-container-highest text-on-surface rounded-full text-xs font-semibold whitespace-nowrap hover:bg-surface-bright transition-colors">Most Trusted</button>
+<button class="px-4 py-1.5 bg-surface-container-highest text-on-surface rounded-full text-xs font-semibold whitespace-nowrap hover:bg-surface-bright transition-colors">Lowest Price</button>
+<button class="px-4 py-1.5 bg-surface-container-highest text-on-surface rounded-full text-xs font-semibold whitespace-nowrap hover:bg-surface-bright transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">tune</span> Filters
+                        </button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-6 space-y-4 pb-12 custom-scrollbar">
+<!-- Provider Card 1 -->
+<div class="glass-card p-5 rounded-xl group transition-all hover:bg-surface-bright/40">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-container-high ring-1 ring-white/5">
+<img alt="Titan Gas" class="w-full h-full object-cover" data-alt="industrial minimalist gas refinery exterior with modern brushed metal tanks and clean architecture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpD9ifTMMigcJknVYu-_cALMvkoESXuDTwsdx5f2y0VQYfhMbonQoJWMrOJsgMzJW05kP0NoWamfBnNm5Shq4fi04RrH3JEDg18VOxMzLxDnYVmddX2x_4CtfspQeTr-Fi8hr-CvwzXpi6LkQoB4HgDllonyNbRtWfS7LXav2Mcq9hNf3gZrmA7XtkrYYJiT6Byq8i7EHi_TFRloVI0DiJnubGRQVg_6HBojDpG98AE25JSYWYLr6CIc8kRUH1w8Pk6BDEKeqWaQ"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-on-surface text-lg leading-tight">Titan Energy Hub</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">near_me</span> 0.8 miles</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.9 (1.2k)</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-[10px] text-primary/60 font-bold uppercase tracking-widest mb-1">Status</div>
+<span class="bg-green-500/10 text-green-400 text-[10px] font-bold px-2 py-0.5 rounded border border-green-500/20">Available</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-5">
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">LPG Availability</div>
+<div class="text-sm font-bold text-on-surface">94% Stock</div>
+</div>
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">Current Rate</div>
+<div class="text-sm font-bold text-on-surface">$12.50 <span class="text-[10px] text-on-surface-variant">/kg</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface py-2 rounded-md text-xs font-bold transition-all backdrop-blur-md">View Profile</button>
+<button class="w-10 h-9 flex items-center justify-center bg-primary text-on-primary rounded-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">directions</span>
+</button>
+</div>
+</div>
+<!-- Provider Card 2 -->
+<div class="glass-card p-5 rounded-xl group transition-all hover:bg-surface-bright/40">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-container-high ring-1 ring-white/5">
+<img alt="Apex Fuels" class="w-full h-full object-cover" data-alt="abstract close up of industrial gas cylinders arranged in a clean pattern with cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJB-J6rSyaJsSDqOuI8Sj4d2TV19NSyxMgh0WU0Mj84iCmwvNTLoD8GtfHKOpjFeNrEPj6n9ZSKDr8E7wT4oaQmBJw_dLte6M6Oc0QNv1QnMgw6IbkOI9WbQJ0MsLmK1kvuG06p4KC9WKVQBLgMqh0f3vnKcnGCzo4aspKJmqWfiT7S4POBmeyNT_ZL7lMPjRjlW1Xnmx4qQvtzAHpIfHfg3sm5-8lv8zOrs7S0zJisR4_9g7nADQls6NltZYpQJS1IaVlSC4exw"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-on-surface text-lg leading-tight">Apex Blue Gas</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">near_me</span> 1.4 miles</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.7 (840)</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-[10px] text-primary/60 font-bold uppercase tracking-widest mb-1">Status</div>
+<span class="bg-orange-500/10 text-orange-400 text-[10px] font-bold px-2 py-0.5 rounded border border-orange-500/20">Low Stock</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-5">
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">LPG Availability</div>
+<div class="text-sm font-bold text-on-surface">22% Stock</div>
+</div>
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">Current Rate</div>
+<div class="text-sm font-bold text-on-surface">$11.90 <span class="text-[10px] text-on-surface-variant">/kg</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface py-2 rounded-md text-xs font-bold transition-all backdrop-blur-md">View Profile</button>
+<button class="w-10 h-9 flex items-center justify-center bg-primary text-on-primary rounded-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">directions</span>
+</button>
+</div>
+</div>
+<!-- Provider Card 3 -->
+<div class="glass-card p-5 rounded-xl group transition-all hover:bg-surface-bright/40">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-container-high ring-1 ring-white/5">
+<img alt="EcoGas Local" class="w-full h-full object-cover" data-alt="modern sustainable architecture building with solar panels and green accents at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi8mML9x7JQ6Vrz7iqD527-1haVqs05WBNsPsHTSuWJyF48HiC0pOF82MMDBJl_-SaQqxzRpDx4DzJbm0Qn4hLUitCJMonVxezlYwZz24CqD0D0lDK69rTBau__KwYN4USEthX0LUDldOrFHavJ_3BLNfKROwzhAJ_p7KceXoAYNCrpTtAO7Wusoz_GhSh6rLidzM1SUIPRCz6SSAKt3kweEUPtHXcxcVgXVHqiHcgzJHEgsevCnjmX1lf1Bf1lJdFWHy15u2K4g"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-on-surface text-lg leading-tight">EcoGas Solutions</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex items-center gap-3 text-xs text-on-surface-variant mt-1">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">near_me</span> 2.1 miles</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> 4.5 (520)</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-[10px] text-primary/60 font-bold uppercase tracking-widest mb-1">Status</div>
+<span class="bg-green-500/10 text-green-400 text-[10px] font-bold px-2 py-0.5 rounded border border-green-500/20">Available</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-5">
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">LPG Availability</div>
+<div class="text-sm font-bold text-on-surface">65% Stock</div>
+</div>
+<div class="bg-surface-container-low/50 p-3 rounded-lg">
+<div class="text-[10px] text-on-surface-variant font-medium uppercase tracking-tight mb-1">Current Rate</div>
+<div class="text-sm font-bold text-on-surface">$13.10 <span class="text-[10px] text-on-surface-variant">/kg</span></div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-surface-container-highest/60 hover:bg-surface-container-highest text-on-surface py-2 rounded-md text-xs font-bold transition-all backdrop-blur-md">View Profile</button>
+<button class="w-10 h-9 flex items-center justify-center bg-primary text-on-primary rounded-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">directions</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Panel: Interactive Map (Visual Representation) -->
+<section class="hidden md:block flex-1 relative bg-surface-container-lowest">
+<div class="absolute inset-0 grayscale contrast-125 opacity-40 mix-blend-screen pointer-events-none">
+<div class="w-full h-full" data-alt="a dark stylized topographic map showing city streets and blocks in high contrast black and grey tones" data-location="New York" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAc0Smiy22N1VcZJsgjKSCN2kF5SkJR4zHL2o__dZKcd8E-zMgIjLXNCAaY7rKAvKx2MSL1sWx5ymZmJDqvVQlFgsS2J86xgFubzQngClzqjzUlcVfwiwuXT3gg1Z5jEd0Vs7jav6KCM_hcIZxBjsCB1FrAf7wJ47VBnr-4bbnphs_AYc_bfzdHzxus2qcNFw6_QkUXta1PvQLYIWpP5UOw7o3QSL0ufKmZAqLpkw_r5GZPbtrSNbxeIoPHJP8qJwI4XYux6hqEgA'); background-size: cover; background-position: center;"></div>
+</div>
+<!-- Map UI Elements -->
+<div class="absolute top-6 left-6 flex flex-col gap-2">
+<button class="w-10 h-10 bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/20 rounded-lg flex items-center justify-center hover:bg-surface-bright transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="w-10 h-10 bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/20 rounded-lg flex items-center justify-center hover:bg-surface-bright transition-all">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+<div class="absolute bottom-6 right-6 flex flex-col gap-3 items-end">
+<div class="bg-neutral-900/90 backdrop-blur-xl border border-white/5 p-4 rounded-2xl shadow-2xl max-w-xs">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-2">Live Activity</p>
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+<div class="absolute -inset-1 bg-primary/20 rounded-full animate-ping"></div>
+</div>
+<p class="text-xs text-on-surface leading-tight">4 refilling tankers active in your quadrant.</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2.5 rounded-full text-xs font-bold shadow-[0_10px_20px_rgba(255,255,255,0.1)] flex items-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">my_location</span> Center My Location
+                    </button>
+</div>
+<!-- Custom Map Markers -->
+<div class="absolute top-1/3 left-1/4">
+<div class="relative group cursor-pointer">
+<div class="w-4 h-4 bg-primary rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-surface-bright text-on-surface px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Titan Hub</div>
+</div>
+</div>
+<div class="absolute top-1/2 left-2/3">
+<div class="relative group cursor-pointer">
+<div class="w-4 h-4 bg-primary/40 rounded-full border-2 border-primary shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-surface-bright text-on-surface px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Apex Blue</div>
+</div>
+</div>
+<div class="absolute bottom-1/4 left-1/2">
+<div class="relative group cursor-pointer">
+<div class="w-4 h-4 bg-primary/40 rounded-full border-2 border-primary shadow-[0_0_10px_rgba(255,255,255,0.2)]"></div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-surface-bright text-on-surface px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">EcoGas</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Floating Action Button for Mobile -->
+<div class="md:hidden fixed bottom-6 right-6">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl">map</span>
+</button>
+</div>
+</body></html>

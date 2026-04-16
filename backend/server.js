@@ -13,8 +13,10 @@ const trustRoutes = require("./routes/trustRoutes");
 const verificationRoutes = require("./routes/verificationRoutes");
 const disputeRoutes = require("./routes/disputeRoutes");
 const internalRoutes = require("./routes/internalRoutes");
+const lpgRoutes = require("./routes/lpgRoutes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
+const { seedTestUsers } = require("./models/tempUserStore");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +48,11 @@ app.get("/", (req, res) => {
       "/api/disputes",
       "/api/internal/exchange-completed",
       "/api/internal/emergency-response-logged",
+      "/api/lpg/cylinders",
+      "/api/lpg/usage",
+      "/api/lpg/predict",
+      "/api/lpg/alerts",
+      "/api/lpg/alert-config",
     ],
   });
 });
@@ -57,9 +64,13 @@ app.use("/api/trust", trustRoutes);
 app.use("/api/verification", verificationRoutes);
 app.use("/api/disputes", disputeRoutes);
 app.use("/api/internal", internalRoutes);
+app.use("/api/lpg", lpgRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
+
+// Seed test users on startup
+seedTestUsers().catch(err => console.error("❌ Failed to seed test users:", err));
 
 app.listen(PORT, () => {
   console.log(`Backend server is running on port ${PORT}`);

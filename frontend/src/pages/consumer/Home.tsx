@@ -56,6 +56,14 @@ function ConsumerHomeContent() {
       stateTone: 'neutral',
     },
     {
+      title: 'LPG Prediction & Leakage',
+      description: 'Track cylinder empty-date predictions and quickly access leakage-safe planning actions.',
+      to: '/lpg-prediction',
+      badge: 'LPG',
+      stateLabel: 'Live',
+      stateTone: 'good',
+    },
+    {
       title: 'Raise Dispute',
       description: 'Submit new dispute records and keep moderation context synced with backend state.',
       to: '/disputes/new/demo-exchange',

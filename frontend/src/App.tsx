@@ -22,6 +22,7 @@ import Profile from '@/pages/Profile';
 import Community from '@/pages/Community';
 import CreatePost from '@/pages/CreatePost';
 import PostDetails from '@/pages/PostDetails';
+import { LPGPredictionPage } from '@/pages/LPGPredictionPage';
 import TrustLogin from '@/pages/trust/TrustLogin';
 import OTPVerify from '@/pages/trust/OTPVerify';
 import ProfileSetup from '@/pages/trust/ProfileSetup';
@@ -45,6 +46,7 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/resources" element={<ResourceSharing />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/login" element={<TrustLogin />} />
         <Route path="/admin" element={<AdminHome />} />
         <Route path="/admin/legacy" element={<AdminPanel />} />
         <Route path="/admin/profile" element={<AdminProfile />} />
@@ -60,6 +62,8 @@ function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/community/create" element={<CreatePost />} />
         <Route path="/community/post/:id" element={<PostDetails />} />
+        <Route path="/lpg-prediction" element={<LPGPredictionPage />} />
+        <Route path="/dashboard/lpg" element={<LPGPredictionPage />} />
         
         {/* Trust Layer Routes */}
         <Route path="/auth/login" element={<TrustLogin />} />

@@ -56,6 +56,14 @@ function UserHomeContent() {
       stateTone: 'neutral',
     },
     {
+      title: 'LPG Prediction & Leakage',
+      description: 'Open the LPG module to monitor predicted empty dates and leakage-aware response flow.',
+      to: '/lpg-prediction',
+      badge: 'LPG',
+      stateLabel: 'Live',
+      stateTone: 'good',
+    },
+    {
       title: 'Raise Dispute',
       description: 'Create and track service disputes against exchanges directly from workflow pages.',
       to: '/disputes/new/demo-exchange',

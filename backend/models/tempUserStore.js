@@ -1,4 +1,10 @@
 const { randomUUID } = require("crypto");
+const bcrypt = require("bcryptjs");
+const {
+  getSupabaseAdminClient,
+  hasSupabaseConfig,
+  hasServiceRole,
+} = require("../config/supabaseClient");
 
 const users = [];
 
@@ -122,6 +128,31 @@ const addBadge = (id, badge) => {
   return user.trust.badges;
 };
 
+const mirrorTestUserToSupabase = async ({ id, name, email, role }) => {
+  if (!hasSupabaseConfig() || !hasServiceRole()) {
+    return;
+  }
+
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    return;
+  }
+
+  const { error } = await supabase.from("users").upsert(
+    {
+      id,
+      name,
+      email,
+      role,
+    },
+    { onConflict: "id" }
+  );
+
+  if (error) {
+    throw new Error(`Failed to mirror test user ${email} to Supabase: ${error.message}`);
+  }
+};
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -133,4 +164,75 @@ module.exports = {
   updateUser,
   updateTrust,
   addBadge,
+  seedTestUsers: async () => {
+    // Test Users Data
+    const testUsers = [
+      {
+        id: "550e8400-e29b-41d4-a716-446655440001",
+        name: "Test Consumer",
+        email: "consumer@test.com",
+        password: "Test@123456",
+        role: "consumer",
+      },
+      {
+        id: "550e8400-e29b-41d4-a716-446655440002",
+        name: "Test Provider",
+        email: "provider@test.com",
+        password: "Test@123456",
+        role: "provider",
+      },
+      {
+        id: "550e8400-e29b-41d4-a716-446655440003",
+        name: "Test Admin",
+        email: "admin@test.com",
+        password: "Test@123456",
+        role: "admin",
+      },
+      {
+        id: "550e8400-e29b-41d4-a716-446655440004",
+        name: "John Bright",
+        email: "john@test.com",
+        password: "Test@123456",
+        role: "consumer",
+      },
+    ];
+
+    // Clear existing test users
+    for (const testUser of testUsers) {
+      removeUserByEmail(testUser.email);
+    }
+
+    // Create test users with verified emails
+    for (const testUser of testUsers) {
+      const passwordHash = await bcrypt.hash(testUser.password, 10);
+      createUser({
+        id: testUser.id,
+        name: testUser.name,
+        email: testUser.email,
+        passwordHash,
+        role: testUser.role,
+      });
+      
+      // Verify the email immediately
+      updateUser(testUser.id, {
+        isEmailVerified: true,
+        emailVerificationStatus: "verified",
+        emailVerifiedAt: new Date().toISOString(),
+      });
+
+      try {
+        await mirrorTestUserToSupabase({
+          id: testUser.id,
+          name: testUser.name,
+          email: testUser.email,
+          role: testUser.role,
+        });
+      } catch (error) {
+        console.warn(error.message);
+      }
+    }
+
+    console.log("✅ Test users seeded successfully!");
+    return testUsers;
+  },
 };

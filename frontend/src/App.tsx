@@ -17,7 +17,7 @@ import Suspensions from '@/pages/admin/Suspensions';
 import UserHome from '@/pages/user/Home';
 import ConsumerHome from '@/pages/consumer/Home';
 import MechanicPanel from '@/pages/MechanicPanel';
-import { RoleProtectedRoute } from '@/pages/shared/RoleProtectedRoute';
+import { RoleProtectedRoute } from '@/components/trust/RoleProtectedRoute';
 import RegisterCylinder from '@/pages/RegisterCylinder';
 import FindCylinder from '@/pages/FindCylinder';
 import Chat from '@/pages/Chat';

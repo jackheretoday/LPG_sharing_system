@@ -8,15 +8,15 @@ import Dashboard from '@/pages/Dashboard';
 import Payment from '@/pages/Payment';
 import ResourceSharing from '@/pages/ResourceSharing';
 import TrustLogin from '@/pages/trust/TrustLogin';
-import AdminPanel from '@/pages/admin/AdminPanel';
+import AdminPanel from '@/pages/AdminPanel';
 import AdminHome from '@/pages/admin/Home';
 import AdminProfile from '@/pages/admin/Profile';
 import IdReviewQueue from '@/pages/admin/IdReviewQueue';
 import TrustOverride from '@/pages/admin/TrustOverride';
 import Suspensions from '@/pages/admin/Suspensions';
 import UserHome from '@/pages/user/Home';
-import ConsumerHome from '@/pages/consumer/ConsumerHome';
-import ProviderHome from '@/pages/provider/ProviderHome';
+import ConsumerHome from '@/pages/consumer/Home';
+import MechanicPanel from '@/pages/MechanicPanel';
 import { RoleProtectedRoute } from '@/pages/shared/RoleProtectedRoute';
 import RegisterCylinder from '@/pages/RegisterCylinder';
 import FindCylinder from '@/pages/FindCylinder';
@@ -79,7 +79,7 @@ function App() {
           path="/provider/home" 
           element={
             <RoleProtectedRoute allowedRoles={['provider', 'verified_reseller', 'mechanic']}>
-              <ProviderHome />
+              <MechanicPanel />
             </RoleProtectedRoute>
           } 
         />

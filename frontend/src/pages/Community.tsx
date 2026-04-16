@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
+import { MapView } from '../components/MapView';
 
 // --- Sub-components ---
 
@@ -40,7 +41,7 @@ const TopNavBar = () => {
   );
 };
 
-const SideNavBar = ({ onCreatePost }: { onCreatePost: () => void }) => {
+const SideNavBar = ({ onCreatePost, currentFilter, setFilter }: { onCreatePost: () => void, currentFilter: string, setFilter: (f: string) => void }) => {
   return (
     <aside className="hidden md:flex flex-col gap-2 pt-6 h-screen w-64 fixed left-0 top-16 bg-[#0E0E0E] z-40">
       <div className="px-6 mb-8">
@@ -48,18 +49,30 @@ const SideNavBar = ({ onCreatePost }: { onCreatePost: () => void }) => {
         <p className="text-xs text-on-surface-variant">Local LPG availability</p>
       </div>
       <nav className="flex flex-col gap-1">
-        <a className="bg-white text-[#131313] rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium" href="#">
-          <span className="material-symbols-outlined !text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>home</span> Home Feed
-        </a>
-        <a className="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+        <button 
+          onClick={() => setFilter('All Posts')}
+          className={`${currentFilter === 'All Posts' ? 'bg-white text-[#131313]' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'} rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium transition-all`}
+        >
+          <span className="material-symbols-outlined !text-xl" style={{ fontVariationSettings: currentFilter === 'All Posts' ? "'FILL' 1" : "" }}>home</span> Home Feed
+        </button>
+        <button 
+          onClick={() => setFilter('Emergency')}
+          className={`${currentFilter === 'Emergency' ? 'bg-red-600 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'} rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium transition-all`}
+        >
           <span className="material-symbols-outlined !text-xl">emergency_home</span> Emergency Alerts
-        </a>
-        <a className="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+        </button>
+        <button 
+          onClick={() => setFilter('Available')}
+          className={`${currentFilter === 'Available' ? 'bg-emerald-600 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'} rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium transition-all`}
+        >
           <span className="material-symbols-outlined !text-xl">gas_meter</span> Active Offers
-        </a>
-        <a className="text-[#C5C7C1] mx-2 px-4 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] font-manrope text-sm font-medium transition-colors" href="#">
+        </button>
+        <button 
+          onClick={() => setFilter('Nearby')}
+          className={`${currentFilter === 'Nearby' ? 'bg-blue-600 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'} rounded-md mx-2 px-4 py-3 flex items-center gap-3 font-manrope text-sm font-medium transition-all`}
+        >
           <span className="material-symbols-outlined !text-xl">history</span> My Requests
-        </a>
+        </button>
       </nav>
       <div className="mt-8 px-4">
         <button 
@@ -81,7 +94,7 @@ const SideNavBar = ({ onCreatePost }: { onCreatePost: () => void }) => {
   );
 };
 
-const RightSidebar = () => {
+const RightSidebar = ({ navigate }: { navigate: any }) => {
   return (
     <aside className="hidden lg:flex flex-col gap-6 w-80 fixed right-0 top-16 h-[calc(100vh-4rem)] p-8 overflow-y-auto no-scrollbar bg-surface border-l border-white/5">
       <section className="hub-glass glass-edge p-5 rounded-xl border border-white/5">
@@ -89,7 +102,7 @@ const RightSidebar = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-on-surface">Average Price</span>
-            <span className="text-sm font-bold text-white">1,280 KES</span>
+            <span className="text-sm font-bold text-white">₹950</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-on-surface">Demand Level</span>
@@ -110,19 +123,23 @@ const RightSidebar = () => {
       <section className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <h4 className="text-xs font-black uppercase tracking-[0.2em] text-on-surface-variant">Hotspots Near You</h4>
-          <button className="text-[10px] text-white underline font-bold">View Full Map</button>
+          <button onClick={() => navigate('/dashboard')} className="text-[10px] text-white underline font-bold">View Full Map</button>
         </div>
-        <div className="aspect-square rounded-xl bg-surface-container overflow-hidden relative group cursor-pointer">
-          <img 
-            alt="Map" 
-            className="w-full h-full object-cover grayscale contrast-125 opacity-60 group-hover:scale-110 transition-transform duration-700" 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB08smE87D1shJu_a9-Tu_7tAnUUSl2oF1_4QdluSVmvBhmXR6-ZjX8oFt0ErbB_kTwhq-Nar91LDfDoOQa8ro41LMaka--Pt5FkE6UUo1qMgHw3sdJSTL3W6hyVwnUbtVeXcJ93DOQTbeQouyJe41ex7YCpjOFDk1Qbjd_An7DR4YIY1gGW8EEVG1qcRB8N-M2_ODvTj7ElEVOOW9ZDggI3snml3SrfGrHMVNN0LoaEwqaknNoL1aSUL2J-YfmZOzQleWHTQlu3Q"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
-          <div className="absolute bottom-4 left-4">
-            <div className="flex items-center gap-2 bg-black/60 backdrop-blur px-3 py-1.5 rounded-full border border-white/10">
+        <div 
+          onClick={() => navigate('/dashboard')}
+          className="aspect-square rounded-xl bg-surface-container overflow-hidden relative group cursor-pointer border border-white/10"
+        >
+          {/* Mini Map View */}
+          <div className="absolute inset-0 z-0 grayscale contrast-125 opacity-70 group-hover:opacity-100 transition-all">
+             <MapView />
+          </div>
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] to-transparent opacity-40 z-10"></div>
+          
+          <div className="absolute bottom-4 left-4 z-20">
+            <div className="flex items-center gap-2 bg-black/80 backdrop-blur px-3 py-1.5 rounded-full border border-white/10 shadow-2xl">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span className="text-[10px] font-bold text-white tracking-tight">3 Active Alerts</span>
+              <span className="text-[10px] font-bold text-white tracking-tight">Live LPG Activity</span>
             </div>
           </div>
         </div>
@@ -252,12 +269,43 @@ export default function Community() {
           </div>
           {isEmergency ? (
             <div className="flex gap-2">
-              <button className="px-4 py-2 bg-red-600 text-white rounded text-xs font-bold hover:opacity-90 transition-opacity">Request Help</button>
-              <button className="px-4 py-2 bg-white/5 text-white rounded text-xs font-bold hover:bg-white/10 transition-colors">Start Chat</button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); navigate('/chat'); }}
+                className="px-4 py-2 bg-red-600 text-white rounded text-xs font-bold hover:opacity-90 transition-opacity"
+              >
+                Request Help
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); navigate('/chat'); }}
+                className="px-4 py-2 bg-white/5 text-white rounded text-xs font-bold hover:bg-white/10 transition-colors"
+              >
+                Start Chat
+              </button>
             </div>
           ) : (
-            <button className="px-4 py-2 bg-white text-black rounded text-xs font-bold hover:bg-[#C9C6C0] transition-colors">Start Chat</button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); navigate('/chat'); }}
+              className="px-4 py-2 bg-white text-black rounded text-xs font-bold hover:bg-[#C9C6C0] transition-colors"
+            >
+              Start Chat
+            </button>
           )}
+        </div>
+        
+        {/* Reply Input */}
+        <div className="mt-4 pt-4 border-t border-white/5 flex gap-3">
+           <input 
+             type="text" 
+             placeholder="Write a helpful response..."
+             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-xs focus:ring-1 focus:ring-white/20 outline-none transition-all"
+             onClick={(e) => e.stopPropagation()}
+           />
+           <button 
+             onClick={(e) => { e.stopPropagation(); alert('Comment posted successfully!'); }}
+             className="px-4 py-2 bg-white/10 text-white rounded-lg text-xs font-bold hover:bg-white/20 transition-all font-headline uppercase tracking-wider"
+           >
+             Post
+           </button>
         </div>
       </article>
     );
@@ -285,7 +333,7 @@ export default function Community() {
       time: '15 mins ago',
       location: 'Westlands Square',
       title: 'Fresh stock just arrived at Rubis Westlands',
-      content: 'Just refilled my 6kg tank. They have plenty of 6kg and 13kg in stock. Queue is moving fast (about 10 mins). Price is standard at 1,250 KES for the 6kg refill.',
+      content: 'Just refilled my 6kg tank. They have plenty of 6kg and 13kg in stock. Queue is moving fast (about 10 mins). Price is standard at ₹950 for the 6kg refill.',
       helpfulCount: 128,
       commentCount: 4,
       image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB_8D28xmWub9SIfcO9jSumktSNJ3mHWapL43Mf2jVq6w32FqJoWSUAbnPDYRbs8B6-Ca4LXAtZ1emHjJQ0AIAkj8Dizqyv1hOwGxJfRRCJ0Zrg-19T85Ior05udYU6OK5UI499ny-mSYGEeVUBx7HBk1GMwTfUlBB6RfC6rcipu50G_1uSqH5N8Z1_6uhaqmOINrkJD2yZ4ReneShkpWI0_htCFKM0KnwHzhsL8TPpY2DiON7Od93QiY_mQHUbCuU7TFgL7cPxxA'
@@ -302,20 +350,56 @@ export default function Community() {
     }
   ];
 
+  const filteredPosts = posts.filter(post => {
+    if (filter === 'All Posts') return true;
+    if (filter === 'Emergency') return post.type === 'emergency';
+    if (filter === 'Available') return post.author.available;
+    if (filter === 'Nearby') return true; // Simulate nearby for demo
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-surface font-body text-on-surface transition-colors duration-300">
       <TopNavBar />
-      <SideNavBar onCreatePost={() => navigate('/community/create')} />
+      <SideNavBar 
+        onCreatePost={() => navigate('/community/create')} 
+        currentFilter={filter}
+        setFilter={setFilter}
+      />
       
       <main className="md:ml-64 mr-0 lg:mr-80 pt-24 px-4 md:px-8 pb-12 transition-all">
+        {/* Resource Sharing Section */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-black text-white font-headline mb-6 tracking-tight flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary">hub</span> Resource Sharing
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((num) => (
+              <div key={num} className="hub-glass glass-edge p-5 rounded-2xl border border-white/5 hover:border-white/20 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+                  <span className="material-symbols-outlined">gas_meter</span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-1">Spare Cylinder {num}</h3>
+                <p className="text-xs text-on-surface-variant mb-4">Location: Andheri West</p>
+                <button 
+                  onClick={() => navigate('/chat')}
+                  className="w-full py-2.5 bg-white text-black rounded-lg text-xs font-black uppercase tracking-widest hover:bg-primary transition-colors"
+                >
+                  Request Resource
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Filter Bar */}
         <div className="mb-10 flex items-center gap-3 overflow-x-auto no-scrollbar pb-2">
           {['All Posts', 'Emergency', 'Available', 'Nearby'].map((tag) => (
             <button
               key={tag}
               onClick={() => setFilter(tag)}
-              className={`px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-                filter === tag ? 'bg-white text-surface' : 'bg-surface-container-high text-on-surface-variant hover:text-white'
+              className={`px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                filter === tag ? 'bg-white text-surface scale-105' : 'bg-surface-container-high text-on-surface-variant hover:text-white'
               }`}
             >
               {tag}
@@ -329,7 +413,7 @@ export default function Community() {
 
         {/* Feed Grid */}
         <div className="flex flex-col gap-6 max-w-3xl mx-auto">
-          {posts.map((post, idx) => (
+          {filteredPosts.map((post, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
@@ -342,7 +426,7 @@ export default function Community() {
         </div>
       </main>
 
-      <RightSidebar />
+      <RightSidebar navigate={navigate} />
 
       {/* FAB for mobile */}
       <button 

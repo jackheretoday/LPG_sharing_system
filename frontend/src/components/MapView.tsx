@@ -1,8 +1,10 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { useState, useEffect } from 'react';
-import { mockMarkers, MarkerData } from '../lib/mockData';
+import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import { getMarkers, MarkerData } from '../lib/mockData';
+import { useTheme } from '../context/ThemeContext';
 
 // Helper to update map center dynamically
 function ChangeView({ center }: { center: [number, number] }) {
@@ -49,33 +51,34 @@ const createHtmlIcon = (type: string, img?: string) => {
 };
 
 export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergency' }) {
+  const navigate = useNavigate();
+  const { theme } = useTheme();
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const [markers, setMarkers] = useState<MarkerData[]>(mockMarkers);
+  const [markers, setMarkers] = useState<MarkerData[]>([]);
 
-  // Simulation loop for movement
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMarkers(current => current.map(m => ({
-        ...m,
-        position: {
-          lat: m.position.lat + (Math.random() - 0.5) * 0.0001,
-          lng: m.position.lng + (Math.random() - 0.5) * 0.0001,
-        }
-      })));
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  const tileUrl = theme === 'dark' 
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png";
 
+  // Map markers remain static for realistic placement
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          const latLng: [number, number] = [position.coords.latitude, position.coords.longitude];
+          setUserLocation(latLng);
+          setMarkers(getMarkers(latLng));
         },
-        () => setUserLocation([19.1075, 72.8258]) // Default Mumbai
+        () => {
+          const defaultLoc: [number, number] = [19.1075, 72.8258];
+          setUserLocation(defaultLoc);
+          setMarkers(getMarkers(defaultLoc));
+        }
       );
     } else {
-      setUserLocation([19.1075, 72.8258]);
+      const defaultLoc: [number, number] = [19.1075, 72.8258];
+      setUserLocation(defaultLoc);
+      setMarkers(getMarkers(defaultLoc));
     }
   }, []);
 
@@ -96,7 +99,7 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
         <ChangeView center={userLocation} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={tileUrl}
         />
         
         {/* User Marker */}
@@ -127,7 +130,7 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
                         </span>
                       )}
                     </h3>
-                    <p className="text-[10px] text-white/50">{m.type === 'emergency' ? 'Action Required' : `Available: ${Math.floor(Math.random() * 50) + 1} Units`}</p>
+                    <p className="text-[10px] text-white/50">{m.type === 'emergency' ? 'Action Required' : `LPG Fill Level: ${m.stock || 0}%`}</p>
                   </div>
                   <span className={`text-[9px] px-2 py-0.5 rounded-full uppercase tracking-widest font-black ${m.type === 'emergency' ? 'bg-red-500 text-white' : 'bg-white/10 text-white'}`}>
                     {m.type === 'emergency' ? 'URGENT' : 'IN STOCK'}
@@ -139,8 +142,13 @@ export function MapView({ mode = 'discovery' }: { mode?: 'discovery' | 'emergenc
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white">$24.50 <span className="text-[9px] font-normal text-white/40">/ refill</span></span>
-                  <button className="text-[10px] font-black text-white px-3 py-1 bg-white/10 rounded hover:bg-white/20 transition-all flex items-center gap-1 uppercase tracking-tight">
+                  <span className="text-xs font-bold text-white">{m.price || '₹850'} <span className="text-[9px] font-normal text-white/40">/ refill</span></span>
+                  <button 
+                    onClick={() => navigate(`/booking/${m.id}`, { 
+                      state: { owner: m.ownerName, price: m.price, fill: `${m.stock}%` } 
+                    })}
+                    className="text-[10px] font-black text-white px-3 py-1 bg-white/10 rounded hover:bg-white/20 transition-all flex items-center gap-1 uppercase tracking-tight"
+                  >
                     View Details
                     <span className="material-symbols-outlined !text-[12px]">arrow_forward</span>
                   </button>

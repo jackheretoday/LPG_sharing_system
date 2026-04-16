@@ -31,7 +31,7 @@ export function RoleHub({ roleTitle, subtitle, accentClass, stats, features }: R
       <div className="relative z-10 mx-auto max-w-6xl px-6 py-8 md:px-10">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <Link to="/" className="text-sm font-semibold tracking-[0.24em] text-white/70 hover:text-white transition-colors">
-            VEX CONTROL
+            GASSAHAYAK CONTROL
           </Link>
           <Link
             to="/auth"

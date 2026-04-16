@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, X, GasMeter, MapPin, IndianRupee, ShieldCheck, HeartPulse } from 'lucide-react';
 import { resourceApi, type ResourceItem } from '@/lib/resourceApi';
 
-export default function ResourceSharing() {
+export default function Resources() {
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
   const [resources, setResources] = useState<any[]>([]);
@@ -98,7 +98,7 @@ export default function ResourceSharing() {
       {/* Grid */}
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-            <p className="text-neutral-500 animate-pulse">Scanning the local hub for available gear...</p>
+            <p>Loading the marketplace...</p>
         ) : resources.length === 0 ? (
             <div className="col-span-full py-20 text-center bg-white/5 rounded-3xl border border-dashed border-white/10">
                 <p className="text-neutral-500 font-headline uppercase tracking-widest">No active listings in your area yet.</p>
@@ -219,14 +219,14 @@ export default function ResourceSharing() {
                             <div className="space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-neutral-500 ml-1">Category</label>
                                 <select 
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-primary outline-none transition-all text-white"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-primary outline-none transition-all text-neutral-400"
                                     value={formData.resource_type}
                                     onChange={e => setFormData({...formData, resource_type: e.target.value})}
                                 >
-                                    <option value="cylinder" className="bg-[#0e0e0e]">LPG Cylinder</option>
-                                    <option value="regulator" className="bg-[#0e0e0e]">Regulator</option>
-                                    <option value="pipe" className="bg-[#0e0e0e]">Gas Pipe</option>
-                                    <option value="stove" className="bg-[#0e0e0e]">Portable Stove</option>
+                                    <option value="cylinder">LPG Cylinder</option>
+                                    <option value="regulator">Regulator</option>
+                                    <option value="pipe">Gas Pipe</option>
+                                    <option value="stove">Portable Stove</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

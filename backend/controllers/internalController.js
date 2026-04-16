@@ -80,7 +80,24 @@ const emergencyResponseLogged = async (req, res, next) => {
   }
 };
 
+const escalationService = require("../services/escalationService");
+
+const runDisputeEscalation = async (req, res, next) => {
+  try {
+    const results = await escalationService.processStaleDisputes();
+    
+    return res.status(200).json({
+      success: true,
+      message: "Dispute escalation scan completed",
+      results
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   exchangeCompleted,
   emergencyResponseLogged,
+  runDisputeEscalation
 };

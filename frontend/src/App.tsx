@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
+import RefillBooking from '@/pages/RefillBooking';
 import Emergency from '@/pages/Emergency';
 import Tracking from '@/pages/Tracking';
 import Dashboard from '@/pages/Dashboard';
@@ -34,12 +35,15 @@ import Disputes from '@/pages/trust/Disputes';
 import DisputeDetails from '@/pages/trust/DisputeDetails';
 import AdminDisputes from '@/pages/trust/AdminDisputes';
 
+import { AIChatbot } from './components/AIChatbot';
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/emergency" element={<Emergency />} />
+        <Route path="/booking/:id" element={<RefillBooking />} />
         <Route path="/tracking" element={<Tracking />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/mechanic" element={<MechanicPanel />} />
@@ -77,9 +81,9 @@ function App() {
         <Route path="/disputes/:id" element={<DisputeDetails />} />
         <Route path="/admin/disputes" element={<AdminDisputes />} />
       </Routes>
+      <AIChatbot />
     </Router>
   );
 }
 
 export default App;
-

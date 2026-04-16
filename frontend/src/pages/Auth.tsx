@@ -74,6 +74,7 @@ export default function Auth() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-[42%] space-y-6">
               <div>
+                <img src="/Gasसहायक-2.png" alt="GasSahayak Logo" className="w-12 h-12 mb-4 object-contain" />
                 <p className="text-[10px] uppercase tracking-[0.35em] text-white/40 font-black">LPG Emergency Gateway</p>
                 <h1 className="text-4xl font-headline font-black tracking-tighter mt-3">Secure Access</h1>
                 <p className="text-white/60 mt-3 text-sm leading-6">

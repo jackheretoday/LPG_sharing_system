@@ -71,7 +71,7 @@ export default function Tracking() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-on-surface-variant font-medium">Verification ID</span>
-                    <span className="text-sm text-white font-bold tracking-tight">#VEX-4902</span>
+                    <span className="text-sm text-white font-bold tracking-tight">#GASSAHAYAK-4902</span>
                   </div>
                </div>
 

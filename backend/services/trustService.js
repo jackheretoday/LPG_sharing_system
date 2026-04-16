@@ -513,6 +513,17 @@ const applyBadgeByCode = (userId, badgeCode) => {
   return null;
 };
 
+const createSystemAlert = async (userId, message, severity = 'warning') => {
+  const supabase = getDbClient();
+  if (!supabase) return null;
+
+  await supabase.from('system_alerts').insert([{
+    user_id: userId,
+    message,
+    severity
+  }]);
+};
+
 module.exports = {
   TRUST_BADGES,
   calculateTrustScore,
@@ -525,4 +536,5 @@ module.exports = {
   updateVerification,
   recordExchangeOutcome,
   applyBadgeByCode,
+  createSystemAlert
 };

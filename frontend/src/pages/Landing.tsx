@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export default function Landing() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex flex-col font-sans">
+    <div className="relative min-h-screen w-full overflow-hidden flex flex-col font-sans" data-theme="dark">
       {/* Video Background */}
       <video
         autoPlay

@@ -1,0 +1,17 @@
+{
+  "name": "GasSahayak - Smart LPG Assistant",
+  "short_name": "GasSahayak",
+  "description": "Premium LPG Cylinder Sharing and Emergency Assistance Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b13",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/Gasसहायक-2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

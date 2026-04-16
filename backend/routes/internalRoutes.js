@@ -4,9 +4,17 @@ const { requireRole } = require("../middleware/roleMiddleware");
 const {
   exchangeCompleted,
   emergencyResponseLogged,
+  runDisputeEscalation,
 } = require("../controllers/internalController");
 
 const router = express.Router();
+
+router.post(
+  "/run-escalation",
+  protect,
+  requireRole(["admin"]),
+  runDisputeEscalation
+);
 
 router.post(
   "/exchange-completed",

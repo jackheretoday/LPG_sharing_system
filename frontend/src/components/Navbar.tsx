@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { getStoredUser, clearToken, clearStoredUser } from '@/lib/trustAuth';
+import { useTheme } from '@/context/ThemeContext';
 
 const getAccessRoute = (role: string | null) => {
   if (role === 'admin') return '/admin';
@@ -22,6 +23,7 @@ export function Navbar() {
   const user = useMemo(() => getStoredUser(), []);
   const accessRoute = useMemo(() => getAccessRoute(user?.role ?? null), [user?.role]);
   const isLoggedIn = !!user && !!accessRoute;
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     clearToken();
@@ -34,8 +36,9 @@ export function Navbar() {
       <div className="liquid-glass rounded-2xl px-4 py-3 border border-white/10 shadow-[0_18px_40px_rgba(0,0,0,0.25)]">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
-            <Link to="/" className="text-2xl font-semibold tracking-tight text-white">
-              VEX
+            <Link to="/" className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-white">
+              <img src="/Gasसहायक-2.png" alt="GasSahayak Logo" className="w-8 h-8 object-contain rounded-md" />
+              GasSahayak
             </Link>
 
             {isLoggedIn && (
@@ -60,7 +63,18 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white transition-all"
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              <span className="material-symbols-outlined !text-xl leading-none">
+                {theme === 'light' ? 'dark_mode' : 'light_mode'}
+              </span>
+            </button>
+
+            <div className="hidden lg:flex items-center gap-3">
             {isLoggedIn ? (
               <>
                 <Link
@@ -104,5 +118,6 @@ export function Navbar() {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

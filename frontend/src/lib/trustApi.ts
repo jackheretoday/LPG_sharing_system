@@ -1,6 +1,6 @@
 import { getToken, type StoredUser } from "@/lib/trustAuth";
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/$/, "");
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001").replace(/\/$/, "");
 
 type ApiOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";
@@ -69,6 +69,7 @@ export type Dispute = {
   resolvedBy?: string | null;
   resolvedAt?: string | null;
   createdAt: string;
+  escalationLevel?: number;
 };
 
 const toError = async (response: Response) => {

@@ -1,17 +1,36 @@
-import { useState, useRef, useEffect } from 'react';
-import { Send, User, ChevronLeft, ShieldCheck } from 'lucide-react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { mockMessages } from '@/lib/mockData';
-import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from "react";
+import { Send, User, ChevronLeft, ShieldCheck } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import { chatApi } from "@/lib/chatApi";
+import { getStoredUser } from "@/lib/trustAuth";
 
 export function ChatBox() {
-  const [messages, setMessages] = useState(mockMessages);
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<any[]>([]);
+  const [input, setInput] = useState("");
+  const [conversationId, setConversationId] = useState("");
+  const [partner, setPartner] = useState<any>(null);
+  const [error, setError] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const user = getStoredUser();
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await chatApi.bootstrap();
+        setConversationId(res.conversationId);
+        setPartner(res.partner);
+        setMessages(res.messages || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load chat");
+      }
+    };
+    run();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -19,104 +38,79 @@ export function ChatBox() {
     }
   }, [messages]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { id: Date.now().toString(), text: input, sender: 'user' }]);
-    setInput('');
-    
-    // Simple mock reply
-    setTimeout(() => {
-      setMessages(prev => [...prev, { id: 'reply', text: 'I understand. Let me check the timing for you.', sender: 'owner' }]);
-    }, 1500);
+  const handleSend = async () => {
+    if (!input.trim() || !conversationId) return;
+    try {
+      const res = await chatApi.sendMessage(conversationId, { body: input.trim() });
+      setMessages((prev) => [...prev, res.message]);
+      setInput("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send message");
+    }
   };
 
   return (
-    <div className="flex flex-col h-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-      {/* Chat Header */}
+    <div className="flex flex-col h-full bg-[#0e0e0e]/80 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl relative">
       <div className="p-5 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="md:hidden p-1 mr-1">
-            <ChevronLeft className="w-5 h-5 text-gray-500" />
+          <button onClick={() => navigate(-1)} className="p-1 mr-1">
+            <ChevronLeft className="w-5 h-5 text-gray-400" />
           </button>
-          <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-            <User className="w-5 h-5 text-gray-400" />
+          <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <User className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-medium text-white flex items-center gap-1.5">
-              Suresh Raina
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+            <p className="text-sm font-bold text-white flex items-center gap-1.5">
+              {partner?.name || "Conversation"}
+              {partner?.is_verified && <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />}
             </p>
-            <p className="text-[10px] text-green-400">Verifed Seller • Online</p>
+            <p className="text-[10px] text-green-400 font-bold uppercase tracking-widest">
+              {partner?.role || "partner"}
+            </p>
           </div>
-        </div>
-        <div className="hidden md:block">
-           <Badge className="bg-white/5 text-[10px] text-gray-400 border-white/10">Ref: LP-9021</Badge>
         </div>
       </div>
 
-      {/* Messages Area */}
-      <div 
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth"
-      >
-        <div className="text-center py-4 opacity-30">
-          <p className="text-[10px] uppercase tracking-widest px-4 py-1 border border-white/20 rounded-full inline-block">
-            Secure End-to-End Chat
-          </p>
-        </div>
-
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth">
+        {error && <div className="text-red-400 text-sm">{error}</div>}
         <AnimatePresence initial={false}>
-          {messages.map((m) => (
-            <motion.div
-              key={m.id}
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              className={cn(
-                "flex w-full",
-                m.sender === 'user' ? "justify-end" : "justify-start"
-              )}
-            >
-              <div className={cn(
-                "max-w-[80%] rounded-2xl px-4 py-3 text-sm font-light leading-relaxed",
-                m.sender === 'user' 
-                  ? "bg-white text-black rounded-tr-none shadow-lg shadow-white/5" 
-                  : "bg-white/5 text-gray-100 border border-white/10 rounded-tl-none"
-              )}>
-                {m.text}
-              </div>
-            </motion.div>
-          ))}
+          {messages.map((m: any) => {
+            const isMine = m.sender_id === user?.id;
+            return (
+              <motion.div
+                key={m.id}
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                className={cn("flex w-full", isMine ? "justify-end" : "justify-start")}
+              >
+                <div
+                  className={cn(
+                    "max-w-[85%] rounded-2xl px-4 py-3 text-sm transition-all",
+                    isMine ? "bg-white text-black rounded-tr-none font-bold" : "bg-white/5 text-gray-100 border border-white/10 rounded-tl-none"
+                  )}
+                >
+                  {m.body}
+                </div>
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
       </div>
 
-      {/* Input Area */}
       <div className="p-5 border-t border-white/10 bg-black/20">
-        <div className="flex items-center gap-3 bg-white/5 border border-white/10 p-1.5 rounded-2xl focus-within:border-white/30 transition-all">
-          <Input 
-            placeholder="Type your message..." 
-            className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-sm h-10 flex-1 px-3"
+        <div className="flex items-center gap-3 bg-white/5 border border-white/10 p-1.5 rounded-2xl">
+          <Input
+            placeholder="Type your message..."
+            className="border-0 bg-transparent focus-visible:ring-0 text-sm h-10 flex-1 px-3 text-white"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
-          <Button 
-            size="icon" 
-            className="rounded-xl w-10 h-10 bg-white text-black hover:bg-white/90"
-            onClick={handleSend}
-          >
+          <Button size="icon" className="rounded-xl w-10 h-10 bg-white text-black hover:bg-primary transition-colors" onClick={handleSend}>
             <Send className="w-4 h-4" />
           </Button>
         </div>
       </div>
     </div>
   );
-}
-
-// Simple Badge helper if needed
-function Badge({ children, className }: { children: React.ReactNode, className?: string }) {
-  return (
-    <div className={cn("inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", className)}>
-      {children}
-    </div>
-  )
 }

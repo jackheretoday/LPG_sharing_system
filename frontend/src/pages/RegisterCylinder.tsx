@@ -88,7 +88,7 @@ export default function RegisterCylinder() {
 
                 <Box w="full">
                   <Text color="whiteAlpha.700" fontSize="xs" mb={2}>Currently Available to Share?</Text>
-                  <RadioGroupRoot onValueChange={(e) => setAvailability(e.value)} value={availability}>
+                  <RadioGroupRoot onValueChange={(e) => setAvailability(e.value ?? 'no')} value={availability}>
                     <Stack direction="row" gap={8} mt={2}>
                       <RadioGroupItem value="yes">
                         <RadioGroupItemControl />

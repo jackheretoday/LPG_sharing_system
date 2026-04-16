@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, ShieldCheck, MapPin, Fuel, ArrowLeft, LogOut, ChevronRight } from 'lucide-react';
+import { ShieldCheck, MapPin, Fuel, ArrowLeft, LogOut, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 

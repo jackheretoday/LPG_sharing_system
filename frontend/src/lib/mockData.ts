@@ -1,52 +1,69 @@
-export interface Location {
-  lat: number;
-  lng: number;
-}
-
-export interface MarkerData {
+export type MarkerData = {
   id: string;
-  type: 'cylinder' | 'mechanic' | 'emergency';
-  position: Location;
+  type: 'user' | 'cylinder' | 'emergency' | 'mechanic';
+  position: {
+    lat: number;
+    lng: number;
+  };
   ownerName?: string;
-  distance?: string;
-  availability?: string;
-  status?: string;
-}
+  price?: string;
+  stock?: number;
+  img?: string;
+};
 
-export const mockMarkers: MarkerData[] = [
-  {
-    id: '1',
-    type: 'cylinder',
-    position: { lat: 19.108, lng: 72.826 },
-    ownerName: 'Amit Shah',
-    distance: '0.4 miles away',
-    availability: '2 available',
-  },
-  {
-    id: '2',
-    type: 'cylinder',
-    position: { lat: 19.110, lng: 72.822 },
-    ownerName: 'Suresh Raina',
-    distance: '0.8 miles away',
-    availability: '1 available',
-  },
-  {
-    id: '3',
-    type: 'mechanic',
-    position: { lat: 19.104, lng: 72.818 },
-    ownerName: 'Rajesh Mechanic',
-    status: 'On the way',
-  },
-  {
-    id: '4',
-    type: 'emergency',
-    position: { lat: 19.102, lng: 72.828 },
-    status: 'Active Leakage reported',
-  },
+export const indianNames = [
+  "Aarav Sharma", "Aditi Patel", "Arjun Mehra", "Priya Iyer", "Kabir Singh",
+  "Saanvi Malhotra", "Ishaan Gupta", "Ananya Reddy", "Rohan Verma", "Diya Joshi",
+  "Vihaan Deshmukh", "Myra Kulkarni", "Reyansh Chawla", "Kyra Nair"
 ];
 
+const generateMarketplaceData = (center: [number, number], count: number): MarkerData[] => {
+  return Array.from({ length: count }).map((_, i) => {
+    // Random stock/fill level from 10% to 100%
+    const stockLevelPercent = Math.floor(Math.random() * 91) + 10;
+    // Base rate is ₹15 per percentage point + ₹100 flat fee
+    const dynamicPrice = (stockLevelPercent * 9) + 250; 
+
+    return {
+      id: `cyl-${i}`,
+      type: 'cylinder',
+      position: {
+        lat: center[0] + (Math.random() - 0.5) * 0.02,
+        lng: center[1] + (Math.random() - 0.5) * 0.02,
+      },
+      ownerName: indianNames[Math.floor(Math.random() * indianNames.length)],
+      price: `₹${dynamicPrice}`,
+      stock: stockLevelPercent, // In this context, stock is the fill percentage
+      img: `https://images.unsplash.com/photo-1599708151046-599187a553f1?auto=format&fit=crop&q=80&w=200`
+    };
+  });
+};
+
+export const getMarkers = (center: [number, number]): MarkerData[] => [
+  ...generateMarketplaceData(center, 12),
+  {
+    id: 'em-1',
+    type: 'emergency',
+    position: {
+      lat: center[0] + 0.005,
+      lng: center[1] - 0.003,
+    }
+  },
+  {
+    id: 'mech-1',
+    type: 'mechanic',
+    position: {
+      lat: center[0] - 0.004,
+      lng: center[1] + 0.006,
+    },
+    ownerName: "Rajesh Kumar",
+  }
+];
+
+export const mockMarkers: MarkerData[] = getMarkers([19.1075, 72.8258]);
+
 export const mockMessages = [
-  { id: '1', text: 'Hello, I have an available cylinder.', sender: 'owner' },
-  { id: '2', text: 'Great! Is it sealed?', sender: 'user' },
-  { id: '3', text: 'Yes, fully verified by HP Gas.', sender: 'owner' },
+  { id: '1', text: 'Namaste! Is the cylinder still available?', sender: 'user' },
+  { id: '2', text: 'Yes, it is. I have 2 full cylinders ready for pickup.', sender: 'owner' },
+  { id: '3', text: 'Great, I can come by in 20 minutes.', sender: 'user' },
 ];

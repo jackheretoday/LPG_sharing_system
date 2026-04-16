@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Plus, X, GasMeter, MapPin, IndianRupee, ShieldCheck, HeartPulse } from 'lucide-react';
-import { resourceApi, type ResourceItem } from '@/lib/resourceApi';
+import { Plus, X, Fuel, MapPin, IndianRupee, ShieldCheck, HeartPulse } from 'lucide-react';
+import { resourceApi } from '@/lib/resourceApi';
+import { getToken } from '@/lib/trustAuth';
 
 export default function Resources() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function Resources() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (!token) {
         alert('Please login to share a resource');
         return;
@@ -55,7 +56,7 @@ export default function Resources() {
   };
 
   const handleRequest = async (id: string) => {
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (!token) {
         alert('Please login to request a resource');
         return;
@@ -112,7 +113,7 @@ export default function Resources() {
           >
             <div className="flex justify-between items-start mb-6">
               <div className="p-3 bg-white/5 rounded-2xl border border-white/10 group-hover:scale-110 transition-transform">
-                <GasMeter className="w-6 h-6 text-primary" />
+                <Fuel className="w-6 h-6 text-primary" />
               </div>
               <div className="text-right">
                 <p className="text-[10px] text-neutral-500 font-black uppercase tracking-widest mb-1">Asking Price</p>

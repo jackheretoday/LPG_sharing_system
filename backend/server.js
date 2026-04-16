@@ -3,8 +3,12 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
+const path = require("path");
 
-dotenv.config({ override: true });
+dotenv.config({
+  path: path.resolve(__dirname, "../.env"),
+  override: true,
+});
 
 const systemRoutes = require("./routes/systemRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -17,6 +21,10 @@ const resourceRoutes = require("./routes/resourceRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const internalRoutes = require("./routes/internalRoutes");
 const lpgRoutes = require("./routes/lpgRoutes");
+const communityRoutes = require("./routes/communityRoutes");
+const emergencyRoutes = require("./routes/emergencyRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
 const { seedTestUsers } = require("./models/tempUserStore");
@@ -27,7 +35,7 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors());
 app.use(morgan("dev"));
-app.use(express.json());
+app.use(express.json({ limit: "15mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
@@ -71,6 +79,10 @@ app.use("/api/resources", resourceRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/internal", internalRoutes);
 app.use("/api/lpg", lpgRoutes);
+app.use("/api/community", communityRoutes);
+app.use("/api/emergency", emergencyRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

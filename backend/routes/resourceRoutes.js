@@ -6,5 +6,6 @@ const { protect } = require('../middleware/authMiddleware');
 router.post('/add', protect, resourceController.createResource);
 router.get('/list', resourceController.getAllResources);
 router.post('/request/:resourceId', protect, resourceController.requestResource);
+router.get('/my-requests', protect, resourceController.getMyRequests);
 
 module.exports = router;

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --bg-primary: #070b13;
   --bg-secondary: #111827;
@@ -52,6 +54,10 @@
 }
 
 @layer utilities {
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+
   .liquid-glass {
     background: var(--glass-bg);
     background-blend-mode: luminosity;
@@ -91,6 +97,39 @@
   }
 
   .no-scrollbar::-webkit-scrollbar { display: none; }
+
+  .assessment-panel {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.86), rgba(17, 24, 39, 0.8));
+    border: 1px solid rgba(71, 85, 105, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .professional-form {
+    color-scheme: dark;
+  }
+
+  .professional-field {
+    border: 1px solid rgba(71, 85, 105, 0.8);
+    background: rgba(15, 23, 42, 0.72);
+    color: #e2e8f0;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .professional-field::placeholder {
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  .professional-field:focus {
+    border-color: rgba(59, 130, 246, 0.85);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+  }
+
+  .professional-field option {
+    background: #0f172a;
+    color: #e2e8f0;
+  }
 }
 
 @keyframes pulseRed {

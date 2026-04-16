@@ -1,31 +1,69 @@
+﻿import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { MapPin } from 'lucide-react';
+import { emergencyApi } from '@/lib/emergencyApi';
+import { useTheme } from '@/context/ThemeContext';
 
 export default function MechanicPanel() {
+  const [requests, setRequests] = useState<any[]>([]);
+  const [error, setError] = useState('');
+  const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await emergencyApi.listRequests();
+        setRequests(res.requests || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load requests');
+      }
+    };
+    run();
+  }, []);
+
   return (
-     <div className="min-h-screen bg-black text-white p-6 md:p-12">
-        <h1 className="text-3xl font-light mb-8">Mechanic Panel</h1>
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="liquid-glass border-white/20">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] p-6 md:p-12 transition-colors">
+      <div className="mb-8 flex items-center justify-between gap-4">
+        <h1 className="text-3xl font-light">Mechanic Panel</h1>
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-[var(--glass-border)] text-[var(--text-primary)] transition-all"
+          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+        >
+          <span className="material-symbols-outlined !text-xl leading-none">
+            {theme === 'light' ? 'dark_mode' : 'light_mode'}
+          </span>
+        </button>
+      </div>
+
+      {error ? <div className="text-red-400 mb-4">{error}</div> : null}
+
+      <div className="grid md:grid-cols-2 gap-6">
+        {requests.map((request) => (
+          <Card key={request.id} className="liquid-glass border-white/20">
             <CardHeader>
               <div className="flex justify-between items-start">
-                <CardTitle className="text-xl">Emergency #1024</CardTitle>
-                <span className="text-red-400 text-sm font-medium animate-pulse">High Severity</span>
+                <CardTitle className="text-xl">Emergency #{request.id.slice(0, 8)}</CardTitle>
+                <span className="text-red-400 text-sm font-medium">{request.status}</span>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center gap-2 text-gray-300 mb-6 font-light">
+              <div className="flex items-center gap-2 text-[var(--text-secondary)] mb-3 font-light">
                 <MapPin className="w-4 h-4" />
-                <span>2 miles away • Andheri West</span>
+                <span>{request.location || 'Unknown location'}</span>
+              </div>
+              <div className="text-sm text-[var(--text-secondary)] mb-6">
+                {request.intensity || '-'} · {request.leakage_sound || '-'} · {request.duration || '-'}
               </div>
               <div className="flex gap-4">
-                 <Button className="flex-1 text-black font-medium text-sm">Accept Job</Button>
-                 <Button variant="outline" className="flex-1 text-sm">Reject</Button>
+                <Button className="flex-1 text-black font-medium text-sm">Accept Job</Button>
+                <Button variant="outline" className="flex-1 text-sm">Reject</Button>
               </div>
             </CardContent>
           </Card>
-        </div>
-     </div>
+        ))}
+      </div>
+    </div>
   );
 }

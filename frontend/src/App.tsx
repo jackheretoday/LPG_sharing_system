@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from '@/pages/Landing';
 import RefillBooking from '@/pages/RefillBooking';
 import Emergency from '@/pages/Emergency';
+import EmergencyAssessment from '@/pages/EmergencyAssessment';
 import Tracking from '@/pages/Tracking';
 import Dashboard from '@/pages/Dashboard';
 import MechanicPanel from '@/pages/MechanicPanel';
@@ -36,6 +37,7 @@ import DisputeDetails from '@/pages/trust/DisputeDetails';
 import AdminDisputes from '@/pages/trust/AdminDisputes';
 
 import { AIChatbot } from './components/AIChatbot';
+import { AuthenticatedRoute } from '@/components/trust/AuthenticatedRoute';
 
 function App() {
   return (
@@ -43,8 +45,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/emergency" element={<Emergency />} />
+        <Route path="/emergency/assessment" element={<EmergencyAssessment />} />
         <Route path="/booking/:id" element={<RefillBooking />} />
-        <Route path="/tracking" element={<Tracking />} />
+        <Route
+          path="/tracking"
+          element={(
+            <AuthenticatedRoute>
+              <Tracking />
+            </AuthenticatedRoute>
+          )}
+        />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/mechanic" element={<MechanicPanel />} />
         <Route path="/payment" element={<Payment />} />

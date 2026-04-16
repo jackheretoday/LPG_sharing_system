@@ -1,11 +1,12 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { API_ROOT } from '@/lib/apiBase';
+import { getToken } from '@/lib/trustAuth';
 
-const getToken = () => localStorage.getItem('token');
+const API_BASE = API_ROOT;
 
-const headers = {
+const getHeaders = () => ({
   'Content-Type': 'application/json',
   Authorization: `Bearer ${getToken()}`,
-};
+});
 
 // ==================== Cylinder Management ====================
 
@@ -19,7 +20,7 @@ export const addCylinder = async (
 ) => {
   const response = await fetch(`${API_BASE}/lpg/cylinders`, {
     method: 'POST',
-    headers,
+    headers: getHeaders(),
     body: JSON.stringify({
       cylinder_id: cylinderId,
       current_weight_kg: currentWeightKg,
@@ -34,7 +35,7 @@ export const addCylinder = async (
  */
 export const getCylinders = async () => {
   const response = await fetch(`${API_BASE}/lpg/cylinders`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -44,7 +45,7 @@ export const getCylinders = async () => {
  */
 export const getCylinderById = async (cylinderId: string) => {
   const response = await fetch(`${API_BASE}/lpg/cylinders/${cylinderId}`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -58,7 +59,7 @@ export const updateCylinder = async (
 ) => {
   const response = await fetch(`${API_BASE}/lpg/cylinders/${cylinderId}`, {
     method: 'PATCH',
-    headers,
+    headers: getHeaders(),
     body: JSON.stringify(updates),
   });
   return response.json();
@@ -70,7 +71,7 @@ export const updateCylinder = async (
 export const deleteCylinder = async (cylinderId: string) => {
   const response = await fetch(`${API_BASE}/lpg/cylinders/${cylinderId}`, {
     method: 'DELETE',
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -87,7 +88,7 @@ export const logDailyUsage = async (
 ) => {
   const response = await fetch(`${API_BASE}/lpg/usage`, {
     method: 'POST',
-    headers,
+    headers: getHeaders(),
     body: JSON.stringify({
       cylinder_id: cylinderId,
       usage_kg: usageKg,
@@ -102,7 +103,7 @@ export const logDailyUsage = async (
  */
 export const getUsageHistory = async (cylinderId: string) => {
   const response = await fetch(`${API_BASE}/lpg/usage/${cylinderId}`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -115,7 +116,7 @@ export const getUsageHistory = async (cylinderId: string) => {
 export const predictEmptyDate = async (cylinderId: string) => {
   const response = await fetch(`${API_BASE}/lpg/predict`, {
     method: 'POST',
-    headers,
+    headers: getHeaders(),
     body: JSON.stringify({
       cylinder_id: cylinderId,
     }),
@@ -128,7 +129,7 @@ export const predictEmptyDate = async (cylinderId: string) => {
  */
 export const getLatestPrediction = async (cylinderId: string) => {
   const response = await fetch(`${API_BASE}/lpg/predict/${cylinderId}`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -140,7 +141,7 @@ export const getLatestPrediction = async (cylinderId: string) => {
  */
 export const getAlerts = async () => {
   const response = await fetch(`${API_BASE}/lpg/alerts`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -151,7 +152,7 @@ export const getAlerts = async () => {
 export const markAlertAsRead = async (alertId: string) => {
   const response = await fetch(`${API_BASE}/lpg/alerts/${alertId}`, {
     method: 'PATCH',
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -163,7 +164,7 @@ export const markAlertAsRead = async (alertId: string) => {
  */
 export const getAlertSettings = async () => {
   const response = await fetch(`${API_BASE}/lpg/alert-config`, {
-    headers,
+    headers: getHeaders(),
   });
   return response.json();
 };
@@ -178,62 +179,62 @@ export const updateAlertSettings = async (settings: {
 }) => {
   const response = await fetch(`${API_BASE}/lpg/alert-config`, {
     method: 'PATCH',
-    headers,
+    headers: getHeaders(),
     body: JSON.stringify(settings),
+  });
+  return response.json();
+};
 
-  // ==================== Prediction Feedback (Model Training) ====================
+// ==================== Prediction Feedback (Model Training) ====================
 
-  /**
-   * Submit prediction feedback for model training
-   */
-  export const submitPredictionFeedback = async (
-    prediction_id: string,
-    actual_empty_date: string,
-    accuracy_percentage?: number,
-    feedback_message?: string
-  ) => {
-    const response = await fetch(`${API_BASE}/lpg/feedback`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        prediction_id,
-        actual_empty_date,
-        accuracy_percentage,
-        feedback_message,
-      }),
-    });
-    return response.json();
-  };
+/**
+ * Submit prediction feedback for model training
+ */
+export const submitPredictionFeedback = async (
+  prediction_id: string,
+  actual_empty_date: string,
+  accuracy_percentage?: number,
+  feedback_message?: string
+) => {
+  const response = await fetch(`${API_BASE}/lpg/feedback`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({
+      prediction_id,
+      actual_empty_date,
+      accuracy_percentage,
+      feedback_message,
+    }),
+  });
+  return response.json();
+};
 
-  /**
-   * Get prediction feedback history
-   */
-  export const getPredictionFeedback = async () => {
-    const response = await fetch(`${API_BASE}/lpg/feedback`, {
-      headers,
-    });
-    return response.json();
-  };
+/**
+ * Get prediction feedback history
+ */
+export const getPredictionFeedback = async () => {
+  const response = await fetch(`${API_BASE}/lpg/feedback`, {
+    headers: getHeaders(),
+  });
+  return response.json();
+};
 
-  /**
-   * Get predictions pending feedback (past predicted date but no feedback yet)
-   */
-  export const getPendingFeedbackPredictions = async () => {
-    const response = await fetch(`${API_BASE}/lpg/feedback/pending`, {
-      headers,
-    });
-    return response.json();
-  };
+/**
+ * Get predictions pending feedback (past predicted date but no feedback yet)
+ */
+export const getPendingFeedbackPredictions = async () => {
+  const response = await fetch(`${API_BASE}/lpg/feedback/pending`, {
+    headers: getHeaders(),
+  });
+  return response.json();
+};
 
-  /**
-   * Get model performance metrics
-   */
-  export const getModelMetrics = async () => {
-    const response = await fetch(`${API_BASE}/lpg/metrics/model`, {
-      headers,
-    });
-    return response.json();
-  };
+/**
+ * Get model performance metrics
+ */
+export const getModelMetrics = async () => {
+  const response = await fetch(`${API_BASE}/lpg/metrics/model`, {
+    headers: getHeaders(),
   });
   return response.json();
 };

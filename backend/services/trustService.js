@@ -154,7 +154,7 @@ const getDbUserTrust = async (userId) => {
 
   const { data: user, error: userError } = await supabase
     .from("users")
-    .select("id,name,role,is_phone_verified")
+    .select("id,name,role,is_verified")
     .eq("id", userId)
     .maybeSingle();
 
@@ -203,7 +203,7 @@ const getDbUserTrust = async (userId) => {
   const badges = deriveBadges(
     {
       role: user.role,
-      isPhoneVerified: user.is_phone_verified,
+      isPhoneVerified: user.is_verified,
     },
     {
       ...normalizedMetrics,
@@ -214,8 +214,17 @@ const getDbUserTrust = async (userId) => {
   return {
     userId: user.id,
     role: user.role,
-    isPhoneVerified: user.is_phone_verified,
-    verification: verification || {},
+    isPhoneVerified: Boolean(user.is_verified),
+    verification: verification
+      ? {
+          userId: verification.user_id,
+          isPinVerified: verification.is_pin_verified,
+          idStatus: verification.id_status,
+          addressText: verification.address_text,
+          pinCode: verification.pin_code,
+          idDocUrl: verification.id_doc_url,
+        }
+      : {},
     metrics: normalizedMetrics,
     trustScore: normalizedMetrics.trustScore,
     badges,
@@ -233,6 +242,39 @@ const getUserTrustSnapshot = async (userId) => {
 };
 
 const listProviderTrustSnapshots = async () => {
+  const supabase = getDbClient();
+  if (supabase) {
+    const { data: dbUsers, error } = await supabase
+      .from("users")
+      .select("id,name,role")
+      .in("role", ["provider", "verified_reseller", "mechanic"]);
+
+    if (!error && Array.isArray(dbUsers)) {
+      const snapshots = await Promise.all(
+        dbUsers.map(async (user) => {
+          const trust = await getUserTrustSnapshot(user.id);
+          if (!trust) {
+            return null;
+          }
+
+          return {
+            user: {
+              id: user.id,
+              name: user.name,
+              role: user.role,
+              isSuspended: false,
+            },
+            trust,
+          };
+        })
+      );
+
+      return snapshots
+        .filter(Boolean)
+        .sort((a, b) => Number(b.trust.trustScore || 0) - Number(a.trust.trustScore || 0));
+    }
+  }
+
   const users = listUsers().filter((user) => {
     const normalized = String(user.role || "").toLowerCase();
     return ["provider", "verified_reseller", "mechanic"].includes(normalized);
@@ -263,6 +305,41 @@ const listProviderTrustSnapshots = async () => {
 };
 
 const listPendingIdReviews = async () => {
+  const supabase = getDbClient();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("user_verifications")
+      .select("user_id,is_pin_verified,id_status,address_text,pin_code,id_doc_url,users!user_verifications_user_id_fkey(id,name,role)")
+      .eq("id_status", "pending");
+
+    if (!error && Array.isArray(data)) {
+      const queue = await Promise.all(
+        data.map(async (row) => {
+          const trust = await getUserTrustSnapshot(row.user_id);
+          return {
+            user: {
+              id: row.users?.id || row.user_id,
+              name: row.users?.name || "Unknown user",
+              email: "",
+              role: row.users?.role || "consumer",
+              isSuspended: false,
+            },
+            verification: {
+              isPinVerified: row.is_pin_verified,
+              idStatus: row.id_status,
+              addressText: row.address_text,
+              pinCode: row.pin_code,
+              idDocUrl: row.id_doc_url,
+            },
+            trustScore: trust?.trustScore || 0,
+          };
+        })
+      );
+
+      return queue;
+    }
+  }
+
   const users = listUsers();
   const queue = [];
 
@@ -453,14 +530,63 @@ const recordExchangeOutcome = async (userId, payload) => {
 };
 
 const applyTrustOverride = async ({ userId, trustScore, reason = "manual_override" }) => {
+  const normalizedTrust = Math.max(0, Math.min(100, Number(trustScore || 0)));
+  const supabase = getDbClient();
+  if (supabase) {
+    const snapshot = await getDbUserTrust(userId);
+    const currentMetrics = snapshot?.metrics || {
+      totalExchanges: 0,
+      successfulExchanges: 0,
+      safetyChecksCompleted: 0,
+      disputesCount: 0,
+      acceptedEmergencyRequests: 0,
+      avgResponseSeconds: 0,
+    };
+
+    await supabase.from("trust_metrics").upsert(
+      {
+        user_id: userId,
+        total_exchanges: Number(currentMetrics.totalExchanges || 0),
+        successful_exchanges: Number(currentMetrics.successfulExchanges || 0),
+        safety_checks_completed: Number(currentMetrics.safetyChecksCompleted || 0),
+        disputes_count: Number(currentMetrics.disputesCount || 0),
+        accepted_emergency_requests: Number(currentMetrics.acceptedEmergencyRequests || 0),
+        avg_response_seconds: Number(currentMetrics.avgResponseSeconds || 0),
+        trust_score: normalizedTrust,
+      },
+      { onConflict: "user_id" }
+    );
+
+    const { data: dbUser } = await supabase
+      .from("users")
+      .select("id,name,role")
+      .eq("id", userId)
+      .maybeSingle();
+
+    const trust = await getUserTrustSnapshot(userId);
+    if (!dbUser || !trust) {
+      return null;
+    }
+
+    return {
+      user: {
+        id: dbUser.id,
+        name: dbUser.name,
+        role: dbUser.role,
+      },
+      trust: {
+        ...trust,
+        trustScore: normalizedTrust,
+      },
+    };
+  }
+
   const user = findUserById(userId);
   if (!user) {
     return null;
   }
 
-  const normalizedTrust = Math.max(0, Math.min(100, Number(trustScore || 0)));
   const currentTrust = user.trust || {};
-
   updateTrust(userId, {
     ...currentTrust,
     trustScore: normalizedTrust,
@@ -470,23 +596,6 @@ const applyTrustOverride = async ({ userId, trustScore, reason = "manual_overrid
       updatedAt: new Date().toISOString(),
     },
   });
-
-  const supabase = getDbClient();
-  if (supabase) {
-    await supabase.from("trust_metrics").upsert(
-      {
-        user_id: userId,
-        total_exchanges: Number(currentTrust.totalExchanges || 0),
-        successful_exchanges: Number(currentTrust.successfulExchanges || 0),
-        safety_checks_completed: Number(currentTrust.safetyChecksCompleted || 0),
-        disputes_count: Number(currentTrust.disputesCount || 0),
-        accepted_emergency_requests: Number(currentTrust.acceptedEmergencyRequests || 0),
-        avg_response_seconds: Number(currentTrust.avgResponseSeconds || 0),
-        trust_score: normalizedTrust,
-      },
-      { onConflict: "user_id" }
-    );
-  }
 
   const trust = await getUserTrustSnapshot(userId);
   return {

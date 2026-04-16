@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, ShieldAlert, Sparkles } from 'lucide-react';
+import { API_ROOT } from '@/lib/apiBase';
 
 interface Message {
   id: string;
@@ -48,8 +49,7 @@ export function AIChatbot() {
     }
 
     try {
-      const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
-      const response = await fetch(`${API_BASE}/api/ai/chat`, {
+      const response = await fetch(`${API_ROOT}/ai/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -65,7 +65,7 @@ export function AIChatbot() {
       if (!response.ok) throw new Error("Backend AI failed");
 
       const data = await response.json();
-      const aiText = data.choices[0].message.content;
+      const aiText = data?.choices?.[0]?.message?.content || 'No response from AI model.';
 
       setMessages(prev => [...prev, { 
         id: (Date.now() + 2).toString(), 

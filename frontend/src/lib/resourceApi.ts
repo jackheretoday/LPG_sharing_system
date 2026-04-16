@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001';
+import { API_BASE_URL } from '@/lib/apiBase';
 
 export interface ResourceItem {
   id?: string;
@@ -35,5 +35,14 @@ export const resourceApi = {
       }
     });
     return response.json();
-  }
+  },
+
+  myRequests: async (token: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/resources/my-requests`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.json();
+  },
 };

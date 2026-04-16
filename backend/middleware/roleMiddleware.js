@@ -1,5 +1,3 @@
-const { findUserById } = require("../models/tempUserStore");
-
 const roleAliases = {
   admin: "admin",
   volunteer_inspector: "admin",
@@ -23,10 +21,8 @@ const requireRole = (allowedRoles) => {
   const allowed = new Set(allowedRoles.map((role) => normalizeRole(role)));
 
   return (req, res, next) => {
-    const tokenUserId = req.user?.id;
     const tokenRole = req.user?.role;
-    const user = tokenUserId ? findUserById(tokenUserId) : null;
-    const currentRole = normalizeRole(tokenRole || user?.role);
+    const currentRole = normalizeRole(tokenRole);
 
     if (!currentRole || !allowed.has(currentRole)) {
       res.status(403);
@@ -34,7 +30,7 @@ const requireRole = (allowedRoles) => {
     }
 
     req.currentRole = currentRole;
-    req.currentUser = user || null;
+    req.currentUser = req.user || null;
     return next();
   };
 };

@@ -1,13 +1,145 @@
-import { useState } from 'react';
+﻿import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapView } from '../components/MapView';
+import { resourceApi } from '@/lib/resourceApi';
+import { emergencyApi } from '@/lib/emergencyApi';
+import { getStoredUser, getToken } from '@/lib/trustAuth';
+
+type PanelKey = 'offers' | 'emergency' | 'requests';
 
 // Using Material Symbols font spans instead of MUI icons to match the design system exactly.
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [activeView, setActiveView] = useState('map'); // 'map' or 'feed'
   const [searchQuery, setSearchQuery] = useState('');
+  const [activePanel, setActivePanel] = useState<PanelKey>('offers');
+  const [resources, setResources] = useState<any[]>([]);
+  const [emergencies, setEmergencies] = useState<any[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const token = getToken();
+  const user = getStoredUser();
+
+  useEffect(() => {
+    const run = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const [resourceRes, emergencyRes, requestRes] = await Promise.all([
+          resourceApi.listResources(),
+          token ? emergencyApi.listRequests() : Promise.resolve({ requests: [] }),
+          token ? resourceApi.myRequests(token) : Promise.resolve({ requests: [] }),
+        ]);
+
+        setResources(resourceRes.resources || []);
+        setEmergencies(emergencyRes.requests || []);
+        setRequests(requestRes.requests || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    run();
+  }, [token]);
+
+  const matchesQuery = (values: unknown[]) =>
+    values.some((value) => String(value || '').toLowerCase().includes(searchQuery.trim().toLowerCase()));
+
+  const filteredResources = useMemo(() => {
+    if (!searchQuery.trim()) return resources;
+    return resources.filter((item) =>
+      matchesQuery([item.title, item.location, item.description, item.resource_type])
+    );
+  }, [resources, searchQuery]);
+
+  const filteredEmergencies = useMemo(() => {
+    if (!searchQuery.trim()) return emergencies;
+    return emergencies.filter((item) =>
+      matchesQuery([item.location, item.notes, item.intensity, item.reporter?.name, item.assigned_provider?.name])
+    );
+  }, [emergencies, searchQuery]);
+
+  const filteredRequests = useMemo(() => {
+    if (!searchQuery.trim()) return requests;
+    return requests.filter((item) =>
+      matchesQuery([item.status, item.resource?.title, item.resource?.location, item.resource?.owner?.name])
+    );
+  }, [requests, searchQuery]);
+
+  const panelItems =
+    activePanel === 'offers' ? filteredResources : activePanel === 'emergency' ? filteredEmergencies : filteredRequests;
+
+  const renderPanelContent = () => {
+    if (!token && activePanel !== 'offers') {
+      return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white/65">Login required.</div>;
+    }
+    if (loading) {
+      return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white/65">Loading...</div>;
+    }
+    if (error) {
+      return <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200">{error}</div>;
+    }
+    if (panelItems.length === 0) {
+      return <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-white/65">No records found.</div>;
+    }
+
+    if (activePanel === 'offers') {
+      return filteredResources.map((item) => (
+        <div key={item.id} className="rounded-2xl border border-white/10 bg-black/40 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-white">{item.title}</h3>
+              <p className="mt-1 text-sm text-white/60">{item.description || 'No description added.'}</p>
+            </div>
+            <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-300">{item.resource_type}</span>
+          </div>
+          <div className="mt-4 flex items-center justify-between text-xs text-white/55">
+            <span>{item.location || 'Unknown location'}</span>
+            <span>Rs. {item.price || 0}</span>
+          </div>
+        </div>
+      ));
+    }
+
+    if (activePanel === 'emergency') {
+      return filteredEmergencies.map((item) => (
+        <div key={item.id} className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-bold text-white">{item.location || 'Unknown location'}</h3>
+              <p className="mt-1 text-sm text-white/65">{item.reporter?.name || 'Community user'} reported {String(item.intensity || 'an issue').toLowerCase()} leakage.</p>
+            </div>
+            <span className="rounded-full bg-red-500/20 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-red-200">{item.status}</span>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2 text-xs text-white/60">
+            <span>Sound: {item.leakage_sound || 'n/a'}</span>
+            <span>Severity: {item.severity || 'n/a'}</span>
+            <span>Duration: {item.duration || 'n/a'}</span>
+            <span>Assigned: {item.assigned_provider?.name || 'Pending'}</span>
+          </div>
+        </div>
+      ));
+    }
+
+    return filteredRequests.map((item) => (
+      <div key={item.id} className="rounded-2xl border border-white/10 bg-black/40 p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="font-bold text-white">{item.resource?.title || 'Unavailable listing'}</h3>
+            <p className="mt-1 text-sm text-white/60">Owner: {item.resource?.owner?.name || 'Unknown'} | {item.resource?.location || 'Unknown location'}</p>
+          </div>
+          <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white">{item.status}</span>
+        </div>
+        <div className="mt-4 flex items-center justify-between text-xs text-white/55">
+          <span>{item.resource?.resource_type || 'resource'}</span>
+          <span>Rs. {item.resource?.price || 0}</span>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <div className="h-screen bg-surface text-on-surface font-body selection:bg-white selection:text-black overflow-hidden flex flex-col">
@@ -40,8 +172,8 @@ export default function Dashboard() {
           <button className="p-2 hover:bg-white/10 transition-all rounded-full flex items-center justify-center">
             <span className="material-symbols-outlined text-white">settings</span>
           </button>
-          <div className="h-8 w-8 rounded-full border border-white/10 overflow-hidden cursor-pointer" onClick={() => navigate('/profile')}>
-            <img alt="User profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU7X65WWbHi5hPUFfgGybpsSuwbm5NaRJ02IWixtcKvudaiQ9shrc3SMCVeoy8h0KwrkZ2yNCNn8HaWSMt030WcEUhkUKEDyNAjH7BU4Wa2UD_jN9ssFi3bWCRV16ArV1p14t1bT4_bosx41kHkXUtA8uPoxHLcYO_avlNzZ4cnpWH_VTsA4rqfBf4bGFnwoHSW9FgmA4PbC0RanXC1CGE3P6mkkd7xESObghWO4i2Tq-Z3yqlaGPjZKYnxjRodjWmsg9wh9zw9A" />
+          <div className="h-8 w-8 rounded-full border border-white/10 overflow-hidden cursor-pointer bg-white/5 flex items-center justify-center text-xs font-black text-white" onClick={() => navigate('/profile')}>
+            {user?.name?.slice(0, 1).toUpperCase() || 'U'}
           </div>
         </div>
       </nav>
@@ -61,15 +193,24 @@ export default function Dashboard() {
               <span className="material-symbols-outlined">dashboard</span>
               <span>Home Feed</span>
             </button>
-            <button className="w-full text-left text-[#C5C7C1] mx-0 px-6 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] transition-all duration-300 group">
+            <button
+              onClick={() => setActivePanel('emergency')}
+              className={`w-full text-left mx-0 px-6 py-3 flex items-center gap-3 transition-all duration-300 ${activePanel === 'emergency' ? 'bg-white/5 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'}`}
+            >
               <span className="material-symbols-outlined">emergency_home</span>
               <span>Emergency Alerts</span>
             </button>
-            <button className="w-full text-left bg-white/5 text-white mx-0 px-6 py-3 flex items-center gap-3 transition-all duration-300">
+            <button
+              onClick={() => setActivePanel('offers')}
+              className={`w-full text-left mx-0 px-6 py-3 flex items-center gap-3 transition-all duration-300 ${activePanel === 'offers' ? 'bg-white/5 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'}`}
+            >
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>gas_meter</span>
               <span>Active Offers</span>
             </button>
-            <button className="w-full text-left text-[#C5C7C1] mx-0 px-6 py-3 flex items-center gap-3 hover:bg-[#1F1F1F] transition-all duration-300 group">
+            <button
+              onClick={() => setActivePanel('requests')}
+              className={`w-full text-left mx-0 px-6 py-3 flex items-center gap-3 transition-all duration-300 ${activePanel === 'requests' ? 'bg-white/5 text-white' : 'text-[#C5C7C1] hover:bg-[#1F1F1F]'}`}
+            >
               <span className="material-symbols-outlined">history</span>
               <span>My Requests</span>
             </button>
@@ -100,26 +241,46 @@ export default function Dashboard() {
           
           {/* Real Leaflet Map */}
           <div className="absolute inset-0 z-0 grayscale-[0.5] contrast-[1.1] brightness-[0.8] transition-all duration-700">
-            <MapView />
+            <MapView mode={activePanel === 'emergency' ? 'emergency' : 'discovery'} />
           </div>
 
           {/* UI Overlays */}
           
           {/* Search / Filter Chips */}
           <div className="absolute top-6 left-6 flex gap-3 z-10 overflow-x-auto max-w-[calc(100%-200px)] no-scrollbar">
-            <button className="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/20 transition-all whitespace-nowrap">
+            <button onClick={() => setActivePanel('emergency')} className={`border px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 transition-all whitespace-nowrap ${activePanel === 'emergency' ? 'bg-red-500/20 border-red-500/30' : 'bg-surface-bright/80 backdrop-blur-md border-white/10 hover:bg-white/20'}`}>
               <span className="w-2 h-2 rounded-full bg-red-500 blur-[2px]"></span>
               Emergency Requests
             </button>
-            <button className="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/20 transition-all whitespace-nowrap">
+            <button onClick={() => setActivePanel('offers')} className={`border px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 transition-all whitespace-nowrap ${activePanel === 'offers' ? 'bg-emerald-500/20 border-emerald-500/30' : 'bg-surface-bright/80 backdrop-blur-md border-white/10 hover:bg-white/20'}`}>
               <span className="w-2 h-2 rounded-full bg-emerald-500 blur-[2px]"></span>
               Bulk Availability
             </button>
-            <button className="bg-surface-bright/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 hover:bg-white/20 transition-all whitespace-nowrap">
-              <span className="material-symbols-outlined !text-sm">filter_list</span>
-              More Filters
+            <button onClick={() => setActivePanel('requests')} className={`border px-4 py-2 rounded-full text-sm text-white flex items-center gap-2 transition-all whitespace-nowrap ${activePanel === 'requests' ? 'bg-white/20 border-white/20' : 'bg-surface-bright/80 backdrop-blur-md border-white/10 hover:bg-white/20'}`}>
+              <span className="material-symbols-outlined !text-sm">history</span>
+              My Requests
             </button>
           </div>
+
+          <section className="absolute inset-y-6 right-6 z-10 w-[min(420px,calc(100%-3rem))] rounded-[2rem] border border-white/10 bg-[#101010]/88 p-6 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.55)] overflow-hidden">
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-black text-white">
+                  {activePanel === 'offers' ? 'Active Offers' : activePanel === 'emergency' ? 'Emergency Alerts' : 'My Requests'}
+                </h3>
+                <p className="mt-1 text-xs text-white/45">
+                  {activePanel === 'offers' ? 'Live LPG listings' : activePanel === 'emergency' ? 'Open emergency cases' : 'Requests from your account'}
+                </p>
+              </div>
+              <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white/75">
+                {panelItems.length}
+              </span>
+            </div>
+
+            <div className="h-[calc(100%-4rem)] overflow-y-auto space-y-4 pr-1">
+              {renderPanelContent()}
+            </div>
+          </section>
 
           {/* Floating Controls (Zoom / Location) */}
           <div className="absolute top-6 right-6 flex flex-col gap-2 z-10">
@@ -140,16 +301,13 @@ export default function Dashboard() {
           {/* Mode Toggle (Map / Feed) */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10">
             <div className="bg-surface-container-highest/80 backdrop-blur-xl p-1.5 rounded-full border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] flex items-center gap-2">
-              <button 
-                onClick={() => setActiveView('map')}
-                className={`px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-all ${activeView === 'map' ? 'bg-white text-black shadow-lg scale-[1.05]' : 'text-on-surface-variant hover:text-white'}`}
-              >
+              <button className="px-6 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-all bg-white text-black shadow-lg scale-[1.05]">
                 <span className="material-symbols-outlined !text-sm">map</span>
                 Map View
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/community')}
-                className={`px-6 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-all ${activeView === 'feed' ? 'bg-white text-black' : 'text-on-surface-variant hover:text-white'}`}
+                className="px-6 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-all text-on-surface-variant hover:text-white"
               >
                 <span className="material-symbols-outlined !text-sm">view_agenda</span>
                 Feed View
@@ -207,16 +365,17 @@ export default function Dashboard() {
             <span className="material-symbols-outlined !text-2xl">add</span>
           </button>
         </div>
-        <button className="flex flex-col items-center gap-1 text-on-surface-variant hover:text-white transition-colors">
+        <button onClick={() => setActivePanel('offers')} className={`flex flex-col items-center gap-1 transition-colors ${activePanel === 'offers' ? 'text-white' : 'text-on-surface-variant hover:text-white'}`}>
           <span className="material-symbols-outlined">gas_meter</span>
           <span className="text-[10px] uppercase tracking-tighter font-bold">Offers</span>
         </button>
-        <button onClick={() => navigate('/profile')} className="flex flex-col items-center gap-1 text-on-surface-variant hover:text-white transition-colors">
-          <span className="material-symbols-outlined">person</span>
-          <span className="text-[10px] uppercase tracking-tighter font-bold">Profile</span>
+        <button onClick={() => setActivePanel('requests')} className={`flex flex-col items-center gap-1 transition-colors ${activePanel === 'requests' ? 'text-white' : 'text-on-surface-variant hover:text-white'}`}>
+          <span className="material-symbols-outlined">history</span>
+          <span className="text-[10px] uppercase tracking-tighter font-bold">Requests</span>
         </button>
       </nav>
 
     </div>
   );
 }
+

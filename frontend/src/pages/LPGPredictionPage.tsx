@@ -3,6 +3,7 @@ import { LPGTracker } from '../components/LPGTracker';
 import { LPGAlertNotification } from '../components/LPGAlertNotification';
 import { TrendingUp, CheckCircle, AlertTriangle } from 'lucide-react';
 import { getToken } from '@/lib/trustAuth';
+import { API_ROOT } from '@/lib/apiBase';
 
 interface ModelMetric {
   metric_date: string;
@@ -24,11 +25,8 @@ export const LPGPredictionPage: React.FC = () => {
   const [historicalMetrics, setHistoricalMetrics] = useState<ModelMetric[]>([]);
   const [loadingMetrics, setLoadingMetrics] = useState(true);
 
-  const rawApiBase = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-  const API_BASE = String(rawApiBase).replace(/\/$/, '').endsWith('/api')
-    ? String(rawApiBase).replace(/\/$/, '')
-    : `${String(rawApiBase).replace(/\/$/, '')}/api`;
-  const token = getToken() || localStorage.getItem('token');
+  const API_BASE = API_ROOT;
+  const token = getToken();
 
   useEffect(() => {
     const fetchMetrics = async () => {
@@ -51,7 +49,7 @@ export const LPGPredictionPage: React.FC = () => {
     };
 
     fetchMetrics();
-  }, []);
+  }, [API_BASE, token]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">

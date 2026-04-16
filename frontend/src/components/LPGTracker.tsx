@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, Droplet, TrendingDown, Calendar, Plus } from 'lucide-react';
 import { getToken } from '@/lib/trustAuth';
+import { API_ROOT } from '@/lib/apiBase';
 
 interface Cylinder {
   id: string;
@@ -45,11 +46,8 @@ export const LPGTracker: React.FC = () => {
     max_capacity_kg: '20',
   });
 
-  const rawApiBase = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-  const API_BASE = String(rawApiBase).replace(/\/$/, '').endsWith('/api')
-    ? String(rawApiBase).replace(/\/$/, '')
-    : `${String(rawApiBase).replace(/\/$/, '')}/api`;
-  const token = getToken() || localStorage.getItem('token');
+  const API_BASE = API_ROOT;
+  const token = getToken();
 
   const fetchCylinders = async () => {
     if (!token) {

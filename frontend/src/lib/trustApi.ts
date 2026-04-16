@@ -1,6 +1,7 @@
 import { getToken, type StoredUser } from "@/lib/trustAuth";
+import { API_BASE_URL } from "@/lib/apiBase";
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5001").replace(/\/$/, "");
+const API_BASE = API_BASE_URL;
 
 type ApiOptions = {
   method?: "GET" | "POST" | "PATCH" | "DELETE";

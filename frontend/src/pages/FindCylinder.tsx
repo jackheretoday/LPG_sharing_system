@@ -102,7 +102,7 @@ export default function FindCylinder() {
                            <div className="flex items-center gap-4 mb-6">
                              <p className="text-xs text-on-surface-variant flex items-center gap-1.5">
                                <span className="material-symbols-outlined !text-sm">location_on</span>
-                               {c.distance || '0.8 km away'}
+                               {`${(((c.position.lat - 19.1075) ** 2 + (c.position.lng - 72.8258) ** 2) ** 0.5 * 111).toFixed(1)} km away`}
                              </p>
                              <p className="text-xs text-on-surface-variant flex items-center gap-1.5">
                                <span className="material-symbols-outlined !text-sm">schedule</span>
@@ -113,7 +113,7 @@ export default function FindCylinder() {
                            <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                              <div>
                                <p className="text-[10px] text-on-surface-variant uppercase tracking-widest font-black mb-1">Stock</p>
-                               <p className="text-sm font-bold text-white">{c.availability || 'In Stock (12)'}</p>
+                               <p className="text-sm font-bold text-white">{c.stock ? `In Stock (${c.stock}%)` : 'In Stock'}</p>
                              </div>
                              <button className="bg-white text-black px-5 py-2 rounded font-black text-xs hover:bg-[#C9C6C0] active:scale-95 transition-all">Request</button>
                            </div>

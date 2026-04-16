@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { MapView } from '../components/MapView';
 
 export default function Tracking() {

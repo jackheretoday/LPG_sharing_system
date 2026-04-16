@@ -48,6 +48,21 @@ export default function Landing() {
               </button>
             </Link>
           </FadeIn>
+
+          <FadeIn delayMs={1500} durationMs={1000} className="mt-6">
+            <div className="flex flex-wrap gap-3">
+              <Link to="/auth">
+                <button className="border border-green-400 bg-green-400/10 text-green-400 px-5 py-3 rounded-lg text-sm font-medium hover:bg-green-400 hover:text-black transition-all">
+                  Login / Signup
+                </button>
+              </Link>
+              <Link to="/auth">
+                <button className="border border-blue-400 bg-blue-400/10 text-blue-400 px-5 py-3 rounded-lg text-sm font-medium hover:bg-blue-400 hover:text-black transition-all">
+                  Admin Login
+                </button>
+              </Link>
+            </div>
+          </FadeIn>
         </div>
 
         {/* Right Content (Tag) */}

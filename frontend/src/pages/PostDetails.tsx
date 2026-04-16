@@ -6,7 +6,7 @@ export default function PostDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [comments, setComments] = useState([
+  const [comments] = useState([
     {
       id: 1,
       author: 'Marcus Thorne',

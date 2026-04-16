@@ -4,6 +4,7 @@ const {
 } = require("../config/supabaseClient");
 const {
   findUserById,
+  listUsers,
   updateUser,
   updateTrust,
   addBadge,
@@ -13,6 +14,24 @@ const TRUST_BADGES = {
   VERIFIED_HOUSEHOLD: "verified_household",
   SAFETY_COMPLIANT: "safety_compliant",
   FAST_RESPONDER: "fast_responder",
+};
+
+const resolveRoleFamily = (role) => {
+  const normalized = String(role || "").toLowerCase();
+
+  if (["admin", "volunteer_inspector"].includes(normalized)) {
+    return "admin";
+  }
+
+  if (["provider", "verified_reseller", "mechanic"].includes(normalized)) {
+    return "provider";
+  }
+
+  if (["consumer", "household", "user"].includes(normalized)) {
+    return "consumer";
+  }
+
+  return normalized;
 };
 
 const calculateTrustScore = (metrics) => {
@@ -38,10 +57,12 @@ const calculateTrustScore = (metrics) => {
 
 const deriveBadges = (user, trustMetrics) => {
   const badges = new Set(trustMetrics.badges || []);
+  const roleFamily = resolveRoleFamily(user.role);
+  const identityVerified = Boolean(user.isPhoneVerified || user.isEmailVerified);
 
   if (
-    user.role === "household" &&
-    user.isPhoneVerified &&
+    roleFamily === "consumer" &&
+    identityVerified &&
     trustMetrics.verification?.isPinVerified
   ) {
     badges.add(TRUST_BADGES.VERIFIED_HOUSEHOLD);
@@ -211,6 +232,66 @@ const getUserTrustSnapshot = async (userId) => {
   return getMemoryUserTrust(userId);
 };
 
+const listProviderTrustSnapshots = async () => {
+  const users = listUsers().filter((user) => {
+    const normalized = String(user.role || "").toLowerCase();
+    return ["provider", "verified_reseller", "mechanic"].includes(normalized);
+  });
+
+  const snapshots = await Promise.all(
+    users.map(async (user) => {
+      const trust = await getUserTrustSnapshot(user.id);
+      if (!trust) {
+        return null;
+      }
+
+      return {
+        user: {
+          id: user.id,
+          name: user.name,
+          role: user.role,
+          isSuspended: Boolean(user.isSuspended),
+        },
+        trust,
+      };
+    })
+  );
+
+  return snapshots
+    .filter(Boolean)
+    .sort((a, b) => Number(b.trust.trustScore || 0) - Number(a.trust.trustScore || 0));
+};
+
+const listPendingIdReviews = async () => {
+  const users = listUsers();
+  const queue = [];
+
+  for (const user of users) {
+    const trust = await getUserTrustSnapshot(user.id);
+    if (!trust?.verification) {
+      continue;
+    }
+
+    if (String(trust.verification.idStatus || "") !== "pending") {
+      continue;
+    }
+
+    queue.push({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isSuspended: Boolean(user.isSuspended),
+      },
+      verification: trust.verification,
+      trustScore: trust.trustScore,
+    });
+  }
+
+  return queue;
+};
+
 const recomputeTrust = async (userId) => {
   const supabase = getDbClient();
 
@@ -371,6 +452,53 @@ const recordExchangeOutcome = async (userId, payload) => {
   return getUserTrustSnapshot(userId);
 };
 
+const applyTrustOverride = async ({ userId, trustScore, reason = "manual_override" }) => {
+  const user = findUserById(userId);
+  if (!user) {
+    return null;
+  }
+
+  const normalizedTrust = Math.max(0, Math.min(100, Number(trustScore || 0)));
+  const currentTrust = user.trust || {};
+
+  updateTrust(userId, {
+    ...currentTrust,
+    trustScore: normalizedTrust,
+    override: {
+      trustScore: normalizedTrust,
+      reason,
+      updatedAt: new Date().toISOString(),
+    },
+  });
+
+  const supabase = getDbClient();
+  if (supabase) {
+    await supabase.from("trust_metrics").upsert(
+      {
+        user_id: userId,
+        total_exchanges: Number(currentTrust.totalExchanges || 0),
+        successful_exchanges: Number(currentTrust.successfulExchanges || 0),
+        safety_checks_completed: Number(currentTrust.safetyChecksCompleted || 0),
+        disputes_count: Number(currentTrust.disputesCount || 0),
+        accepted_emergency_requests: Number(currentTrust.acceptedEmergencyRequests || 0),
+        avg_response_seconds: Number(currentTrust.avgResponseSeconds || 0),
+        trust_score: normalizedTrust,
+      },
+      { onConflict: "user_id" }
+    );
+  }
+
+  const trust = await getUserTrustSnapshot(userId);
+  return {
+    user: {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    },
+    trust,
+  };
+};
+
 const applyBadgeByCode = (userId, badgeCode) => {
   const user = findUserById(userId);
   if (!user) {
@@ -390,7 +518,10 @@ module.exports = {
   calculateTrustScore,
   deriveBadges,
   getUserTrustSnapshot,
+  listProviderTrustSnapshots,
+  listPendingIdReviews,
   recomputeTrust,
+  applyTrustOverride,
   updateVerification,
   recordExchangeOutcome,
   applyBadgeByCode,

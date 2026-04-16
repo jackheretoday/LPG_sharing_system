@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapView } from '@/components/MapView';
-import { CylinderCard } from '@/components/CylinderCard';
 import { mockMarkers } from '@/lib/mockData';
 
 export default function FindCylinder() {

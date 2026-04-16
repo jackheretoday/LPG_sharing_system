@@ -1,6 +1,7 @@
 const {
   recordExchangeOutcome,
 } = require("../services/trustService");
+const { writeAuditLog } = require("../services/auditService");
 
 const exchangeCompleted = async (req, res, next) => {
   try {
@@ -17,6 +18,19 @@ const exchangeCompleted = async (req, res, next) => {
       disputed: Boolean(disputed),
       responseSeconds: Number(responseSeconds || 0),
       emergencyAccepted: true,
+    });
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "internal.exchange_completed",
+      entityType: "trust_metrics",
+      entityId: userId,
+      details: {
+        successful: Boolean(successful),
+        safetyCompleted: Boolean(safetyCompleted),
+        disputed: Boolean(disputed),
+        responseSeconds: Number(responseSeconds || 0),
+      },
     });
 
     return res.status(200).json({
@@ -44,6 +58,16 @@ const emergencyResponseLogged = async (req, res, next) => {
       disputed: false,
       emergencyAccepted: true,
       responseSeconds: Number(responseSeconds || 0),
+    });
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "internal.emergency_response_logged",
+      entityType: "trust_metrics",
+      entityId: userId,
+      details: {
+        responseSeconds: Number(responseSeconds || 0),
+      },
     });
 
     return res.status(200).json({

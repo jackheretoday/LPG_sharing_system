@@ -4,6 +4,7 @@ const {
   findDisputeById,
   updateDisputeRecord,
 } = require("../models/tempDisputeStore");
+const { writeAuditLog } = require("../services/auditService");
 
 const createDispute = async (req, res, next) => {
   try {
@@ -19,6 +20,18 @@ const createDispute = async (req, res, next) => {
       raisedBy: req.user.id,
       againstUserId,
       reason,
+    });
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "dispute.create",
+      entityType: "disputes",
+      entityId: dispute.id,
+      details: {
+        exchangeId,
+        againstUserId,
+        reason,
+      },
     });
 
     return res.status(201).json({
@@ -62,6 +75,18 @@ const updateDispute = async (req, res, next) => {
         status && ["resolved", "rejected"].includes(status)
           ? new Date().toISOString()
           : dispute.resolvedAt,
+    });
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "dispute.update",
+      entityType: "disputes",
+      entityId: id,
+      details: {
+        previousStatus: dispute.status,
+        status: updated?.status,
+        resolvedBy: updated?.resolvedBy || null,
+      },
     });
 
     return res.status(200).json({

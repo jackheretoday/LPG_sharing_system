@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Upload, FileText, X, Check } from 'lucide-react';
+import { Upload, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface UploadBoxProps {

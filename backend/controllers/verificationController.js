@@ -1,6 +1,8 @@
 const {
   updateVerification,
+  listPendingIdReviews,
 } = require("../services/trustService");
+const { writeAuditLog } = require("../services/auditService");
 
 const pinVerify = async (req, res, next) => {
   try {
@@ -16,6 +18,17 @@ const pinVerify = async (req, res, next) => {
       pinCode,
       addressText: addressText || "",
       isPinVerified: true,
+    });
+
+    await writeAuditLog({
+      actorUserId: userId,
+      action: "verification.pin_verify",
+      entityType: "user_verifications",
+      entityId: userId,
+      details: {
+        pinCode,
+        hasAddress: Boolean(addressText),
+      },
     });
 
     return res.status(200).json({
@@ -41,6 +54,16 @@ const idUpload = async (req, res, next) => {
     const trust = await updateVerification(userId, {
       idDocUrl,
       idStatus: "pending",
+    });
+
+    await writeAuditLog({
+      actorUserId: userId,
+      action: "verification.id_upload",
+      entityType: "user_verifications",
+      entityId: userId,
+      details: {
+        idDocUrl,
+      },
     });
 
     return res.status(200).json({
@@ -71,6 +94,16 @@ const idReview = async (req, res, next) => {
       idStatus: decision,
     });
 
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "verification.id_review",
+      entityType: "user_verifications",
+      entityId: userId,
+      details: {
+        decision,
+      },
+    });
+
     return res.status(200).json({
       success: true,
       message: `ID verification ${decision}`,
@@ -81,8 +114,23 @@ const idReview = async (req, res, next) => {
   }
 };
 
+const getIdReviewQueue = async (req, res, next) => {
+  try {
+    const queue = await listPendingIdReviews();
+
+    return res.status(200).json({
+      success: true,
+      count: queue.length,
+      queue,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   pinVerify,
   idUpload,
   idReview,
+  getIdReviewQueue,
 };

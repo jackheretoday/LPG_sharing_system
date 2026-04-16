@@ -55,15 +55,29 @@ Inspector/admin:
 
 ### Page: /auth
 Purpose:
-- Entry page with login/signup options.
+- Entry page with login/signup options and role selection.
 
 UI components:
-- Phone input
-- Continue button
+- Role cards
+- Name input on signup
+- Email input
+- Password input
 - Login/signup toggle
 
 API calls:
-- POST /api/auth/request-otp
+- POST /api/auth/signup
+- POST /api/auth/login
+
+### Auth roles supported now
+- User
+- Consumer
+- Provider
+- Admin
+
+Role aliases accepted by the backend:
+- `household` -> `consumer`
+- `verified_reseller` -> `provider`
+- `volunteer_inspector` -> `admin`
 
 ### Page: /auth/role-select
 Purpose:
@@ -98,10 +112,12 @@ UI components:
 - 6-digit OTP input
 - Verify button
 - Resend OTP action
+- Email input
+- Login/signup purpose toggle
 
 API calls:
+- POST /api/auth/request-otp
 - POST /api/auth/verify-otp
-- POST /api/auth/login (if backend separates verify and token issue)
 
 ## 4.3 Profile and KYC-lite Verification
 

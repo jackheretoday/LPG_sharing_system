@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { MapView } from '../components/MapView';
 
 // Using Material Symbols font spans instead of MUI icons to match the design system exactly.

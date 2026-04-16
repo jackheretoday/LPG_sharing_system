@@ -8,6 +8,13 @@ import Payment from '@/pages/Payment';
 import ResourceSharing from '@/pages/ResourceSharing';
 import Auth from '@/pages/Auth';
 import AdminPanel from '@/pages/AdminPanel';
+import AdminHome from '@/pages/admin/Home';
+import AdminProfile from '@/pages/admin/Profile';
+import IdReviewQueue from '@/pages/admin/IdReviewQueue';
+import TrustOverride from '@/pages/admin/TrustOverride';
+import Suspensions from '@/pages/admin/Suspensions';
+import UserHome from '@/pages/user/Home';
+import ConsumerHome from '@/pages/consumer/Home';
 import RegisterCylinder from '@/pages/RegisterCylinder';
 import FindCylinder from '@/pages/FindCylinder';
 import Chat from '@/pages/Chat';
@@ -38,7 +45,14 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/resources" element={<ResourceSharing />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin" element={<AdminHome />} />
+        <Route path="/admin/legacy" element={<AdminPanel />} />
+        <Route path="/admin/profile" element={<AdminProfile />} />
+        <Route path="/admin/id-review-queue" element={<IdReviewQueue />} />
+        <Route path="/admin/trust-override" element={<TrustOverride />} />
+        <Route path="/admin/suspensions" element={<Suspensions />} />
+        <Route path="/user" element={<UserHome />} />
+        <Route path="/consumer" element={<ConsumerHome />} />
         <Route path="/register" element={<RegisterCylinder />} />
         <Route path="/find" element={<FindCylinder />} />
         <Route path="/chat" element={<Chat />} />

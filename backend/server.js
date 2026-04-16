@@ -34,6 +34,8 @@ app.get("/", (req, res) => {
       "/api/health",
       "/api/auth/signup",
       "/api/auth/login",
+      "/api/auth/request-otp",
+      "/api/auth/verify-otp",
       "/api/auth/me",
       "/api/db/status",
       "/api/trust/me",

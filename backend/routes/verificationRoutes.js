@@ -5,12 +5,19 @@ const {
   pinVerify,
   idUpload,
   idReview,
+  getIdReviewQueue,
 } = require("../controllers/verificationController");
 
 const router = express.Router();
 
 router.post("/pin-verify", protect, pinVerify);
 router.post("/id-upload", protect, idUpload);
+router.get(
+  "/id-review-queue",
+  protect,
+  requireRole(["admin", "volunteer_inspector"]),
+  getIdReviewQueue
+);
 router.post(
   "/id-review",
   protect,

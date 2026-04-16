@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const {
-  getSupabasePublicClient,
   getSupabaseAdminClient,
   hasSupabaseConfig,
   hasServiceRole,
@@ -9,17 +8,58 @@ const {
   createUser,
   findUserByEmail,
   findUserById,
+  listUsersByRole,
   updateUser,
-  updateTrust,
+  removeUserById,
+  removeUserByEmail,
 } = require("../models/tempUserStore");
+const {
+  createChallenge,
+  verifyChallenge,
+  clearChallenge,
+} = require("../models/authChallengeStore");
+const { sendOtpEmail, hasSmtpConfig } = require("../services/emailService");
+const { writeAuditLog } = require("../services/auditService");
 const { generateToken } = require("../utilis/token");
 
-const allowedRoles = new Set([
-  "household",
-  "verified_reseller",
-  "volunteer_inspector",
-  "admin",
-]);
+const roleAliases = {
+  user: "user",
+  consumer: "consumer",
+  provider: "provider",
+  admin: "admin",
+  household: "consumer",
+  verified_reseller: "provider",
+  volunteer_inspector: "admin",
+};
+
+const allowedRoles = new Set(["user", "consumer", "provider", "admin", "household", "verified_reseller", "volunteer_inspector"]);
+
+const resolveNextRoute = (role) => {
+  const normalized = String(role || "").toLowerCase();
+
+  if (["admin", "volunteer_inspector"].includes(normalized)) {
+    return "/admin";
+  }
+
+  if (["provider", "verified_reseller", "mechanic"].includes(normalized)) {
+    return "/mechanic";
+  }
+
+  if (["user"].includes(normalized)) {
+    return "/user";
+  }
+
+  return "/consumer";
+};
+
+const normalizeRole = (role) => {
+  if (!role) {
+    return "consumer";
+  }
+
+  const normalized = roleAliases[String(role).toLowerCase()];
+  return normalized || null;
+};
 
 const serializeUser = (user) => ({
   id: user.id,
@@ -27,6 +67,12 @@ const serializeUser = (user) => ({
   email: user.email,
   role: user.role,
   trust: user.trust,
+  isEmailVerified: Boolean(user.isEmailVerified),
+  emailVerificationStatus: user.emailVerificationStatus || "pending",
+  emailVerifiedAt: user.emailVerifiedAt || null,
+  isSuspended: Boolean(user.isSuspended),
+  suspendedReason: user.suspendedReason || "",
+  suspendedAt: user.suspendedAt || null,
 });
 
 const persistSupabaseUser = async ({ id, name, email, role }) => {
@@ -102,6 +148,81 @@ const persistSupabaseUser = async ({ id, name, email, role }) => {
   };
 };
 
+const deleteSupabaseUser = async (id) => {
+  if (!hasSupabaseConfig() || !hasServiceRole()) {
+    return { ok: false, skipped: true, errors: [] };
+  }
+
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    return { ok: false, skipped: true, errors: [] };
+  }
+
+  const errors = [];
+
+  const { error: trustError } = await supabase.from("trust_metrics").delete().eq("user_id", id);
+  if (trustError) {
+    errors.push({ table: "trust_metrics", code: trustError.code, message: trustError.message });
+  }
+
+  const { error: verificationError } = await supabase.from("user_verifications").delete().eq("user_id", id);
+  if (verificationError) {
+    errors.push({ table: "user_verifications", code: verificationError.code, message: verificationError.message });
+  }
+
+  const { error: usersError } = await supabase.from("users").delete().eq("id", id);
+  if (usersError) {
+    errors.push({ table: "users", code: usersError.code, message: usersError.message });
+  }
+
+  return {
+    ok: errors.length === 0,
+    skipped: false,
+    errors,
+  };
+};
+
+const issueSession = (user) =>
+  generateToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+const markVerified = (user) => {
+  const next = updateUser(user.id, {
+    isEmailVerified: true,
+    emailVerificationStatus: "verified",
+    emailVerifiedAt: user.emailVerifiedAt || new Date().toISOString(),
+  });
+
+  return next || user;
+};
+
+const sendVerificationChallenge = async ({ user, purpose }) => {
+  const challenge = createChallenge({
+    email: user.email,
+    purpose,
+    userId: user.id,
+    role: user.role,
+  });
+
+  const delivery = await sendOtpEmail({
+    to: user.email,
+    name: user.name,
+    otp: challenge.otp,
+    purpose,
+    role: user.role,
+  });
+
+  return {
+    delivery,
+    expiresInMinutes: Number(process.env.EMAIL_OTP_TTL_MINUTES || 10),
+    smtpConfigured: hasSmtpConfig(),
+    devOtp: hasSmtpConfig() ? null : challenge.otp,
+  };
+};
+
 const signup = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
@@ -116,75 +237,55 @@ const signup = async (req, res, next) => {
       throw new Error("Password must be at least 6 characters");
     }
 
-    if (role && !allowedRoles.has(role)) {
+    if (role && !allowedRoles.has(String(role).toLowerCase())) {
       res.status(400);
       throw new Error("Invalid role selected");
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    const userRole = role || "household";
+    const normalizedRole = normalizeRole(role);
+    if (!normalizedRole) {
+      res.status(400);
+      throw new Error("Invalid role selected");
+    }
 
-    let user = findUserByEmail(email);
-    if (user) {
+    const existing = findUserByEmail(email);
+    if (existing) {
       res.status(409);
       throw new Error("User already exists with this email");
     }
 
-    let supabaseMirror = { ok: false, skipped: true, errors: [] };
+    const passwordHash = await bcrypt.hash(password, 12);
+    const user = createUser({
+      name,
+      email,
+      passwordHash,
+      role: normalizedRole,
+    });
 
-    if (hasSupabaseConfig() && hasServiceRole()) {
-      const supabase = getSupabaseAdminClient();
-      if (supabase) {
-        const { data, error } = await supabase.auth.admin.createUser({
-          email,
-          password,
-          email_confirm: true,
-        });
-
-        if (error || !data?.user) {
-          res.status(500);
-          throw new Error(error?.message || "Failed to create Supabase user");
-        }
-
-        user = createUser({
-          id: data.user.id,
-          name,
-          email,
-          passwordHash,
-          role: userRole,
-        });
-
-        supabaseMirror = await persistSupabaseUser({
-          id: user.id,
-          name,
-          email,
-          role: userRole,
-        });
-      }
-    }
-
-    if (!user) {
-      user = createUser({
-        name,
-        email,
-        passwordHash,
-        role: userRole,
-      });
-    }
-
-    const token = generateToken({
+    const supabaseMirror = await persistSupabaseUser({
       id: user.id,
+      name: user.name,
       email: user.email,
       role: user.role,
     });
 
+    const otpDelivery = await sendVerificationChallenge({
+      user,
+      purpose: "signup",
+    });
+
     return res.status(201).json({
       success: true,
-      message: "Signup successful",
-      token,
+      message: "Signup successful. A verification code has been sent to your email.",
+      verificationRequired: true,
+      nextRoute: "/auth/otp-verify",
       user: serializeUser(user),
+      otpDelivery,
+      devOtp: otpDelivery.devOtp,
       supabaseMirror,
-      note: "Signup mirrors the profile into Supabase when service-role config is available; login still uses the local user store for the dev flow.",
+      note: otpDelivery.smtpConfigured
+        ? "OTP was sent using SMTP email delivery."
+        : "SMTP is not configured, so the OTP was logged to the backend console for development.",
     });
   } catch (error) {
     return next(error);
@@ -200,72 +301,175 @@ const login = async (req, res, next) => {
       throw new Error("Email and password are required");
     }
 
-    let user = findUserByEmail(email);
-
-    if (hasSupabaseConfig()) {
-      const supabase = getSupabasePublicClient();
-      if (!supabase) {
-        res.status(503);
-        throw new Error("Supabase client not available");
-      }
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error || !data?.user) {
-        res.status(401);
-        throw new Error("Invalid credentials");
-      }
-
-      const { data: profile } = await supabase
-        .from("users")
-        .select("id,name,email,role")
-        .eq("id", data.user.id)
-        .maybeSingle();
-
-      user =
-        profile ||
-        user ||
-        createUser({
-          id: data.user.id,
-          name: data.user.user_metadata?.name || data.user.email,
-          email: data.user.email,
-          passwordHash: await bcrypt.hash(password, 10),
-          role: data.user.user_metadata?.role || "household",
-        });
-
-      updateUser(user.id, {
-        email: data.user.email,
-        name: profile?.name || data.user.user_metadata?.name || user.name,
-        role: profile?.role || data.user.user_metadata?.role || user.role,
-      });
-    } else {
-      if (!user) {
-        res.status(401);
-        throw new Error("Invalid credentials");
-      }
-
-      const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-      if (!isValidPassword) {
-        res.status(401);
-        throw new Error("Invalid credentials");
-      }
+    const user = findUserByEmail(email);
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid credentials");
     }
 
-    const token = generateToken({
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    });
+    const isValidPassword = await bcrypt.compare(password, user.passwordHash);
+    if (!isValidPassword) {
+      res.status(401);
+      throw new Error("Invalid credentials");
+    }
+
+    if (!user.isEmailVerified) {
+      res.status(403);
+      throw new Error("Email is not verified. Please complete signup OTP verification first.");
+    }
+
+    if (user.isSuspended) {
+      res.status(403);
+      throw new Error(user.suspendedReason || "Your account is suspended. Contact support.");
+    }
 
     return res.status(200).json({
       success: true,
       message: "Login successful",
-      token,
+      verificationRequired: false,
+      token: issueSession(user),
+      nextRoute: resolveNextRoute(user.role),
       user: serializeUser(user),
-      note: "Login uses Supabase Auth when configured; otherwise it falls back to in-memory auth.",
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updateUserSuspension = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const { suspended = true, reason = "" } = req.body || {};
+
+    const user = findUserById(userId);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const nextSuspended = Boolean(suspended);
+    const updated = updateUser(userId, {
+      isSuspended: nextSuspended,
+      suspendedReason: nextSuspended ? String(reason || "Suspended by moderator") : "",
+      suspendedAt: nextSuspended ? new Date().toISOString() : null,
+    });
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "auth.user_suspension_updated",
+      entityType: "users",
+      entityId: userId,
+      details: {
+        suspended: nextSuspended,
+        reason: nextSuspended ? String(reason || "Suspended by moderator") : "",
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: nextSuspended ? "User suspended" : "User unsuspended",
+      user: serializeUser(updated),
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const requestOtp = async (req, res, next) => {
+  try {
+    const { email, purpose = "signup" } = req.body;
+
+    if (!email) {
+      res.status(400);
+      throw new Error("Email is required");
+    }
+
+    if (String(purpose) !== "signup") {
+      res.status(400);
+      throw new Error("purpose must be signup");
+    }
+
+    const user = findUserByEmail(email);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const otpDelivery = await sendVerificationChallenge({
+      user,
+      purpose,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Verification code sent",
+      verificationRequired: true,
+      nextRoute: "/auth/otp-verify",
+      user: serializeUser(user),
+      otpDelivery,
+      devOtp: otpDelivery.devOtp,
+      note: otpDelivery.smtpConfigured
+        ? "OTP was sent using SMTP email delivery."
+        : "SMTP is not configured, so the OTP was logged to the backend console for development.",
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const verifyOtp = async (req, res, next) => {
+  try {
+    const { email, otp, purpose = "signup" } = req.body;
+
+    if (!email || !otp) {
+      res.status(400);
+      throw new Error("Email and OTP are required");
+    }
+
+    if (String(purpose) !== "signup") {
+      res.status(400);
+      throw new Error("purpose must be signup");
+    }
+
+    const otpCheck = verifyChallenge({
+      email,
+      purpose,
+      otp,
+    });
+
+    if (!otpCheck.ok) {
+      res.status(401);
+      throw new Error(otpCheck.reason);
+    }
+
+    const user = findUserByEmail(email);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const verifiedUser = markVerified(user);
+    clearChallenge(email, purpose);
+
+    await writeAuditLog({
+      actorUserId: verifiedUser.id,
+      action: "auth.email_verified",
+      entityType: "users",
+      entityId: verifiedUser.id,
+      details: {
+        email: verifiedUser.email,
+        role: verifiedUser.role,
+        purpose,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      token: issueSession(verifiedUser),
+      user: serializeUser(verifiedUser),
+      verificationRequired: false,
+      nextRoute: resolveNextRoute(verifiedUser.role),
     });
   } catch (error) {
     return next(error);
@@ -290,8 +494,93 @@ const me = (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const id = req.params.id || req.body?.id || req.query?.id;
+    const email = req.body?.email || req.query?.email;
+
+    if (!id && !email) {
+      res.status(400);
+      throw new Error("Provide either user id or email");
+    }
+
+    const existingUser = id ? findUserById(id) : findUserByEmail(email);
+    if (!existingUser) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const removed = id ? removeUserById(id) : removeUserByEmail(email);
+    if (!removed) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    clearChallenge(removed.email, "signup");
+    clearChallenge(removed.email, "login");
+
+    const supabaseDelete = await deleteSupabaseUser(removed.id);
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "auth.user_deleted",
+      entityType: "users",
+      entityId: removed.id,
+      details: {
+        email: removed.email,
+        role: removed.role,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+      deletedUser: {
+        id: removed.id,
+        email: removed.email,
+        role: removed.role,
+      },
+      supabaseDelete,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getAdmins = async (req, res, next) => {
+  try {
+    const admins = [
+      ...listUsersByRole("admin"),
+      ...listUsersByRole("volunteer_inspector"),
+    ].map((user) => serializeUser(user));
+
+    await writeAuditLog({
+      actorUserId: req.user?.id || null,
+      action: "auth.admins_listed",
+      entityType: "users",
+      entityId: null,
+      details: {
+        count: admins.length,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      count: admins.length,
+      admins,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
+  requestOtp,
+  verifyOtp,
   me,
+  getAdmins,
+  deleteUser,
+  updateUserSuspension,
 };

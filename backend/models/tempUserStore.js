@@ -28,6 +28,38 @@ const findUserById = (id) => {
   return users.find((user) => String(user.id) === String(id));
 };
 
+const listUsers = () => {
+  return [...users];
+};
+
+const listUsersByRole = (role) => {
+  const normalizedRole = String(role || "").toLowerCase();
+  return users.filter((user) => String(user.role || "").toLowerCase() === normalizedRole);
+};
+
+const removeUserById = (id) => {
+  const index = users.findIndex((user) => String(user.id) === String(id));
+
+  if (index === -1) {
+    return null;
+  }
+
+  const [removed] = users.splice(index, 1);
+  return removed;
+};
+
+const removeUserByEmail = (email) => {
+  const normalizedEmail = String(email || "").toLowerCase();
+  const index = users.findIndex((user) => user.email === normalizedEmail);
+
+  if (index === -1) {
+    return null;
+  }
+
+  const [removed] = users.splice(index, 1);
+  return removed;
+};
+
 const createUser = ({ id, name, email, passwordHash, role = "household" }) => {
   const user = {
     id: id || randomUUID(),
@@ -35,6 +67,12 @@ const createUser = ({ id, name, email, passwordHash, role = "household" }) => {
     email: email.toLowerCase(),
     passwordHash,
     role,
+    isEmailVerified: false,
+    emailVerificationStatus: "pending",
+    emailVerifiedAt: null,
+    isSuspended: false,
+    suspendedReason: "",
+    suspendedAt: null,
     isPhoneVerified: true,
     createdAt: new Date().toISOString(),
     trust: seedTrustMetrics(),
@@ -87,6 +125,10 @@ const addBadge = (id, badge) => {
 module.exports = {
   findUserByEmail,
   findUserById,
+  listUsers,
+  listUsersByRole,
+  removeUserById,
+  removeUserByEmail,
   createUser,
   updateUser,
   updateTrust,

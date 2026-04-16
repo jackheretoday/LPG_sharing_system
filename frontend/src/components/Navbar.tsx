@@ -1,29 +1,23 @@
-﻿import { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { getStoredUser, clearToken, clearStoredUser } from '@/lib/trustAuth';
 import { useTheme } from '@/context/ThemeContext';
 
 const getAccessRoute = (role: string | null) => {
-  if (role === 'admin') return '/admin';
-  if (role === 'provider') return '/mechanic';
-  if (role === 'consumer' || role === 'household') return '/consumer';
-  if (role === 'user') return '/user';
+  if (role === 'admin') return '/admin/dashboard';
+  if (role === 'provider' || role === 'verified_reseller' || role === 'mechanic') return '/provider/home';
+  if (role === 'consumer' || role === 'household' || role === 'user') return '/consumer/home';
   return null;
 };
 
 const getRoleLabel = (role: string | null) => {
-  if (role === 'admin') return 'Admin Workspace';
-  if (role === 'provider') return 'Mechanic Panel';
-  if (role === 'consumer' || role === 'household') return 'Consumer Workspace';
-  if (role === 'user') return 'User Workspace';
+  if (role === 'admin') return 'Admin Dashboard';
+  if (role === 'provider' || role === 'verified_reseller' || role === 'mechanic') return 'Provider Hub';
+  if (role === 'consumer' || role === 'household' || role === 'user') return 'Consumer Command';
   return 'Dashboard';
 };
 
-type NavbarProps = {
-  showThemeToggle?: boolean;
-};
-
-export function Navbar({ showThemeToggle = false }: NavbarProps) {
+export function Navbar() {
   const user = useMemo(() => getStoredUser(), []);
   const accessRoute = useMemo(() => getAccessRoute(user?.role ?? null), [user?.role]);
   const isLoggedIn = !!user && !!accessRoute;
@@ -45,14 +39,14 @@ export function Navbar({ showThemeToggle = false }: NavbarProps) {
               GasSahayak
             </Link>
 
-            {isLoggedIn ? (
+            {isLoggedIn && (
               <Link
                 to={accessRoute}
                 className="lg:hidden bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
               >
                 {getRoleLabel(user?.role ?? null)}
               </Link>
-            ) : null}
+            )}
           </div>
 
           <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -68,62 +62,60 @@ export function Navbar({ showThemeToggle = false }: NavbarProps) {
           </div>
 
           <div className="flex items-center gap-3">
-            {showThemeToggle ? (
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white transition-all"
-                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-              >
-                <span className="material-symbols-outlined !text-xl leading-none">
-                  {theme === 'light' ? 'dark_mode' : 'light_mode'}
-                </span>
-              </button>
-            ) : null}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white transition-all"
+              title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            >
+              <span className="material-symbols-outlined !text-xl leading-none">
+                {theme === 'light' ? 'dark_mode' : 'light_mode'}
+              </span>
+            </button>
 
             <div className="hidden lg:flex items-center gap-3">
-              {isLoggedIn ? (
-                <>
+            {isLoggedIn ? (
+              <>
+                <Link
+                  to={accessRoute}
+                  className="bg-white text-black px-5 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
+                >
+                  {getRoleLabel(user?.role ?? null)}
+                </Link>
+                {user?.role === 'admin' && (
                   <Link
-                    to={accessRoute}
-                    className="bg-white text-black px-5 py-2 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
+                    to="/admin/profile"
+                    className="border border-blue-400 text-blue-400 px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-400 hover:text-black transition-colors"
                   >
-                    {getRoleLabel(user?.role ?? null)}
+                    My Profile
                   </Link>
-                  {user?.role === 'admin' ? (
-                    <Link
-                      to="/admin/profile"
-                      className="border border-blue-400 text-blue-400 px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-400 hover:text-black transition-colors"
-                    >
-                      My Profile
-                    </Link>
-                  ) : null}
-                  <button
-                    onClick={handleLogout}
-                    className="border border-red-400/50 text-red-400 px-5 py-2 rounded-lg text-sm font-medium hover:bg-red-400 hover:text-black transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/auth"
-                    className="border border-white/20 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
-                  >
-                    Login / Signup
-                  </Link>
-                  <Link
-                    to="/auth"
-                    className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
-                  >
-                    Admin Login
-                  </Link>
-                </>
-              )}
-            </div>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="border border-red-400/50 text-red-400 px-5 py-2 rounded-lg text-sm font-medium hover:bg-red-400 hover:text-black transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/auth/login"
+                  className="border border-white/20 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  Login / Signup
+                </Link>
+                <Link
+                  to="/auth/admin"
+                  className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Admin Login
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

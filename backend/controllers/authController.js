@@ -6,13 +6,9 @@ const {
 } = require("../config/supabaseClient");
 const {
   createUser,
-  createOrReplaceUser,
-  ensureSupabaseIdentity,
   findUserByEmail,
   findUserById,
-  hydrateUserFromSupabaseByEmail,
   listUsersByRole,
-  mapRoleForDatabase,
   updateUser,
   removeUserById,
   removeUserByEmail,
@@ -25,6 +21,13 @@ const {
 const { sendOtpEmail, hasSmtpConfig } = require("../services/emailService");
 const { writeAuditLog } = require("../services/auditService");
 const { generateToken } = require("../utilis/token");
+
+const { 
+  signupSchema, 
+  loginSchema, 
+  otpRequestSchema, 
+  otpVerifySchema 
+} = require("../utils/validators");
 
 const roleAliases = {
   user: "user",
@@ -42,18 +45,14 @@ const resolveNextRoute = (role) => {
   const normalized = String(role || "").toLowerCase();
 
   if (["admin", "volunteer_inspector"].includes(normalized)) {
-    return "/admin";
+    return "/admin/dashboard";
   }
 
   if (["provider", "verified_reseller", "mechanic"].includes(normalized)) {
-    return "/mechanic";
+    return "/provider/home";
   }
 
-  if (["user"].includes(normalized)) {
-    return "/user";
-  }
-
-  return "/consumer";
+  return "/consumer/home";
 };
 
 const normalizeRole = (role) => {
@@ -79,7 +78,7 @@ const serializeUser = (user) => ({
   suspendedAt: user.suspendedAt || null,
 });
 
-const persistSupabaseUser = async ({ id, name, email, role, passwordHash, isEmailVerified = false }) => {
+const persistSupabaseUser = async ({ id, name, email, role }) => {
   if (!hasSupabaseConfig() || !hasServiceRole()) {
     return { ok: false, skipped: true, errors: [] };
   }
@@ -91,77 +90,58 @@ const persistSupabaseUser = async ({ id, name, email, role, passwordHash, isEmai
 
   const errors = [];
 
-  const normalizedEmail = String(email || "").toLowerCase();
-  const { data: userRow, error: lookupError } = await supabase
-    .from("users")
-    .select("id")
-    .eq("email", normalizedEmail)
-    .maybeSingle();
+  const { error: usersError } = await supabase.from("users").upsert(
+    {
+      id,
+      name,
+    },
+    { onConflict: "id" }
+  );
 
-  if (lookupError) {
-    errors.push({ table: "users", code: lookupError.code, message: lookupError.message });
+  if (usersError) {
+    errors.push({ table: "users", code: usersError.code, message: usersError.message });
   }
 
-  if (userRow?.id) {
-    const { error: usersError } = await supabase.from("users").upsert(
-      {
-        id: userRow.id,
-        name,
-        email: normalizedEmail,
-        role: mapRoleForDatabase(role),
-        password_hash: passwordHash || null,
-        is_email_verified: Boolean(isEmailVerified),
-        email_verified_at: isEmailVerified ? new Date().toISOString() : null,
-        is_verified: Boolean(isEmailVerified),
-      },
-      { onConflict: "id" }
-    );
+  const { error: verificationError } = await supabase.from("user_verifications").upsert(
+    {
+      user_id: id,
+      address_text: "",
+      pin_code: "",
+      is_pin_verified: false,
+      id_doc_url: null,
+      id_status: "not_submitted",
+    },
+    { onConflict: "user_id" }
+  );
 
-    if (usersError) {
-      errors.push({ table: "users", code: usersError.code, message: usersError.message });
-    }
+  if (verificationError) {
+    errors.push({
+      table: "user_verifications",
+      code: verificationError.code,
+      message: verificationError.message,
+    });
+  }
 
-    const { error: verificationError } = await supabase.from("user_verifications").upsert(
-      {
-        user_id: userRow.id,
-        address_text: "",
-        pin_code: "",
-        is_pin_verified: false,
-        id_doc_url: null,
-        id_status: "not_submitted",
-      },
-      { onConflict: "user_id" }
-    );
+  const { error: trustError } = await supabase.from("trust_metrics").upsert(
+    {
+      user_id: id,
+      total_exchanges: 0,
+      successful_exchanges: 0,
+      safety_checks_completed: 0,
+      disputes_count: 0,
+      accepted_emergency_requests: 0,
+      avg_response_seconds: 0,
+      trust_score: 0,
+    },
+    { onConflict: "user_id" }
+  );
 
-    if (verificationError) {
-      errors.push({
-        table: "user_verifications",
-        code: verificationError.code,
-        message: verificationError.message,
-      });
-    }
-
-    const { error: trustError } = await supabase.from("trust_metrics").upsert(
-      {
-        user_id: userRow.id,
-        total_exchanges: 0,
-        successful_exchanges: 0,
-        safety_checks_completed: 0,
-        disputes_count: 0,
-        accepted_emergency_requests: 0,
-        avg_response_seconds: 0,
-        trust_score: 0,
-      },
-      { onConflict: "user_id" }
-    );
-
-    if (trustError) {
-      errors.push({
-        table: "trust_metrics",
-        code: trustError.code,
-        message: trustError.message,
-      });
-    }
+  if (trustError) {
+    errors.push({
+      table: "trust_metrics",
+      code: trustError.code,
+      message: trustError.message,
+    });
   }
 
   return {
@@ -222,26 +202,6 @@ const markVerified = (user) => {
   return next || user;
 };
 
-const syncVerificationToSupabase = async (user) => {
-  if (!hasSupabaseConfig() || !hasServiceRole()) {
-    return;
-  }
-
-  const supabase = getSupabaseAdminClient();
-  if (!supabase) {
-    return;
-  }
-
-  await supabase
-    .from("users")
-    .update({
-      is_email_verified: true,
-      email_verified_at: user.emailVerifiedAt || new Date().toISOString(),
-      is_verified: true,
-    })
-    .eq("id", user.id);
-};
-
 const sendVerificationChallenge = async ({ user, purpose }) => {
   const challenge = createChallenge({
     email: user.email,
@@ -268,22 +228,13 @@ const sendVerificationChallenge = async ({ user, purpose }) => {
 
 const signup = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
-
-    if (!name || !email || !password) {
+    const validated = signupSchema.safeParse(req.body);
+    if (!validated.success) {
       res.status(400);
-      throw new Error("Name, email and password are required");
+      throw new Error(validated.error.errors[0].message);
     }
 
-    if (password.length < 6) {
-      res.status(400);
-      throw new Error("Password must be at least 6 characters");
-    }
-
-    if (role && !allowedRoles.has(String(role).toLowerCase())) {
-      res.status(400);
-      throw new Error("Invalid role selected");
-    }
+    const { name, email, password, role } = validated.data;
 
     const normalizedRole = normalizeRole(role);
     if (!normalizedRole) {
@@ -298,17 +249,7 @@ const signup = async (req, res, next) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    const supabaseIdentity = await ensureSupabaseIdentity({
-      name,
-      email,
-      password,
-      role: normalizedRole,
-      passwordHash,
-      isEmailVerified: false,
-    });
-
-    const user = createOrReplaceUser({
-      id: supabaseIdentity?.id,
+    const user = createUser({
       name,
       email,
       passwordHash,
@@ -320,8 +261,6 @@ const signup = async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      passwordHash,
-      isEmailVerified: false,
     });
 
     const otpDelivery = await sendVerificationChallenge({
@@ -349,18 +288,15 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
+    const validated = loginSchema.safeParse(req.body);
+    if (!validated.success) {
       res.status(400);
-      throw new Error("Email and password are required");
+      throw new Error(validated.error.errors[0].message);
     }
 
-    let user = findUserByEmail(email);
-    if (!user) {
-      user = await hydrateUserFromSupabaseByEmail(email);
-    }
+    const { email, password } = validated.data;
 
+    const user = findUserByEmail(email);
     if (!user) {
       res.status(401);
       throw new Error("Invalid credentials");
@@ -413,20 +349,6 @@ const updateUserSuspension = async (req, res, next) => {
       suspendedAt: nextSuspended ? new Date().toISOString() : null,
     });
 
-    if (hasSupabaseConfig() && hasServiceRole()) {
-      const supabase = getSupabaseAdminClient();
-      if (supabase) {
-        await supabase
-          .from("users")
-          .update({
-            is_suspended: nextSuspended,
-            suspended_reason: nextSuspended ? String(reason || "Suspended by moderator") : "",
-            suspended_at: nextSuspended ? new Date().toISOString() : null,
-          })
-          .eq("id", userId);
-      }
-    }
-
     await writeAuditLog({
       actorUserId: req.user?.id || null,
       action: "auth.user_suspension_updated",
@@ -450,23 +372,21 @@ const updateUserSuspension = async (req, res, next) => {
 
 const requestOtp = async (req, res, next) => {
   try {
-    const { email, purpose = "signup" } = req.body;
-
-    if (!email) {
+    const validated = otpRequestSchema.safeParse(req.body);
+    if (!validated.success) {
       res.status(400);
-      throw new Error("Email is required");
+      throw new Error(validated.error.errors[0].message);
     }
+
+    const { email } = validated.data;
+    const { purpose = "signup" } = req.body;
 
     if (String(purpose) !== "signup") {
       res.status(400);
       throw new Error("purpose must be signup");
     }
 
-    let user = findUserByEmail(email);
-    if (!user) {
-      user = await hydrateUserFromSupabaseByEmail(email);
-    }
-
+    const user = findUserByEmail(email);
     if (!user) {
       res.status(404);
       throw new Error("User not found");
@@ -496,12 +416,14 @@ const requestOtp = async (req, res, next) => {
 
 const verifyOtp = async (req, res, next) => {
   try {
-    const { email, otp, purpose = "signup" } = req.body;
-
-    if (!email || !otp) {
+    const validated = otpVerifySchema.safeParse(req.body);
+    if (!validated.success) {
       res.status(400);
-      throw new Error("Email and OTP are required");
+      throw new Error(validated.error.errors[0].message);
     }
+
+    const { email, otp } = validated.data;
+    const { purpose = "signup" } = req.body;
 
     if (String(purpose) !== "signup") {
       res.status(400);
@@ -519,11 +441,7 @@ const verifyOtp = async (req, res, next) => {
       throw new Error(otpCheck.reason);
     }
 
-    let user = findUserByEmail(email);
-    if (!user) {
-      user = await hydrateUserFromSupabaseByEmail(email);
-    }
-
+    const user = findUserByEmail(email);
     if (!user) {
       res.status(404);
       throw new Error("User not found");
@@ -531,7 +449,6 @@ const verifyOtp = async (req, res, next) => {
 
     const verifiedUser = markVerified(user);
     clearChallenge(email, purpose);
-    await syncVerificationToSupabase(verifiedUser);
 
     await writeAuditLog({
       actorUserId: verifiedUser.id,
@@ -558,13 +475,9 @@ const verifyOtp = async (req, res, next) => {
   }
 };
 
-const me = async (req, res, next) => {
+const me = (req, res, next) => {
   try {
-    let user = findUserById(req.user.id);
-
-    if (!user && req.user?.email) {
-      user = await hydrateUserFromSupabaseByEmail(req.user.email);
-    }
+    const user = findUserById(req.user.id);
 
     if (!user) {
       res.status(404);

@@ -1,11 +1,12 @@
-﻿import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Siren } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Siren, Users, Zap, ShieldAlert, ArrowRight } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { AnimatedHeading } from '../components/AnimatedHeading';
 import { FadeIn } from '../components/FadeIn';
 import { communityApi } from '@/lib/communityApi';
 import { contactApi } from '@/lib/contactApi';
+import { getStoredUser } from '@/lib/trustAuth';
 
 type LandingPost = {
   id: string;
@@ -51,6 +52,10 @@ const qnaItems = [
 ];
 
 export default function Landing() {
+  const navigate = useNavigate();
+  const user = getStoredUser();
+  const isLoggedIn = !!user;
+
   const [posts, setPosts] = useState<LandingPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
   const [postError, setPostError] = useState('');
@@ -86,6 +91,21 @@ export default function Landing() {
 
   const displayedPosts = useMemo(() => sortedPosts.slice(0, visiblePosts), [sortedPosts, visiblePosts]);
   const displayedQna = useMemo(() => qnaItems.slice(0, visibleQna), [visibleQna]);
+
+  const handleRoleAction = (role: 'consumer' | 'provider' | 'admin') => {
+    if (!isLoggedIn) {
+        if (role === 'admin') {
+            navigate('/auth/admin');
+        } else {
+            navigate(`/auth/login?role=${role}&mode=signup`);
+        }
+        return;
+    }
+    
+    if (role === 'admin') navigate('/admin');
+    else if (role === 'provider') navigate('/provider/home');
+    else navigate('/consumer/home');
+  };
 
   const handleContactSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -146,11 +166,18 @@ export default function Landing() {
                     Raise Emergency
                   </button>
                 </Link>
-                <Link to="/community">
-                  <button className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-white hover:text-black transition-all">
-                    Explore Platform
-                  </button>
-                </Link>
+                <button 
+                  onClick={() => handleRoleAction('consumer')}
+                  className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-emerald-500 hover:text-white transition-all flex items-center gap-2"
+                >
+                  <Users className="w-5 h-5" /> Enter as Consumer
+                </button>
+                <button 
+                  onClick={() => handleRoleAction('provider')}
+                  className="liquid-glass border border-white/20 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-500 hover:text-white transition-all flex items-center gap-2"
+                >
+                  <Zap className="w-5 h-5" /> Become a Provider
+                </button>
               </FadeIn>
             </div>
 

@@ -3,6 +3,7 @@ const {
   listPendingIdReviews,
 } = require("../services/trustService");
 const { writeAuditLog } = require("../services/auditService");
+const { idVerificationSchema } = require("../utils/validators");
 
 const pinVerify = async (req, res, next) => {
   try {
@@ -43,13 +44,14 @@ const pinVerify = async (req, res, next) => {
 
 const idUpload = async (req, res, next) => {
   try {
-    const userId = req.user?.id;
-    const { idDocUrl } = req.body;
-
-    if (!idDocUrl) {
+    const validated = idVerificationSchema.safeParse(req.body);
+    if (!validated.success) {
       res.status(400);
-      throw new Error("idDocUrl is required");
+      throw new Error(validated.error.errors[0].message);
     }
+
+    const { idDocUrl } = validated.data;
+    const userId = req.user?.id;
 
     const trust = await updateVerification(userId, {
       idDocUrl,
